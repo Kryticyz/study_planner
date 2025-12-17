@@ -17,7 +17,9 @@ export function SemesterGrid({ planId }: SemesterGridProps) {
   if (!plan) return null;
 
   const years = [1, 2, 3, 4];
-  const semesters = [1, 2] as const;
+  const startSemester = plan.startSemester ?? 1;
+  // When starting in S2, show S2 first, then S1
+  const semesters = startSemester === 1 ? [1, 2] as const : [2, 1] as const;
 
   const handleDragStart = (event: DragStartEvent) => {
     setActiveId(event.active.id as string);
@@ -52,7 +54,7 @@ export function SemesterGrid({ planId }: SemesterGridProps) {
           <h2 className="text-lg font-semibold text-gray-800">
             {plan.name}
             <span className="text-sm font-normal text-gray-500 ml-2">
-              Starting Year: {plan.startYear}
+              Starting: {plan.startYear} S{plan.startSemester ?? 1}
             </span>
           </h2>
         </div>
@@ -62,7 +64,11 @@ export function SemesterGrid({ planId }: SemesterGridProps) {
             <div key={year} className="space-y-4">
               <div className="text-center">
                 <h3 className="font-semibold text-gray-700">Year {year}</h3>
-                <p className="text-xs text-gray-500">{plan.startYear + year - 1}</p>
+                <p className="text-xs text-gray-500">
+                  {startSemester === 1
+                    ? plan.startYear + year - 1
+                    : `${plan.startYear + year - 1}-${plan.startYear + year}`}
+                </p>
               </div>
 
               {semesters.map((semester) => (
@@ -72,6 +78,7 @@ export function SemesterGrid({ planId }: SemesterGridProps) {
                   year={year}
                   semester={semester}
                   startYear={plan.startYear}
+                  startSemester={plan.startSemester ?? 1}
                 />
               ))}
             </div>

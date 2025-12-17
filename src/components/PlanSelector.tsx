@@ -6,13 +6,15 @@ export function PlanSelector() {
   const { plans, activePlanId, setActivePlan, createPlan, deletePlan, duplicatePlan, renamePlan } = usePlanStore();
   const [isCreating, setIsCreating] = useState(false);
   const [newPlanName, setNewPlanName] = useState('');
+  const [newPlanStartSemester, setNewPlanStartSemester] = useState<1 | 2>(1);
   const [editingId, setEditingId] = useState<string | null>(null);
   const [editName, setEditName] = useState('');
 
   const handleCreate = () => {
     if (newPlanName.trim()) {
-      createPlan(newPlanName.trim());
+      createPlan(newPlanName.trim(), 2025, newPlanStartSemester);
       setNewPlanName('');
+      setNewPlanStartSemester(1);
       setIsCreating(false);
     }
   };
@@ -58,6 +60,15 @@ export function PlanSelector() {
             className="flex-1 px-3 py-1.5 border rounded-lg focus:outline-none focus:ring-2 focus:ring-anu-gold"
             autoFocus
           />
+          <select
+            value={newPlanStartSemester}
+            onChange={(e) => setNewPlanStartSemester(Number(e.target.value) as 1 | 2)}
+            className="px-3 py-1.5 border rounded-lg focus:outline-none focus:ring-2 focus:ring-anu-gold bg-white"
+            title="Start semester"
+          >
+            <option value={1}>Start S1</option>
+            <option value={2}>Start S2</option>
+          </select>
           <button
             onClick={handleCreate}
             className="p-1.5 bg-green-500 text-white rounded-lg hover:bg-green-600"
@@ -65,7 +76,7 @@ export function PlanSelector() {
             <Check size={18} />
           </button>
           <button
-            onClick={() => { setIsCreating(false); setNewPlanName(''); }}
+            onClick={() => { setIsCreating(false); setNewPlanName(''); setNewPlanStartSemester(1); }}
             className="p-1.5 bg-gray-400 text-white rounded-lg hover:bg-gray-500"
           >
             <X size={18} />

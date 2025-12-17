@@ -97,7 +97,10 @@ export function CourseCard({ courseCode, planId, isDragging, compact }: CourseCa
       } ${isCompleted ? 'opacity-60' : ''}`}
     >
       {/* Actions */}
-      <div className="absolute -top-2 -right-2 hidden group-hover:flex items-center gap-1">
+      <div
+        className="absolute -top-2 -right-2 hidden group-hover:flex items-center gap-1"
+        onPointerDown={(e) => e.stopPropagation()}
+      >
         <button
           onClick={(e) => { e.stopPropagation(); openCourseModal(courseCode); }}
           className="p-1 bg-white rounded-full shadow hover:bg-gray-100"

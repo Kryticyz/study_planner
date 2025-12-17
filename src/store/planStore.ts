@@ -11,7 +11,7 @@ interface PlanStore {
   isCompareMode: boolean;
 
   // Actions
-  createPlan: (name: string, startYear?: number) => string;
+  createPlan: (name: string, startYear?: number, startSemester?: 1 | 2) => string;
   deletePlan: (id: string) => void;
   duplicatePlan: (id: string) => string;
   renamePlan: (id: string, name: string) => void;
@@ -49,6 +49,18 @@ interface PlanStore {
 
 const generateId = () => Math.random().toString(36).substring(2, 15);
 
+// Helper to get chronological position of a semester slot
+// Returns a number that can be compared to determine which slot comes first
+const getChronologicalPosition = (year: number, semester: 1 | 2, startSemester: 1 | 2): number => {
+  // Each year has 2 semesters, so base position is (year - 1) * 2
+  // When starting S1: S1 is first (add 1), S2 is second (add 2)
+  // When starting S2: S2 is first (add 1), S1 is second (add 2)
+  const semesterOffset = startSemester === 1
+    ? semester  // S1=1, S2=2
+    : (semester === 2 ? 1 : 2);  // S2=1, S1=2
+  return (year - 1) * 2 + semesterOffset;
+};
+
 export const usePlanStore = create<PlanStore>()(
   persist(
     (set, get) => ({
@@ -57,7 +69,7 @@ export const usePlanStore = create<PlanStore>()(
       comparisonPlanIds: [],
       isCompareMode: false,
 
-      createPlan: (name: string, startYear = 2025) => {
+      createPlan: (name: string, startYear = 2025, startSemester: 1 | 2 = 1) => {
         const id = generateId();
         const newPlan: StudyPlan = {
           id,
@@ -65,6 +77,7 @@ export const usePlanStore = create<PlanStore>()(
           createdAt: Date.now(),
           updatedAt: Date.now(),
           startYear,
+          startSemester,
           courses: [],
           completedCourses: [],
         };
@@ -100,6 +113,7 @@ export const usePlanStore = create<PlanStore>()(
           name: `${plan.name} (Copy)`,
           createdAt: Date.now(),
           updatedAt: Date.now(),
+          startSemester: plan.startSemester ?? 1,
           courses: [...plan.courses],
           completedCourses: [...plan.completedCourses],
         };
@@ -223,8 +237,11 @@ export const usePlanStore = create<PlanStore>()(
         if (!course) return false;
         if (course.prerequisites.length === 0) return true;
 
+        const startSemester = plan.startSemester ?? 1;
+        const targetPosition = getChronologicalPosition(year, semester, startSemester);
+
         const priorCourses = plan.courses
-          .filter(c => c.year < year || (c.year === year && c.semester < semester))
+          .filter(c => getChronologicalPosition(c.year, c.semester, startSemester) < targetPosition)
           .map(c => c.courseCode);
 
         const completedSet = new Set([...priorCourses, ...plan.completedCourses]);

@@ -9,16 +9,25 @@ interface SemesterSlotProps {
   year: number;
   semester: 1 | 2;
   startYear: number;
+  startSemester: 1 | 2;
 }
 
-export function SemesterSlot({ planId, year, semester, startYear }: SemesterSlotProps) {
+export function SemesterSlot({ planId, year, semester, startYear, startSemester }: SemesterSlotProps) {
   const { getCoursesForSemester, getSemesterUnits } = usePlanStore();
   const { openCoursePanel } = useUIStore();
 
   const courses = getCoursesForSemester(planId, year, semester);
   const units = getSemesterUnits(planId, year, semester);
   const isOverload = units > 24;
-  const actualYear = startYear + year - 1;
+
+  // Calculate actual calendar year based on start semester
+  // When starting S1: both S1 and S2 are in the same calendar year
+  // When starting S2: S2 is in startYear+year-1, S1 is in startYear+year (next calendar year)
+  const actualYear = startSemester === 1
+    ? startYear + year - 1
+    : semester === 2
+      ? startYear + year - 1
+      : startYear + year;
 
   const { setNodeRef, isOver } = useDroppable({
     id: `slot-${year}-${semester}`,

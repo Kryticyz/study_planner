@@ -47,6 +47,7 @@ export interface StudyPlan {
   createdAt: number;
   updatedAt: number;
   startYear: number;
+  startSemester: 1 | 2;
   courses: PlannedCourse[];
   completedCourses: string[];
 }
