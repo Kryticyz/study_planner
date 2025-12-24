@@ -10,6 +10,7 @@ interface CourseCardProps {
   planId: string;
   isDragging?: boolean;
   compact?: boolean;
+  isSpanContinuation?: boolean;
 }
 
 const typeColors: Record<CourseType, string> = {
@@ -34,7 +35,7 @@ const typeLabels: Record<CourseType, string> = {
   industryExperience: 'Industry',
 };
 
-export function CourseCard({ courseCode, planId, isDragging, compact }: CourseCardProps) {
+export function CourseCard({ courseCode, planId, isDragging, compact, isSpanContinuation }: CourseCardProps) {
   const { removeCourse, validatePlan, getPlanById, markCompleted, unmarkCompleted } = usePlanStore();
   const { openCourseModal } = useUIStore();
   const course = courses[courseCode];
@@ -42,6 +43,7 @@ export function CourseCard({ courseCode, planId, isDragging, compact }: CourseCa
 
   const { attributes, listeners, setNodeRef, transform } = useDraggable({
     id: courseCode,
+    disabled: isSpanContinuation, // Can't drag continuation instances
   });
 
   if (!course) {
@@ -55,6 +57,7 @@ export function CourseCard({ courseCode, planId, isDragging, compact }: CourseCa
   const errors = validatePlan(planId).filter(e => e.courseCode === courseCode);
   const hasError = errors.length > 0;
   const isCompleted = plan?.completedCourses.includes(courseCode);
+  const isMultiSemester = (course.semesterSpan ?? 1) > 1;
 
   const style = transform
     ? {
@@ -80,6 +83,25 @@ export function CourseCard({ courseCode, planId, isDragging, compact }: CourseCa
       >
         <span className="font-medium">{course.code}</span>
         <span className="text-gray-500 ml-1">({course.units}u)</span>
+      </div>
+    );
+  }
+
+  // Simplified view for span continuation (course continues from previous semester)
+  if (isSpanContinuation) {
+    return (
+      <div
+        className={`p-2 rounded-lg border-2 border-dashed ${typeColors[course.type]} opacity-70`}
+      >
+        <div className="flex items-center justify-between gap-2">
+          <div className="flex-1 min-w-0">
+            <div className="flex items-center gap-1">
+              <span className="font-semibold text-sm text-gray-600">{course.code}</span>
+            </div>
+            <p className="text-xs text-gray-500 italic">Continues...</p>
+          </div>
+          <span className="text-xs font-medium text-gray-400">{course.units / (course.semesterSpan ?? 1)}u</span>
+        </div>
       </div>
     );
   }
@@ -152,6 +174,11 @@ export function CourseCard({ courseCode, planId, isDragging, compact }: CourseCa
         }`}>
           {typeLabels[course.type]}
         </span>
+        {isMultiSemester && (
+          <span className="text-[10px] px-1.5 py-0.5 rounded bg-indigo-100 text-indigo-700">
+            {course.semesterSpan} sem
+          </span>
+        )}
         <span className="text-[10px] text-gray-400">
           {course.semesters.join(', ')}
         </span>

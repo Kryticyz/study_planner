@@ -61,6 +61,43 @@ const getChronologicalPosition = (year: number, semester: 1 | 2, startSemester: 
   return (year - 1) * 2 + semesterOffset;
 };
 
+// Helper to get the next semester slot chronologically
+const getNextSemester = (year: number, semester: 1 | 2, startSemester: 1 | 2): { year: number; semester: 1 | 2 } | null => {
+  if (startSemester === 1) {
+    // S1 -> S2 (same year), S2 -> S1 (next year)
+    if (semester === 1) return { year, semester: 2 };
+    if (year >= 4) return null; // Can't go beyond year 4
+    return { year: year + 1, semester: 1 };
+  } else {
+    // S2 -> S1 (next year), S1 -> S2 (same year)
+    if (semester === 2) {
+      if (year >= 4) return null; // Can't go beyond year 4
+      return { year: year + 1, semester: 1 };
+    }
+    return { year, semester: 2 };
+  }
+};
+
+// Helper to get all semester slots a course occupies (including span)
+const getOccupiedSlots = (
+  year: number,
+  semester: 1 | 2,
+  semesterSpan: number,
+  startSemester: 1 | 2
+): { year: number; semester: 1 | 2 }[] => {
+  const slots: { year: number; semester: 1 | 2 }[] = [{ year, semester }];
+  let current = { year, semester };
+
+  for (let i = 1; i < semesterSpan; i++) {
+    const next = getNextSemester(current.year, current.semester, startSemester);
+    if (!next) break; // Can't extend beyond year 4
+    slots.push(next);
+    current = next;
+  }
+
+  return slots;
+};
+
 export const usePlanStore = create<PlanStore>()(
   persist(
     (set, get) => ({
@@ -136,11 +173,38 @@ export const usePlanStore = create<PlanStore>()(
       },
 
       addCourse: (planId: string, courseCode: string, year: number, semester: 1 | 2) => {
+        const course = courses[courseCode];
+        const semesterSpan = course?.semesterSpan ?? 1;
+
         set(state => ({
           plans: state.plans.map(p => {
             if (p.id !== planId) return p;
             const exists = p.courses.some(c => c.courseCode === courseCode);
             if (exists) return p;
+
+            const startSemester = p.startSemester ?? 1;
+
+            // For multi-semester courses, check that all slots are available
+            if (semesterSpan > 1) {
+              const occupiedSlots = getOccupiedSlots(year, semester, semesterSpan, startSemester);
+
+              // Check course doesn't extend beyond year 4
+              if (occupiedSlots.length < semesterSpan) return p;
+
+              // Check no conflicts with existing courses in any occupied slot
+              for (const slot of occupiedSlots) {
+                const hasConflict = p.courses.some(existingCourse => {
+                  const existingCourseData = courses[existingCourse.courseCode];
+                  const existingSpan = existingCourseData?.semesterSpan ?? 1;
+                  const existingOccupied = getOccupiedSlots(
+                    existingCourse.year, existingCourse.semester, existingSpan, startSemester
+                  );
+                  return existingOccupied.some(s => s.year === slot.year && s.semester === slot.semester);
+                });
+                if (hasConflict) return p;
+              }
+            }
+
             return {
               ...p,
               courses: [...p.courses, { courseCode, year, semester }],
@@ -165,9 +229,38 @@ export const usePlanStore = create<PlanStore>()(
       },
 
       moveCourse: (planId: string, courseCode: string, year: number, semester: 1 | 2) => {
+        const course = courses[courseCode];
+        const semesterSpan = course?.semesterSpan ?? 1;
+
         set(state => ({
           plans: state.plans.map(p => {
             if (p.id !== planId) return p;
+
+            const startSemester = p.startSemester ?? 1;
+
+            // For multi-semester courses, check that all slots are available
+            if (semesterSpan > 1) {
+              const occupiedSlots = getOccupiedSlots(year, semester, semesterSpan, startSemester);
+
+              // Check course doesn't extend beyond year 4
+              if (occupiedSlots.length < semesterSpan) return p;
+
+              // Check no conflicts with OTHER existing courses in any occupied slot
+              for (const slot of occupiedSlots) {
+                const hasConflict = p.courses.some(existingCourse => {
+                  // Skip the course being moved
+                  if (existingCourse.courseCode === courseCode) return false;
+                  const existingCourseData = courses[existingCourse.courseCode];
+                  const existingSpan = existingCourseData?.semesterSpan ?? 1;
+                  const existingOccupied = getOccupiedSlots(
+                    existingCourse.year, existingCourse.semester, existingSpan, startSemester
+                  );
+                  return existingOccupied.some(s => s.year === slot.year && s.semester === slot.semester);
+                });
+                if (hasConflict) return p;
+              }
+            }
+
             return {
               ...p,
               courses: p.courses.map(c =>
@@ -226,7 +319,23 @@ export const usePlanStore = create<PlanStore>()(
       getCoursesForSemester: (planId: string, year: number, semester: 1 | 2) => {
         const plan = get().plans.find(p => p.id === planId);
         if (!plan) return [];
-        return plan.courses.filter(c => c.year === year && c.semester === semester);
+
+        const startSemester = plan.startSemester ?? 1;
+
+        // Return courses that occupy this slot (either start here or span into here)
+        return plan.courses.filter(c => {
+          const course = courses[c.courseCode];
+          const semesterSpan = course?.semesterSpan ?? 1;
+
+          if (semesterSpan === 1) {
+            // Single semester course - must start here
+            return c.year === year && c.semester === semester;
+          }
+
+          // Multi-semester course - check if any of its occupied slots match
+          const occupiedSlots = getOccupiedSlots(c.year, c.semester, semesterSpan, startSemester);
+          return occupiedSlots.some(slot => slot.year === year && slot.semester === semester);
+        });
       },
 
       getPrerequisitesMet: (planId: string, courseCode: string, year: number, semester: 1 | 2) => {
@@ -259,7 +368,10 @@ export const usePlanStore = create<PlanStore>()(
         const semesterCourses = get().getCoursesForSemester(planId, year, semester);
         return semesterCourses.reduce((total, c) => {
           const course = courses[c.courseCode];
-          return total + (course?.units || 0);
+          if (!course) return total;
+          // Split units across semesters for multi-semester courses
+          const semesterSpan = course.semesterSpan ?? 1;
+          return total + (course.units / semesterSpan);
         }, 0);
       },
 
@@ -319,6 +431,42 @@ export const usePlanStore = create<PlanStore>()(
                   type: 'incompatible',
                   message: `Incompatible with ${incomp}`,
                 });
+              }
+            });
+          }
+
+          // Check multi-semester course validity
+          const semesterSpan = course.semesterSpan ?? 1;
+          if (semesterSpan > 1) {
+            const startSemester = plan.startSemester ?? 1;
+            const occupiedSlots = getOccupiedSlots(pc.year, pc.semester, semesterSpan, startSemester);
+
+            // Check course doesn't extend beyond year 4
+            if (occupiedSlots.length < semesterSpan) {
+              errors.push({
+                courseCode: pc.courseCode,
+                type: 'semester',
+                message: `${course.code} extends beyond Year 4`,
+              });
+            }
+
+            // Check for overlaps with other multi-semester courses
+            plan.courses.forEach(otherPc => {
+              if (otherPc.courseCode === pc.courseCode) return;
+              const otherCourse = courses[otherPc.courseCode];
+              if (!otherCourse) return;
+              const otherSpan = otherCourse.semesterSpan ?? 1;
+              const otherOccupied = getOccupiedSlots(otherPc.year, otherPc.semester, otherSpan, startSemester);
+
+              for (const slot of occupiedSlots) {
+                if (otherOccupied.some(s => s.year === slot.year && s.semester === slot.semester)) {
+                  errors.push({
+                    courseCode: pc.courseCode,
+                    type: 'incompatible',
+                    message: `${course.code} overlaps with ${otherCourse.code} in Year ${slot.year} S${slot.semester}`,
+                  });
+                  break;
+                }
               }
             });
           }

@@ -55,7 +55,7 @@ export const courses: Record<string, Course> = {
     prerequisiteAlternatives: [["MATH1115"], ["MATH1013"]],
     incompatible: ["MATH1014"],
     description: "Honours-track multivariable calculus and ODEs",
-    type: "elective",
+    type: "foundation",
   },
 
   // Physics - First Year
@@ -346,7 +346,7 @@ export const courses: Record<string, Course> = {
     level: 2000,
     college: "Engineering",
     semesters: ["S2"],
-    prerequisites: ["MATH1014", "ENGN1218"],
+    prerequisites: ["MATH1013"],
     description:
       "Fourier analysis, LTI systems, Laplace transforms, frequency response",
     type: "core",

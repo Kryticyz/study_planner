@@ -3,6 +3,7 @@ import { useUIStore } from '../store/uiStore';
 import { CourseCard } from './CourseCard';
 import { useDroppable } from '@dnd-kit/core';
 import { Plus, AlertTriangle } from 'lucide-react';
+import { courses as courseData } from '../data/courses';
 
 interface SemesterSlotProps {
   planId: string;
@@ -60,13 +61,23 @@ export function SemesterSlot({ planId, year, semester, startYear, startSemester 
       </div>
 
       <div className="space-y-2">
-        {courses.map((course) => (
-          <CourseCard
-            key={course.courseCode}
-            courseCode={course.courseCode}
-            planId={planId}
-          />
-        ))}
+        {courses.map((course) => {
+          // Check if this is a continuation of a multi-semester course
+          const courseInfo = courseData[course.courseCode];
+          const isSpanContinuation = Boolean(
+            courseInfo?.semesterSpan && courseInfo.semesterSpan > 1 &&
+            (course.year !== year || course.semester !== semester)
+          );
+
+          return (
+            <CourseCard
+              key={course.courseCode}
+              courseCode={course.courseCode}
+              planId={planId}
+              isSpanContinuation={isSpanContinuation}
+            />
+          );
+        })}
 
         <button
           onClick={() => openCoursePanel(year, semester)}

@@ -1,0 +1,25 @@
+{
+  "ENGN4339": {
+    "code": "ENGN4339",
+    "name": "Programs and Courses",
+    "units": 6,
+    "level": 4000,
+    "college": "",
+    "semesters": [
+      "Unknown"
+    ],
+    "prerequisites": {
+      "requires": [
+        "ENGN2218",
+        "ENGN3338"
+      ],
+      "raw": "To enrol in this course you must have completedENGN2218Electronics Systems and Design andENGN3338Aerodynamics"
+    },
+    "description": "This course provides students with experience in developing microcontroller-based instrumentation for aerospace applications, with particular emphasis on measurement of fluid quantities, including tem...",
+    "type": "elective",
+    "majorRelevance": [],
+    "areasOfInterest": [],
+    "assumedKnowledge": "Basic programming and breadboard-based construction are assumed.  Students should be able to convert between binary, decimal and hexadecimal numbers.",
+    "stemCourse": true
+  }
+}
