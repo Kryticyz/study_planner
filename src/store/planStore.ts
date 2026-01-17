@@ -3,6 +3,10 @@ import { persist } from 'zustand/middleware';
 import { StudyPlan, PlannedCourse, ValidationError } from '../types';
 import { courses } from '../data/courses';
 import { degreeRequirements, electronicsCommunicationsMajor } from '../data/requirements';
+import { getEquivalenceRegistry } from '../data/equivalences';
+import { evaluateExpression, convertLegacyPrerequisites, describeExpression } from '../utils/prerequisiteEvaluator';
+import { validateCorequisites } from '../utils/corequisiteValidator';
+import { EvaluationContext } from '../types/prerequisites';
 
 interface PlanStore {
   plans: StudyPlan[];
@@ -344,24 +348,33 @@ export const usePlanStore = create<PlanStore>()(
 
         const course = courses[courseCode];
         if (!course) return false;
-        if (course.prerequisites.length === 0) return true;
+
+        // Convert to expression tree (handles legacy format automatically)
+        const expression = convertLegacyPrerequisites(course);
+        if (!expression) return true; // No prerequisites
 
         const startSemester = plan.startSemester ?? 1;
         const targetPosition = getChronologicalPosition(year, semester, startSemester);
 
-        const priorCourses = plan.courses
+        // Get prior courses with full data for unit calculations
+        const priorCourseCodes = plan.courses
           .filter(c => getChronologicalPosition(c.year, c.semester, startSemester) < targetPosition)
           .map(c => c.courseCode);
 
-        const completedSet = new Set([...priorCourses, ...plan.completedCourses]);
+        const completedSet = new Set([...priorCourseCodes, ...plan.completedCourses]);
+        const completedCoursesData = [...completedSet]
+          .map(code => courses[code])
+          .filter(Boolean)
+          .map(c => ({ code: c.code, units: c.units, level: c.level }));
 
-        if (course.prerequisiteAlternatives && course.prerequisiteAlternatives.length > 0) {
-          return course.prerequisiteAlternatives.some(altGroup =>
-            altGroup.every(prereq => completedSet.has(prereq))
-          );
-        }
+        const context: EvaluationContext = {
+          completedCourses: completedSet,
+          completedCoursesData,
+          equivalenceRegistry: getEquivalenceRegistry(),
+        };
 
-        return course.prerequisites.every(prereq => completedSet.has(prereq));
+        const result = evaluateExpression(expression, context);
+        return result.satisfied;
       },
 
       getSemesterUnits: (planId: string, year: number, semester: 1 | 2) => {
@@ -387,12 +400,26 @@ export const usePlanStore = create<PlanStore>()(
 
           // Check prerequisites
           if (!get().getPrerequisitesMet(planId, pc.courseCode, pc.year, pc.semester)) {
+            const expression = convertLegacyPrerequisites(course);
+            const prereqDescription = expression
+              ? describeExpression(expression)
+              : course.prerequisites.join(', ');
             errors.push({
               courseCode: pc.courseCode,
               type: 'prerequisite',
-              message: `Prerequisites not met: ${course.prerequisites.join(', ')}`,
+              message: `Prerequisites not met: ${prereqDescription}`,
             });
           }
+
+          // Check corequisites
+          const coreqErrors = validateCorequisites(
+            pc.courseCode,
+            course,
+            pc.year,
+            pc.semester,
+            plan
+          );
+          errors.push(...coreqErrors);
 
           // Check semester availability
           const semesterStr = pc.semester === 1 ? 'S1' : 'S2';

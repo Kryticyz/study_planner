@@ -1,0 +1,572 @@
+{
+  "AENGI": {
+    "code": "AENGI",
+    "name": "Programs and Courses",
+    "postNominal": "",
+    "duration": "",
+    "totalUnits": 192,
+    "max1000LevelUnits": 60,
+    "admission": {
+      "atar": null,
+      "ibScore": null,
+      "prerequisites": {
+        "ACT": "Mathematical Methods (Major)/Further Mathematics (Major)/Specialist Mathematics/Specialist Methods (Major)",
+        "NSW": "HSC Mathematics Advanced or equivalent.",
+        "VIC": "Mathematics Methods or equivalent",
+        "QLD": "Mathematics Methods or equivalent",
+        "TAS": "Mathematical methods/Mathematics Specialised/Mathematics 1 and II through U Tas/Both Mathematics 1 and II through UTAS/Both Advanced Calculus and Applications 1A and 1B through UTAS",
+        "SA": "Mathematical Methods or equivalent",
+        "NT": "Mathematical Methods or equivalent",
+        "WA": "Mathematical Methods or equivalent",
+        "IB": "Mathematics: Applications and Interpretations HL/Mathematics: Analysis and Approaches SL or HL"
+      }
+    },
+    "classification": {
+      "degreeType": "single",
+      "fieldOfEducation": "",
+      "stemProgram": true,
+      "college": ""
+    },
+    "codes": {
+      "cricosCode": "",
+      "uacCode": ""
+    },
+    "requirements": [
+      {
+        "type": "choose",
+        "units": 60,
+        "description": "A maximum of 60 units may come from completion of 1000-level courses",
+        "courses": [],
+        "majors": [],
+        "subjectAreas": [],
+        "note": ""
+      },
+      {
+        "type": "choose",
+        "units": 12,
+        "description": "A minimum of 12 units of courses tagged as Transdisciplinary Problem-Solving",
+        "courses": [],
+        "majors": [],
+        "subjectAreas": [],
+        "note": ""
+      },
+      {
+        "type": "choose",
+        "units": 192,
+        "description": "The 192 units must consist of:",
+        "courses": [],
+        "majors": [],
+        "subjectAreas": [],
+        "note": ""
+      },
+      {
+        "type": "compulsory",
+        "units": 72,
+        "description": "72 units from completion of the following compulsory courses:",
+        "courses": [],
+        "majors": [],
+        "subjectAreas": [],
+        "note": ""
+      },
+      {
+        "type": "choose",
+        "units": 12,
+        "description": "12 units from completion of a course from the following list:",
+        "courses": [],
+        "majors": [],
+        "subjectAreas": [],
+        "note": ""
+      },
+      {
+        "type": "choose",
+        "units": 6,
+        "description": "6 units from completion of a course from the following list:",
+        "courses": [],
+        "majors": [],
+        "subjectAreas": [],
+        "note": ""
+      },
+      {
+        "type": "choose",
+        "units": 6,
+        "description": "6 units from completion of a course from the following list:",
+        "courses": [],
+        "majors": [],
+        "subjectAreas": [],
+        "note": ""
+      },
+      {
+        "type": "choose",
+        "units": 6,
+        "description": "6 units from completion of a course from the following list:",
+        "courses": [],
+        "majors": [],
+        "subjectAreas": [],
+        "note": ""
+      },
+      {
+        "type": "choose",
+        "units": 6,
+        "description": "6 units from completion of a course from the following list:",
+        "courses": [],
+        "majors": [],
+        "subjectAreas": [],
+        "note": ""
+      },
+      {
+        "type": "compulsory",
+        "units": 48,
+        "description": "48 units from completion of one of the following Engineering majors, of which 12 units contribute towards meeting the compulsory course requirements above:",
+        "courses": [],
+        "majors": [],
+        "subjectAreas": [],
+        "note": ""
+      },
+      {
+        "type": "subject_area",
+        "units": 24,
+        "description": "24 units from completion of courses from the following subject areas: ENGN Engineering",
+        "courses": [],
+        "majors": [],
+        "subjectAreas": [
+          "ENGN"
+        ],
+        "note": ""
+      },
+      {
+        "type": "elective",
+        "units": 24,
+        "description": "24 units from completion of elective courses offered by ANU.",
+        "courses": [],
+        "majors": [],
+        "subjectAreas": [],
+        "note": ""
+      }
+    ],
+    "availableMajors": [
+      {
+        "code": "ASSY-MAJ",
+        "name": "Aerospace Systems",
+        "url": "https://programsandcourses.anu.edu.au/major/ASSY-MAJ"
+      },
+      {
+        "code": "ELCO-MAJ",
+        "name": "Electronic and Communication Systems",
+        "url": "https://programsandcourses.anu.edu.au/major/ELCO-MAJ"
+      },
+      {
+        "code": "ESYS-MAJ",
+        "name": "Environmental Systems",
+        "url": "https://programsandcourses.anu.edu.au/major/ESYS-MAJ"
+      },
+      {
+        "code": "INES-MAJ",
+        "name": "Intelligent Electronic Systems",
+        "url": "https://programsandcourses.anu.edu.au/major/INES-MAJ"
+      },
+      {
+        "code": "MTSY-MAJ",
+        "name": "Mechatronic Systems",
+        "url": "https://programsandcourses.anu.edu.au/major/MTSY-MAJ"
+      },
+      {
+        "code": "NUSY-MAJ",
+        "name": "Nuclear Systems",
+        "url": "https://programsandcourses.anu.edu.au/major/NUSY-MAJ"
+      },
+      {
+        "code": "RENE-MAJ",
+        "name": "Renewable Energy Systems",
+        "url": "https://programsandcourses.anu.edu.au/major/RENE-MAJ"
+      }
+    ],
+    "studyPlans": [
+      {
+        "year": 148,
+        "semester": 1,
+        "courses": [
+          {
+            "code": "ENGN1211",
+            "name": "ENGN1211",
+            "units": 6,
+            "is_placeholder": false
+          },
+          {
+            "code": "PHYS1101",
+            "name": "PHYS1101",
+            "units": 6,
+            "is_placeholder": false
+          },
+          {
+            "code": "MATH1013",
+            "name": "MATH1013",
+            "units": 16,
+            "is_placeholder": false
+          },
+          {
+            "code": "",
+            "name": "Elective Course6 units",
+            "units": 6,
+            "is_placeholder": true
+          }
+        ]
+      },
+      {
+        "year": 148,
+        "semester": 2,
+        "courses": [
+          {
+            "code": "MATH1014",
+            "name": "MATH1014",
+            "units": 26,
+            "is_placeholder": false
+          },
+          {
+            "code": "ENGN1217",
+            "name": "ENGN1217",
+            "units": 6,
+            "is_placeholder": false
+          },
+          {
+            "code": "ENGN1218",
+            "name": "ENGN1218",
+            "units": 6,
+            "is_placeholder": false
+          },
+          {
+            "code": "COMP1730",
+            "name": "COMP1730",
+            "units": 6,
+            "is_placeholder": false
+          }
+        ]
+      },
+      {
+        "year": 248,
+        "semester": 1,
+        "courses": [
+          {
+            "code": "ENGN2300",
+            "name": "ENGN2300",
+            "units": 6,
+            "is_placeholder": false
+          },
+          {
+            "code": "ENGN2217",
+            "name": "ENGN2217",
+            "units": 6,
+            "is_placeholder": false
+          },
+          {
+            "code": "ENGN2218",
+            "name": "ENGN2218",
+            "units": 6,
+            "is_placeholder": false
+          },
+          {
+            "code": "ENGN2219",
+            "name": "ENGN2219",
+            "units": 6,
+            "is_placeholder": false
+          }
+        ]
+      },
+      {
+        "year": 248,
+        "semester": 2,
+        "courses": [
+          {
+            "code": "ENGN2301",
+            "name": "ENGN2301",
+            "units": 6,
+            "is_placeholder": false
+          },
+          {
+            "code": "ENGN2222",
+            "name": "ENGN2222",
+            "units": 6,
+            "is_placeholder": false
+          },
+          {
+            "code": "ENGN2228",
+            "name": "ENGN2228",
+            "units": 6,
+            "is_placeholder": false
+          },
+          {
+            "code": "",
+            "name": "Elective Course6 units",
+            "units": 6,
+            "is_placeholder": true
+          }
+        ]
+      },
+      {
+        "year": 348,
+        "semester": 1,
+        "courses": [
+          {
+            "code": "ENGN3300",
+            "name": "ENGN3300",
+            "units": 6,
+            "is_placeholder": false
+          },
+          {
+            "code": "",
+            "name": "ENGN Major Course6 units",
+            "units": 6,
+            "is_placeholder": true
+          },
+          {
+            "code": "",
+            "name": "Elective Course6 units",
+            "units": 6,
+            "is_placeholder": true
+          },
+          {
+            "code": "",
+            "name": "Elective Course6 units",
+            "units": 6,
+            "is_placeholder": true
+          }
+        ]
+      },
+      {
+        "year": 348,
+        "semester": 2,
+        "courses": [
+          {
+            "code": "ENGN3301",
+            "name": "ENGN3301",
+            "units": 6,
+            "is_placeholder": false
+          },
+          {
+            "code": "",
+            "name": "ENGN Major Course6 units",
+            "units": 6,
+            "is_placeholder": true
+          },
+          {
+            "code": "",
+            "name": "ENGN Major Course6 units",
+            "units": 6,
+            "is_placeholder": true
+          },
+          {
+            "code": "",
+            "name": "Elective Course6 units",
+            "units": 6,
+            "is_placeholder": true
+          }
+        ]
+      },
+      {
+        "year": 448,
+        "semester": 1,
+        "courses": [
+          {
+            "code": "ENGN4300",
+            "name": "ENGN4300",
+            "units": 12,
+            "is_placeholder": false
+          },
+          {
+            "code": "",
+            "name": "ENGN Major Course6 units",
+            "units": 6,
+            "is_placeholder": true
+          },
+          {
+            "code": "",
+            "name": "ENGN Major Course6 units",
+            "units": 6,
+            "is_placeholder": true
+          },
+          {
+            "code": "",
+            "name": "Elective Course6 units",
+            "units": 6,
+            "is_placeholder": true
+          }
+        ]
+      },
+      {
+        "year": 448,
+        "semester": 2,
+        "courses": [
+          {
+            "code": "ENGN4300",
+            "name": "ENGN4300",
+            "units": 12,
+            "is_placeholder": false
+          },
+          {
+            "code": "",
+            "name": "ENGN Major Course6 units",
+            "units": 6,
+            "is_placeholder": true
+          },
+          {
+            "code": "",
+            "name": "Elective Course6 units",
+            "units": 6,
+            "is_placeholder": true
+          },
+          {
+            "code": "",
+            "name": "Elective Course6 units",
+            "units": 6,
+            "is_placeholder": true
+          }
+        ]
+      },
+      {
+        "year": 148,
+        "semester": 1,
+        "courses": [
+          {
+            "code": "ENGN1211",
+            "name": "ENGN1211",
+            "units": 6,
+            "is_placeholder": false
+          },
+          {
+            "code": "PHYS1101",
+            "name": "PHYS1101",
+            "units": 6,
+            "is_placeholder": false
+          },
+          {
+            "code": "MATH1013",
+            "name": "MATH1013",
+            "units": 16,
+            "is_placeholder": false
+          },
+          {
+            "code": "",
+            "name": "Elective Course6 Units",
+            "units": 6,
+            "is_placeholder": true
+          }
+        ]
+      },
+      {
+        "year": 148,
+        "semester": 2,
+        "courses": [
+          {
+            "code": "ENGN1217",
+            "name": "ENGN1217",
+            "units": 6,
+            "is_placeholder": false
+          },
+          {
+            "code": "ENGN1218",
+            "name": "ENGN1218",
+            "units": 6,
+            "is_placeholder": false
+          },
+          {
+            "code": "MATH1014",
+            "name": "MATH1014",
+            "units": 26,
+            "is_placeholder": false
+          },
+          {
+            "code": "COMP1730",
+            "name": "COMP1730",
+            "units": 6,
+            "is_placeholder": false
+          }
+        ]
+      },
+      {
+        "year": 148,
+        "semester": 1,
+        "courses": [
+          {
+            "code": "ENGN1211",
+            "name": "ENGN1211",
+            "units": 6,
+            "is_placeholder": false
+          },
+          {
+            "code": "PHYS1101",
+            "name": "PHYS1101",
+            "units": 6,
+            "is_placeholder": false
+          },
+          {
+            "code": "MATH1013",
+            "name": "MATH1013",
+            "units": 16,
+            "is_placeholder": false
+          },
+          {
+            "code": "",
+            "name": "Other Degree Course",
+            "units": 6,
+            "is_placeholder": true
+          }
+        ]
+      },
+      {
+        "year": 148,
+        "semester": 2,
+        "courses": [
+          {
+            "code": "ENGN1217",
+            "name": "ENGN1217",
+            "units": 6,
+            "is_placeholder": false
+          },
+          {
+            "code": "ENGN1218",
+            "name": "ENGN1218",
+            "units": 6,
+            "is_placeholder": false
+          },
+          {
+            "code": "MATH1014",
+            "name": "MATH1014",
+            "units": 26,
+            "is_placeholder": false
+          },
+          {
+            "code": "",
+            "name": "Double Degree Course",
+            "units": 6,
+            "is_placeholder": true
+          }
+        ]
+      }
+    ],
+    "honoursInfo": {
+      "enrolment_course": "ENGN4100",
+      "calculation_method": "",
+      "weightings": {
+        "foundations": 0.1,
+        "fundamentals": 0.2,
+        "professional_core": 0.3,
+        "discipline": 0.4
+      }
+    },
+    "description": "",
+    "learningOutcomes": [
+      "Apply systematic engineering methods professionally to design optimised and sustainable solutions to complex and transdisciplinary engineering problems.",
+      "Construct and evaluate solutions to engineering problems by selecting and applying theoretical principles and methods from the underpinning physical, mathematical and information sciences, and broader transdisciplinary knowledge.",
+      "Demonstrate advanced technical knowledge and the application of appropriate tools in at least one field of engineering specialisation.",
+      "Compare current developments and emerging trends in at least one field of engineering specialisation.",
+      "Understand the contextual factors that influence professional engineering practice, such as interpersonal, organizational, institutional, technological, physical, environmental, political and societal factors, and assess the potential societal, cultural, health, legal and environmental impact of engineering activities.",
+      "Communicate and incorporate perspectives across disciplines effectively with colleagues, other engineering professionals and the broader community employing a range of communication media and tools.",
+      "Engage in independent research through the application of research-based knowledge and research methods, including searching, analysing and evaluating information sources within and beyond their engineering discipline.",
+      "Engage responsibly in critical reflection on self-competence to practice ethically and independent learning to continue practicing at the forefront of the discipline.",
+      "Work effectively and proactively within cross-cultural, multi-disciplinary teams, demonstrating autonomy, ethical conduct, well-developed judgement, adaptability and responsibility to achieve engineering outcomes at a high standard."
+    ],
+    "careerOptions": "ANU ranks among the world's very finest universities.\u00a0Our nearly 100,000 alumni include political, business, government, and academic leaders around the world.",
+    "academicContact": "",
+    "modeOfDelivery": "In Person",
+    "url": "https://programsandcourses.anu.edu.au/2026/program/aengi"
+  }
+}

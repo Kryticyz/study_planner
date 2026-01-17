@@ -1,0 +1,1816 @@
+{
+  "metadata": {
+    "program": "AENGI",
+    "year": 2025,
+    "scrapedAt": "2025-12-25T23:34:47.059924+00:00",
+    "stats": {
+      "programs": 1,
+      "majors": 6,
+      "courses": 65
+    }
+  },
+  "program": {
+    "code": "AENGI",
+    "name": "Programs and Courses",
+    "totalUnits": 192,
+    "duration": "4 year full-time",
+    "requirements": [
+      {
+        "type": "compulsory",
+        "courses": [
+          "ENGN2301",
+          "MATH1014",
+          "ENGN3100",
+          "ENGN4350",
+          "ENGN1217",
+          "ENGN1218",
+          "ENGN4000",
+          "ENGN2219",
+          "COMP1130",
+          "MATH1116",
+          "ENGN2217",
+          "ENGN1000",
+          "COMP1100",
+          "ENGN4300",
+          "MATH1013",
+          "ENGN2228",
+          "PHYS1001",
+          "ENGN2000",
+          "ENGN2300",
+          "MATH1115",
+          "ENGN4100",
+          "ENGN3000",
+          "ENGN2218",
+          "ENGN1211",
+          "ENGN3300",
+          "PHYS1101",
+          "ENGN2222",
+          "ENGN3301",
+          "COMP1730",
+          "ENGN3200"
+        ]
+      }
+    ],
+    "majors": [
+      "ASSY-MAJ",
+      "ELCO-MAJ",
+      "ESYS-MAJ",
+      "MTSY-MAJ",
+      "NUSY-MAJ",
+      "RENE-MAJ"
+    ],
+    "allCourses": [
+      "COMP1100",
+      "COMP1130",
+      "COMP1730",
+      "ENGN1000",
+      "ENGN1211",
+      "ENGN1217",
+      "ENGN1218",
+      "ENGN2000",
+      "ENGN2217",
+      "ENGN2218",
+      "ENGN2219",
+      "ENGN2222",
+      "ENGN2228",
+      "ENGN2300",
+      "ENGN2301",
+      "ENGN3000",
+      "ENGN3100",
+      "ENGN3200",
+      "ENGN3300",
+      "ENGN3301",
+      "ENGN4000",
+      "ENGN4100",
+      "ENGN4300",
+      "ENGN4350",
+      "MATH1013",
+      "MATH1014",
+      "MATH1115",
+      "MATH1116",
+      "PHYS1001",
+      "PHYS1101"
+    ],
+    "atar": 85
+  },
+  "majors": {
+    "ASSY-MAJ": {
+      "code": "ASSY-MAJ",
+      "name": "Programs and Courses",
+      "units": 48,
+      "requirements": [
+        {
+          "type": "compulsory",
+          "courses": [
+            "ENGN2228",
+            "ENGN4338",
+            "ENGN3223",
+            "ENGN2222",
+            "ENGN4337",
+            "ENGN3339",
+            "ENGN3338",
+            "ENGN4339"
+          ]
+        }
+      ],
+      "allCourses": [
+        "ENGN2222",
+        "ENGN2228",
+        "ENGN3223",
+        "ENGN3338",
+        "ENGN3339",
+        "ENGN4337",
+        "ENGN4338",
+        "ENGN4339"
+      ]
+    },
+    "ELCO-MAJ": {
+      "code": "ELCO-MAJ",
+      "name": "Programs and Courses",
+      "units": 48,
+      "requirements": [
+        {
+          "type": "compulsory",
+          "courses": [
+            "ENGN4625",
+            "ENGN2228",
+            "ENGN4536",
+            "ENGN4213",
+            "ENGN3539",
+            "ENGN3226",
+            "ENGN2218",
+            "ENGN4537"
+          ]
+        }
+      ],
+      "allCourses": [
+        "ENGN2218",
+        "ENGN2228",
+        "ENGN3226",
+        "ENGN3539",
+        "ENGN4213",
+        "ENGN4536",
+        "ENGN4537",
+        "ENGN4625"
+      ]
+    },
+    "ESYS-MAJ": {
+      "code": "ESYS-MAJ",
+      "name": "Programs and Courses",
+      "units": 48,
+      "requirements": [
+        {
+          "type": "compulsory",
+          "courses": [
+            "ENGN4903",
+            "ENGN2228",
+            "ENGN3901",
+            "ENGN2222",
+            "ENGN3902",
+            "ENGN4901",
+            "ENGN3903",
+            "ENGN4902"
+          ]
+        }
+      ],
+      "allCourses": [
+        "ENGN2222",
+        "ENGN2228",
+        "ENGN3901",
+        "ENGN3902",
+        "ENGN3903",
+        "ENGN4901",
+        "ENGN4902",
+        "ENGN4903"
+      ]
+    },
+    "MTSY-MAJ": {
+      "code": "MTSY-MAJ",
+      "name": "Programs and Courses",
+      "units": 48,
+      "requirements": [
+        {
+          "type": "compulsory",
+          "courses": [
+            "ENGN3331",
+            "ENGN2228",
+            "ENGN4628",
+            "ENGN3223",
+            "ENGN4627",
+            "ENGN4528",
+            "ENGN4213",
+            "ENGN1218",
+            "ENGN2218"
+          ]
+        }
+      ],
+      "allCourses": [
+        "ENGN1218",
+        "ENGN2218",
+        "ENGN2228",
+        "ENGN3223",
+        "ENGN3331",
+        "ENGN4213",
+        "ENGN4528",
+        "ENGN4627",
+        "ENGN4628"
+      ]
+    },
+    "NUSY-MAJ": {
+      "code": "NUSY-MAJ",
+      "name": "Programs and Courses",
+      "units": 48,
+      "requirements": [
+        {
+          "type": "compulsory",
+          "courses": [
+            "ENGN4204",
+            "ENGN4222",
+            "ENGN2228",
+            "ENGN3224",
+            "ENGN3223",
+            "ENGN2222",
+            "ENGN4549",
+            "ENGN4205"
+          ]
+        }
+      ],
+      "allCourses": [
+        "ENGN2222",
+        "ENGN2228",
+        "ENGN3223",
+        "ENGN3224",
+        "ENGN4204",
+        "ENGN4205",
+        "ENGN4222",
+        "ENGN4549"
+      ]
+    },
+    "RENE-MAJ": {
+      "code": "RENE-MAJ",
+      "name": "Programs and Courses",
+      "units": 48,
+      "requirements": [
+        {
+          "type": "compulsory",
+          "courses": [
+            "ENGN4548",
+            "ENGN4625",
+            "ENGN3224",
+            "ENGN2222",
+            "ENGN4547",
+            "ENGN4524",
+            "ENGN3516",
+            "ENGN2218"
+          ]
+        }
+      ],
+      "allCourses": [
+        "ENGN2218",
+        "ENGN2222",
+        "ENGN3224",
+        "ENGN3516",
+        "ENGN4524",
+        "ENGN4547",
+        "ENGN4548",
+        "ENGN4625"
+      ]
+    }
+  },
+  "courses": {
+    "COMP1100": {
+      "code": "COMP1100",
+      "name": "Programming as Problem Solving",
+      "units": 6,
+      "level": 1000,
+      "college": "Computing",
+      "semesters": [
+        "S1",
+        "S2"
+      ],
+      "prerequisites": [],
+      "description": "This course is the first of three core computer science courses on programming. It introduces students to the field of computer science as a discipline for solving problems through computation and provides the foundation for more advanced courses on programming and software development. Data structures and algorithms, the key concepts at the core of computer science, receive their first treatment in this course.The course covers functional programming in depth, developing the core idea of functi",
+      "type": "foundation",
+      "incompatible": [
+        "COMP1130"
+      ]
+    },
+    "COMP1130": {
+      "code": "COMP1130",
+      "name": "Programming as Problem Solving (Advanced)",
+      "units": 6,
+      "level": 1000,
+      "college": "Computing",
+      "semesters": [
+        "S1",
+        "S2"
+      ],
+      "prerequisites": [],
+      "description": "This course is a variation on Programming for Problem Solving (COMP1100). It covers the same topics in more depth, requiring addtional contact hours to allow students to deepen their understanding and experience. They will understand the foundations of program semantics, program proof, and implementation of the programming language features that they have learned in the course. As the advanced version of the course the first six Learning Outcomes are the same as for COMP1100.",
+      "type": "foundation",
+      "incompatible": [
+        "COMP1100"
+      ]
+    },
+    "COMP1730": {
+      "code": "COMP1730",
+      "name": "Programming for Scientists",
+      "units": 6,
+      "level": 1000,
+      "college": "Computing",
+      "semesters": [
+        "S1",
+        "S2"
+      ],
+      "prerequisites": [],
+      "description": "This course teaches introductory programming, fundamental programming language and computer science concepts, and computational problem solving illustrated with applications common in science and engineering, such as simulation and data analysis and visualisation. The course does not require any prior knowledge of programming, computer science or IT. There is an emphasis on designing and writing correct programs: testing and debugging are seen as integral to the programming enterprise.",
+      "type": "foundation",
+      "incompatible": [
+        "COMP6730",
+        "COMP1130",
+        "COMP1110",
+        "COMP1100",
+        "COMP1140"
+      ]
+    },
+    "ENGN1000": {
+      "code": "ENGN1000",
+      "name": "Programs and Courses",
+      "units": 6,
+      "level": 1000,
+      "college": "Engineering",
+      "semesters": [],
+      "prerequisites": [],
+      "description": "You may have mistyped the address or the page may have moved.",
+      "type": "foundation"
+    },
+    "ENGN1211": {
+      "code": "ENGN1211",
+      "name": "Engineering Design 1: Discovering Engineering",
+      "units": 6,
+      "level": 1000,
+      "college": "Engineering",
+      "semesters": [
+        "S1",
+        "S2"
+      ],
+      "prerequisites": [],
+      "description": "Discovering Engineering is the foundation course for engineering. The course invites students to discover engineering by tackling an open-ended design project, as well as learning a variety of essential technical and non-technical skills. The major project for the course is to work in teams to design and build a robot rover that can autonomously navigate around a maze.Throughout the course, students undertake a variety of learning activities that introduce the key engineering concepts that are n",
+      "type": "foundation"
+    },
+    "ENGN1217": {
+      "code": "ENGN1217",
+      "name": "Introduction to Mechanics",
+      "units": 6,
+      "level": 1000,
+      "college": "Engineering",
+      "semesters": [
+        "S2"
+      ],
+      "prerequisites": [],
+      "description": "This course introduces the fundamental principles in mechanics. Structural design applications of a variety of problems are developed throughout the course using examples that elucidate the theory of mechanics. The primary aim of this course is to provide a solid foundation for students in the field of mechanical engineering. Specific topics include:Statics of particles; forces in a plane and in spaceEquivalent systems of forces; Cartesian vector and vector operationsEquilibrium of rigid bodies;",
+      "type": "foundation"
+    },
+    "ENGN1218": {
+      "code": "ENGN1218",
+      "name": "Introduction to Electronics",
+      "units": 6,
+      "level": 1000,
+      "college": "Engineering",
+      "semesters": [
+        "S2"
+      ],
+      "prerequisites": [],
+      "description": "This course introduces students to the fundamentals of electrical and electronic engineering. It provides the students with an understanding of basic electrical quantities, circuit elements and circuit analysis techniques. It also provides an understanding of the principles and operation of diodes (which are the basis of the ubiquitous DC power supply circuit) and operational amplifiers (which provide the easiest method to build an amplifier circuit). Specific topics include:Introduction to Elec",
+      "type": "foundation"
+    },
+    "ENGN2000": {
+      "code": "ENGN2000",
+      "name": "Programs and Courses",
+      "units": 6,
+      "level": 2000,
+      "college": "Engineering",
+      "semesters": [],
+      "prerequisites": [],
+      "description": "You may have mistyped the address or the page may have moved.",
+      "type": "core"
+    },
+    "ENGN2217": {
+      "code": "ENGN2217",
+      "name": "Mechanical Systems and Design",
+      "units": 6,
+      "level": 2000,
+      "college": "Engineering",
+      "semesters": [
+        "S1",
+        "S2"
+      ],
+      "prerequisites": [
+        "ENGN1217"
+      ],
+      "description": "Drawing on a well-established Mechanics of Materials curriculum, this course introduces students to the fundamentals of the mechanics of deformable bodies, with key topics including stress, strain, constitutive relations, loading modes (axial, shear, torsion), stress transformations, and analysis of simple structures (beams, shafts, columns). These concepts represent essential knowledge for many engineering fields, such as aerospace, civil and mechanical, as well as a wide range of related disci",
+      "type": "core"
+    },
+    "ENGN2218": {
+      "code": "ENGN2218",
+      "name": "Electronic Systems and Design",
+      "units": 6,
+      "level": 2000,
+      "college": "Engineering",
+      "semesters": [
+        "S1",
+        "S2"
+      ],
+      "prerequisites": [
+        "ENGN1218"
+      ],
+      "description": "ENGN2218 Electrical Systems & Design builds directly on ENGN1218 Introduction to Electrical Systems by developing the students' understanding of the principles and operation of advanced electronic circuits and devices (bipolar junction transistor, operational amplifier, filters, digital logic gates, ADC and DAC, 555 Timer and Instrumentation amplifiers). It also emphasizes the importance of modelling the behaviour of complex electronic circuits and devices using systematic mathematical technique",
+      "type": "core"
+    },
+    "ENGN2219": {
+      "code": "ENGN2219",
+      "name": "Computer Architecture",
+      "units": 6,
+      "level": 2000,
+      "college": "Engineering",
+      "semesters": [
+        "S1",
+        "S2"
+      ],
+      "prerequisites": [
+        "COMP1100",
+        "COMP1730",
+        "COMP1130"
+      ],
+      "description": "This course is a rigorous introduction to the design of digital circuits and computer architecture. It provides technical foundations for how a computer system is built from the bottom up and how the high-level programming languages you learn in other courses are translated into simple instructions the computer executes. The course introduces the different abstraction layers necessary to make a computer system work, and a key focus is the connection between hardware and software.The course intro",
+      "type": "core",
+      "incompatible": [
+        "COMP2300",
+        "COMP6719",
+        "COMP6300"
+      ]
+    },
+    "ENGN2222": {
+      "code": "ENGN2222",
+      "name": "Engineering Thermodynamics",
+      "units": 6,
+      "level": 2000,
+      "college": "Engineering",
+      "semesters": [
+        "S2"
+      ],
+      "prerequisites": [
+        "PHYS1101"
+      ],
+      "description": "This course conveys the fundamental thermodynamic principles and analysis methods. The topics covered include basic concepts and definitions, first law of thermodynamics and its applications to closed and open systems, second law of thermodynamics, equations of state, thermodynamic property relations, ideal gas mixtures, psychrometrics, reacting mixtures, chemical and phase equilibrium. The course briefly explores relations between thermodynamics and information theory. Application examples are ",
+      "type": "core",
+      "prerequisiteAlternatives": [
+        [
+          "PHYS1101"
+        ],
+        [
+          "PHYS1001"
+        ]
+      ],
+      "prerequisiteExpression": {
+        "type": "or",
+        "operands": [
+          {
+            "type": "course",
+            "courseCode": "PHYS1101"
+          },
+          {
+            "type": "course",
+            "courseCode": "PHYS1001"
+          }
+        ]
+      }
+    },
+    "ENGN2228": {
+      "code": "ENGN2228",
+      "name": "Signals and Systems",
+      "units": 6,
+      "level": 2000,
+      "college": "Engineering",
+      "semesters": [
+        "S2"
+      ],
+      "prerequisites": [
+        "MATH1116"
+      ],
+      "description": "The concepts of signals and systems are at the heart of our modern world. They exist in a wide range of engineering disciplines ranging from electrical and electronic systems, mechanical systems, thermal and chemical systems, to biomedical system . This course presents the common principles, theory and techniques fundamental to the analysis and design of continuous-time and discrete-time signals and systems applicable to all engineering disciplines. It begins by introducing an analytical framewo",
+      "type": "core",
+      "prerequisiteAlternatives": [
+        [
+          "MATH1116"
+        ],
+        [
+          "MATH1115"
+        ],
+        [
+          "MATH1013"
+        ],
+        [
+          "MATH1014"
+        ]
+      ],
+      "prerequisiteExpression": {
+        "type": "or",
+        "operands": [
+          {
+            "type": "course",
+            "courseCode": "MATH1116"
+          },
+          {
+            "type": "course",
+            "courseCode": "MATH1115"
+          },
+          {
+            "type": "course",
+            "courseCode": "MATH1013"
+          },
+          {
+            "type": "course",
+            "courseCode": "MATH1014"
+          }
+        ]
+      }
+    },
+    "ENGN2300": {
+      "code": "ENGN2300",
+      "name": "Engineering Design 2: Systems Approaches for Design",
+      "units": 6,
+      "level": 2000,
+      "college": "Engineering",
+      "semesters": [
+        "S1",
+        "S2"
+      ],
+      "prerequisites": [
+        "ENGN1211"
+      ],
+      "description": "Engineering Design 2: Systems Approaches for Design will build your proficiency to abstract, visualise, communicate and deliver engineering designs. ED2 is the second course in the interdisciplinary engineering design core, which situates design within the life-cycle of systems. You will undertake a project using a systems approach to design, which is a formal process for generating robust and relevant engineering designs, applicable to all areas of engineering.During the early stages of the cou",
+      "type": "core",
+      "incompatible": [
+        "ENGN2225"
+      ]
+    },
+    "ENGN2301": {
+      "code": "ENGN2301",
+      "name": "Engineering Design 3: Systems Approaches for Analysis",
+      "units": 6,
+      "level": 2000,
+      "college": "Engineering",
+      "semesters": [
+        "S2"
+      ],
+      "prerequisites": [
+        "ENGN2300"
+      ],
+      "description": "Engineering Design 3: Systems Approaches for Analysis will develop your skills to undertake formal testing and evaluation of an engineering design as a technical process in the life-cycle of a system. ED3 is the third course in the interdisciplinary engineering design core, which situates design within the life-cycle of a system. You will learn how to design and execute engineering testing and analysis processes to improve design outcomes. These techniques build on concepts covered in ED2, and a",
+      "type": "core",
+      "incompatible": [
+        "ENGN2226"
+      ]
+    },
+    "ENGN3000": {
+      "code": "ENGN3000",
+      "name": "Programs and Courses",
+      "units": 6,
+      "level": 3000,
+      "college": "Engineering",
+      "semesters": [],
+      "prerequisites": [],
+      "description": "You may have mistyped the address or the page may have moved.",
+      "type": "major"
+    },
+    "ENGN3100": {
+      "code": "ENGN3100",
+      "name": "Practical Experience",
+      "units": 6,
+      "level": 3000,
+      "college": "Engineering",
+      "semesters": [
+        "Summer"
+      ],
+      "prerequisites": [],
+      "description": "The Bachelor of Engineering (Honours), Bachelor of Engineering (Research and Development) (Honours) and Bachelor of Engineering (Honours) in Software Engineering degrees at the ANU are accredited by Engineers Australia. A requirement of Engineers Australia, as part of the degree accreditation, is that ALL students MUST complete the equivalent of 12 weeks of full-time work experience outside the University during their studies. This is implemented in the engineering degrees at the ANU as ENGN3100",
+      "type": "industryExperience"
+    },
+    "ENGN3200": {
+      "code": "ENGN3200",
+      "name": "Engineering Internship",
+      "units": 6,
+      "level": 3000,
+      "college": "Engineering",
+      "semesters": [
+        "Summer"
+      ],
+      "prerequisites": [],
+      "description": "The aim of this course is to use the internship experience to enable students to develop their engineering skills and practice. Students will undertake industry placements and assessed for academic credit. The internships will be aligned with the aims of the engineering program and its areas of specialisation. Students will experience a real-life engineering workplace and understand how their engineering and professional skills and knowledge can be utilised in industry. They will also be able to",
+      "type": "major"
+    },
+    "ENGN3223": {
+      "code": "ENGN3223",
+      "name": "Control Systems",
+      "units": 6,
+      "level": 3000,
+      "college": "Engineering",
+      "semesters": [
+        "S2"
+      ],
+      "prerequisites": [],
+      "description": "Control Systems is the study of the analysis and regulation of the output behaviors of dynamical systems subject to input signals. The concepts and tools discussed in this course can be used in a wide spectrum of engineering disciplines such as mechanical, electrical, aerospace, manufacturing, and biomedical engineering. The emphasis of this course will be on the basic theories and feedback controller design methods of linear time-invariant systems.",
+      "type": "major",
+      "incompatible": [
+        "ENGN6223"
+      ]
+    },
+    "ENGN3224": {
+      "code": "ENGN3224",
+      "name": "Fluid Mechanics and Heat Transfer",
+      "units": 6,
+      "level": 3000,
+      "college": "Engineering",
+      "semesters": [
+        "S1",
+        "S2"
+      ],
+      "prerequisites": [
+        "ENGN2222"
+      ],
+      "description": "This course explores the fundamental concepts of fluid mechanics and heat transfer, and their applications in engineering. The course begins by introducing analysis of static fluid bodies and then continues with fluid dynamics, principally the effects of viscous and thermal boundary layers. Fluid conservation equations are presented in detail. Fluid conveyancing through pipework and external flow analysis complete the coursework on fluids. The concept of boundary layer behaviour is then extended",
+      "type": "major",
+      "incompatible": [
+        "ENGN6224"
+      ]
+    },
+    "ENGN3226": {
+      "code": "ENGN3226",
+      "name": "Digital Communications",
+      "units": 6,
+      "level": 3000,
+      "college": "Engineering",
+      "semesters": [
+        "S1",
+        "S2"
+      ],
+      "prerequisites": [
+        "ENGN2228"
+      ],
+      "description": "This course presents the principles and techniques fundamental to the analysis and design of digital communication systems. It focuses on the basic building blocks of a digital communication system (source encoder/decoder, channel encoder/decoder, digital modulator/demodulator and channel characteristics). The emphasis is on mathematical underpinnings of communications theory along with practical applications and emerging machine learning tools. Specific topics include:• Review of Probability an",
+      "type": "major",
+      "incompatible": [
+        "ENGN6626"
+      ]
+    },
+    "ENGN3300": {
+      "code": "ENGN3300",
+      "name": "Engineering Design 4A: Systems Approaches for Management",
+      "units": 6,
+      "level": 3000,
+      "college": "Engineering",
+      "semesters": [
+        "S1",
+        "S2"
+      ],
+      "prerequisites": [
+        "ENGN2301"
+      ],
+      "description": "In Engineering Design 4A: Systems Approaches for Management, you will develop industry-relevant techniques to manage a design project over the entire system life cycle, from problem conception through to project retirement. ED4A is the fourth course in the interdisciplinary engineering design core, and is followed by Engineering Design 4B: Systems Approaches for Operations. The project selected from a pool of projects that are representative of typical final year capstone projects, allowing you ",
+      "type": "major",
+      "incompatible": [
+        "ENGN3221"
+      ]
+    },
+    "ENGN3301": {
+      "code": "ENGN3301",
+      "name": "Engineering Design 4B: Systems Approaches for Operations",
+      "units": 6,
+      "level": 3000,
+      "college": "Engineering",
+      "semesters": [
+        "S2"
+      ],
+      "prerequisites": [
+        "ENGN3300"
+      ],
+      "description": "In Engineering Design 4B: Systems Approaches for Operations, you will learn industry-relevant techniques to operate and innovate an engineering system over the entire system life cycle, from problem conception through to system retirement. Engineering Design 4B is the fifth course in the interdisciplinary engineering design core. The project in this course explores the management and operation processes in a complex system in operations.You will learn project operations techniques relevant for o",
+      "type": "major",
+      "incompatible": [
+        "ENGN3301",
+        "ENGN3230"
+      ]
+    },
+    "ENGN3331": {
+      "code": "ENGN3331",
+      "name": "System Dynamics",
+      "units": 6,
+      "level": 3000,
+      "college": "Engineering",
+      "semesters": [
+        "S1",
+        "S2"
+      ],
+      "prerequisites": [
+        "MATH1013"
+      ],
+      "description": "System dynamics is the study of the response of engineering systems with changing time. The concepts learned in this unit can be used in a number of science and engineering disciplines including mechatronics, and in particular robotics, mechanical, electrical, aerospace, chemical, and marine engineering, manufacturing and biomedical engineering. The emphasis of this course will be on the analytical and numerical tools to describe the bahviour of the systems of interest. The presentation stresses",
+      "type": "major",
+      "prerequisiteAlternatives": [
+        [
+          "MATH1013"
+        ],
+        [
+          "MATH1014"
+        ]
+      ],
+      "incompatible": [
+        "ENGN6331"
+      ],
+      "prerequisiteExpression": {
+        "type": "or",
+        "operands": [
+          {
+            "type": "course",
+            "courseCode": "MATH1013"
+          },
+          {
+            "type": "course",
+            "courseCode": "MATH1014"
+          }
+        ]
+      }
+    },
+    "ENGN3338": {
+      "code": "ENGN3338",
+      "name": "Aerodynamics",
+      "units": 6,
+      "level": 3000,
+      "college": "Engineering",
+      "semesters": [
+        "S1",
+        "S2"
+      ],
+      "prerequisites": [
+        "ENGN2222"
+      ],
+      "description": "In this course students will develop an understanding of low speed and high-speed aerodynamics of wings and bodies. The course includes the fundamental principles of aerodynamics, the derivation of flow equations, the potential flows in two and three dimensions, the theory of airfoils and wings for inviscid and incompressible flow and the determination of lift and induced drag of finite wings. The course also includes the comprehension of the phenomena related to the aerodynamic behaviour under ",
+      "type": "major"
+    },
+    "ENGN3339": {
+      "code": "ENGN3339",
+      "name": "Aerospace Structures and Materials",
+      "units": 6,
+      "level": 3000,
+      "college": "Engineering",
+      "semesters": [
+        "S1",
+        "S2"
+      ],
+      "prerequisites": [
+        "ENGN2217"
+      ],
+      "description": "Modern aerospace and space structures need to effectively combine high performance and light weight, and as such they are typically nonstructured from composite and advanced multifunctional materials. To achieve the required level of performance, it is necessary to understand material limitations, strength, structural stability and health. This course will take a detailed look at the design, fabrication and properties of engineered materials for aerospace, focusing on computational material/stru",
+      "type": "major",
+      "incompatible": [
+        "ENGN4511"
+      ]
+    },
+    "ENGN3516": {
+      "code": "ENGN3516",
+      "name": "Energy Resources and Renewable Technologies",
+      "units": 6,
+      "level": 3000,
+      "college": "Engineering",
+      "semesters": [
+        "S2"
+      ],
+      "prerequisites": [
+        "ENGN2301"
+      ],
+      "description": "Providing energy for the entire planet without causing catastrophic climate change requires profound Energy Change. Major developments are occurring in the energy sector, both with energy technologies and the economic, social and policy measures that accompany them. This course focuses on renewable energy resources - the technologies that will comprise a large part of global Energy Change. It aims to help students identify the major 'big picture' questions in the area of energy resources and dev",
+      "type": "major",
+      "prerequisiteAlternatives": [
+        [
+          "ENGN2301"
+        ],
+        [
+          "ENGN2226"
+        ]
+      ],
+      "incompatible": [
+        "ENGN6516"
+      ],
+      "prerequisiteExpression": {
+        "type": "or",
+        "operands": [
+          {
+            "type": "course",
+            "courseCode": "ENGN2301"
+          },
+          {
+            "type": "course",
+            "courseCode": "ENGN2226"
+          }
+        ]
+      }
+    },
+    "ENGN3539": {
+      "code": "ENGN3539",
+      "name": "Computer Networks",
+      "units": 6,
+      "level": 3000,
+      "college": "Engineering",
+      "semesters": [
+        "S1",
+        "S2"
+      ],
+      "prerequisites": [
+        "ENGN2219"
+      ],
+      "description": "This course studies the standard models for the layered approach to communication between autonomous machines in a network, and the main characteristics of data transmission across various physical link types. It considers how to design networks and protocols for diverse situations, analyses several application and support protocols from a distributed systems viewpoint, and identifies significant problem areas in networked communications.Topics include: communication network architectures, signa",
+      "type": "major",
+      "incompatible": [
+        "COMP6331",
+        "COMP3310",
+        "ENGN6539"
+      ]
+    },
+    "ENGN3901": {
+      "code": "ENGN3901",
+      "name": "Environmental Fluid Mechanics",
+      "units": 6,
+      "level": 3000,
+      "college": "Engineering",
+      "semesters": [
+        "S1",
+        "S2"
+      ],
+      "prerequisites": [],
+      "description": "This course will provide students with a fundamental understanding of fluid flows in the environment. The course will provide a foundational understanding of fluid statics and dynamics which respectively relate to pressure forces exerted by standing bodies of water (i.e. in dams and pipe networks) and the behaviour of moving fluids. This will extend into an exploration of boundary layer flows, an understanding of which is essential for predicting mass transport, shear forces, and heat transfer p",
+      "type": "major"
+    },
+    "ENGN3902": {
+      "code": "ENGN3902",
+      "name": "Environmental Chemistry and Systems",
+      "units": 6,
+      "level": 3000,
+      "college": "Engineering",
+      "semesters": [
+        "S1"
+      ],
+      "prerequisites": [],
+      "description": "This course will provide students with the skills and knowledge to understand and explain the complex biogeochemical cycles that drive environmental systems and processes. The course will provide a foundation in modern environmental chemistry, exploring interactions between the hydrosphere, geosphere, atmosphere and biosphere. Students will apply this knowledge to land management decision making across a range of contexts, including agriculture, mining, contaminated land remediation, native vege",
+      "type": "major",
+      "incompatible": [
+        "ENVS3902"
+      ]
+    },
+    "ENGN3903": {
+      "code": "ENGN3903",
+      "name": "Environmental Sensing, Mapping and Modelling",
+      "units": 6,
+      "level": 3000,
+      "college": "Engineering",
+      "semesters": [
+        "S2"
+      ],
+      "prerequisites": [],
+      "description": "To better understand and manage the rapid pace of environmental change, there is a need to develop accurate and effective environmental sensing, mapping and modelling techniques. In this course, students will learn about and compare the methods used to investigate environmental systems and parameters including techniques for measuring water, air, soil, vegetation, light, noise and vibration. Students will also learn about remote sensing from ground-, and space-based platforms, including how thes",
+      "type": "major",
+      "incompatible": [
+        "PHYS1001",
+        "MATH1014",
+        "MATH1116",
+        "PHYS1101",
+        "ENVS3903",
+        "MATH1115",
+        "MATH1013"
+      ]
+    },
+    "ENGN4000": {
+      "code": "ENGN4000",
+      "name": "Programs and Courses",
+      "units": 6,
+      "level": 4000,
+      "college": "Engineering",
+      "semesters": [],
+      "prerequisites": [],
+      "description": "You may have mistyped the address or the page may have moved.",
+      "type": "major"
+    },
+    "ENGN4100": {
+      "code": "ENGN4100",
+      "name": "Programs and Courses",
+      "units": 6,
+      "level": 4000,
+      "college": "Engineering",
+      "semesters": [],
+      "prerequisites": [],
+      "description": "You may have mistyped the address or the page may have moved.",
+      "type": "major"
+    },
+    "ENGN4204": {
+      "code": "ENGN4204",
+      "name": "Fundamentals of Nuclear Radiation",
+      "units": 6,
+      "level": 4000,
+      "college": "Engineering",
+      "semesters": [
+        "S1",
+        "S2"
+      ],
+      "prerequisites": [],
+      "description": "This course introduces the physical processes by which nuclear radiation interacts with matter, including with biological systems.Following on from this background, students will engage in experimental and simulation-based activities designed to develop their expertise in:The absorption of, and shielding from, nuclear radiation, including charged particle, neutron and gamma radiationRadiation dosimetryRadiation detection and measurementIndustrial and medical applications of nuclear radiation",
+      "type": "major",
+      "corequisites": [
+        "ENGN4549"
+      ],
+      "incompatible": [
+        "PHYS8204"
+      ]
+    },
+    "ENGN4205": {
+      "code": "ENGN4205",
+      "name": "Nuclear Fuel Cycle",
+      "units": 6,
+      "level": 4000,
+      "college": "Engineering",
+      "semesters": [
+        "S2"
+      ],
+      "prerequisites": [
+        "ENGN4549"
+      ],
+      "description": "In this course, students will learn about the nuclear fuel cycle, starting from how Uranium and Thorium elements are formed via nucleosynthesis and ending in how spent fuel from nuclear reactors is managed with safety and security in mind. Students will learn about proliferation concerns of relevance to the nuclear fuel cycle, engage in hands-on work of relevance to non-proliferation and safeguards work, and engage with some of the policy and regulatory considerations shaping safe, secure, and r",
+      "type": "major",
+      "incompatible": [
+        "PHYS8205"
+      ]
+    },
+    "ENGN4213": {
+      "code": "ENGN4213",
+      "name": "Digital Systems and Microprocessors",
+      "units": 6,
+      "level": 4000,
+      "college": "Engineering",
+      "semesters": [
+        "S1",
+        "S2"
+      ],
+      "prerequisites": [
+        "ENGN2218",
+        "ENGN2219",
+        "COMP2300"
+      ],
+      "description": "This course introduces advanced theoretical and technical knowledge of digital circuits and embedded systems. Digital and embedded systems are at the heart of almost all modern mechatronic and electronic technologies, ranging from smartphones to robots and autonomous vehicles. The course has a clear hardware focus, with the first half of the curriculum centered around the analysis and design of sequential logic circuits, and their implementation on field-programmable-gate-array (FPGA) platform u",
+      "type": "major",
+      "incompatible": [
+        "ENGN6213"
+      ],
+      "prerequisiteExpression": {
+        "type": "and",
+        "operands": [
+          {
+            "type": "course",
+            "courseCode": "ENGN2218"
+          },
+          {
+            "type": "course",
+            "courseCode": "ENGN2219"
+          },
+          {
+            "type": "course",
+            "courseCode": "COMP2300"
+          }
+        ]
+      }
+    },
+    "ENGN4222": {
+      "code": "ENGN4222",
+      "name": "Advanced Reactor Science",
+      "units": 6,
+      "level": 4000,
+      "college": "Engineering",
+      "semesters": [
+        "S2"
+      ],
+      "prerequisites": [
+        "ENGN4549"
+      ],
+      "description": "Nuclear reactors provide 10% of global electricity generation and are used in a wide range of applications from defence to medical radioisotope production. A detailed understanding of reactor physics and an ability to simulate nuclear reactors is key to their reliable and safe operation. This course explores advanced topics relating to the physics, design and operation of nuclear reactors, and will introduce methods of simulating their properties and performance, including:Analytic models for ne",
+      "type": "major",
+      "incompatible": [
+        "PHYS8212"
+      ]
+    },
+    "ENGN4300": {
+      "code": "ENGN4300",
+      "name": "Capstone Design Project",
+      "units": 6,
+      "level": 4000,
+      "college": "Engineering",
+      "semesters": [
+        "S1",
+        "S2"
+      ],
+      "prerequisites": [
+        "ENGN3300",
+        "ENGN3000"
+      ],
+      "description": "In Capstone Design Project, you will work as an independent group to deliver value on a real-world project. Teams will work to define and scope their project in consultation with project hosts, and tailor and manage system life-cycle processes to the delivery of the project.Students will undertake skills modules during the project, designed to improve the quality of the final deliverables. During the project, you will be situated with other teams to simulate an engineering firm working on multip",
+      "type": "capstone",
+      "incompatible": [
+        "ENGN4221"
+      ],
+      "prerequisiteExpression": {
+        "type": "and",
+        "operands": [
+          {
+            "type": "course",
+            "courseCode": "ENGN3300"
+          },
+          {
+            "type": "course",
+            "courseCode": "ENGN3000"
+          }
+        ]
+      },
+      "honoursWeight": 0.4
+    },
+    "ENGN4337": {
+      "code": "ENGN4337",
+      "name": "Flight Dynamics",
+      "units": 6,
+      "level": 4000,
+      "college": "Engineering",
+      "semesters": [
+        "S1",
+        "S2"
+      ],
+      "prerequisites": [
+        "ENGN3223",
+        "ENGN3338"
+      ],
+      "description": "This course will focus on the theory and methods that are used to describe and predict the motion of aircraft. Students will learn mathematical models and useful techniques that can be used to analyse, simulate and evaluate flying and handling qualities of an aircraft. Concepts of guidance and navigation, as well as control are discussed.Building on the analysis-oriented aerodynamics, students will learn to apply key classical principles of configuration aerodynamics to give them a design-orient",
+      "type": "major",
+      "prerequisiteExpression": {
+        "type": "and",
+        "operands": [
+          {
+            "type": "course",
+            "courseCode": "ENGN3223"
+          },
+          {
+            "type": "course",
+            "courseCode": "ENGN3338"
+          }
+        ]
+      }
+    },
+    "ENGN4338": {
+      "code": "ENGN4338",
+      "name": "Propulsion Systems",
+      "units": 6,
+      "level": 4000,
+      "college": "Engineering",
+      "semesters": [
+        "S2"
+      ],
+      "prerequisites": [
+        "ENGN3338"
+      ],
+      "description": "This course will first introduce students to different contemporary mechanisms of thrust generation in atmospheric and space flight. Student will learn how to design, analyse and control thrust generation in aircraft and rocket engines, and how the design and performance of these thrust platforms are related to the laws of thermodynamics, fuel-air power cycles, and combustion chemistry. Piston and gas turbine and piston and turboprop engine platforms will be discussed and compared in terms of ef",
+      "type": "major"
+    },
+    "ENGN4339": {
+      "code": "ENGN4339",
+      "name": "Aircraft and Spacecraft - Design and Performance",
+      "units": 6,
+      "level": 4000,
+      "college": "Engineering",
+      "semesters": [
+        "S2"
+      ],
+      "prerequisites": [
+        "ENGN3223",
+        "ENGN3338",
+        "ENGN3339"
+      ],
+      "description": "This course explores fundamental and applied topics concerning aerospace vehicles, especially aircraft and spacecraft in flight. The course describes and assesses the performance of these vehicles based on the mechanics and flight dynamics such as atmospheric, orbital and attitude dynamics, under which they are operated. It delivers the design process of those systems using engineering tools represented by mathematics, optimization, articulation/control, numerical approach, based on the paramete",
+      "type": "major",
+      "prerequisiteExpression": {
+        "type": "and",
+        "operands": [
+          {
+            "type": "course",
+            "courseCode": "ENGN3223"
+          },
+          {
+            "type": "course",
+            "courseCode": "ENGN3338"
+          },
+          {
+            "type": "course",
+            "courseCode": "ENGN3339"
+          }
+        ]
+      }
+    },
+    "ENGN4350": {
+      "code": "ENGN4350",
+      "name": "Individual Project",
+      "units": 6,
+      "level": 4000,
+      "college": "Engineering",
+      "semesters": [
+        "S1",
+        "S2"
+      ],
+      "prerequisites": [
+        "ENGN3300",
+        "ENGN3000",
+        "ENGN4300"
+      ],
+      "description": "In this course, students undertake an individual engineering research or design project under supervision.Students are encouraged to put forward their own ideas for the individual project, or they may select a project from a range of projects offered by researchers across the ANU. The topic area would normally be expected to be in the same area as the major (or one of the majors) being completed by the student.It is recommended that students identify a project topic and supervisor well before pr",
+      "type": "major",
+      "incompatible": [
+        "ENGN4712"
+      ],
+      "prerequisiteExpression": {
+        "type": "and",
+        "operands": [
+          {
+            "type": "course",
+            "courseCode": "ENGN3300"
+          },
+          {
+            "type": "course",
+            "courseCode": "ENGN3000"
+          },
+          {
+            "type": "course",
+            "courseCode": "ENGN4300"
+          }
+        ]
+      }
+    },
+    "ENGN4524": {
+      "code": "ENGN4524",
+      "name": "Photovoltaic Technologies",
+      "units": 6,
+      "level": 4000,
+      "college": "Engineering",
+      "semesters": [
+        "S1",
+        "S2"
+      ],
+      "prerequisites": [
+        "ENGN2218"
+      ],
+      "description": "Photovoltaic electric systems have become an important area of engineering and are expected to become a mainstream source of energy in the near future. They are an example of interdisciplinary systems engineering, where basic electronic materials science is combined with power electronics, mechanical design, control systems and economic optimisation. The course will give an overview of the solar energy resource and will cover photovoltaic approaches to conversion to electricity in detail. The ph",
+      "type": "major",
+      "incompatible": [
+        "ENGN6524"
+      ]
+    },
+    "ENGN4528": {
+      "code": "ENGN4528",
+      "name": "Computer Vision",
+      "units": 6,
+      "level": 4000,
+      "college": "Engineering",
+      "semesters": [
+        "S1",
+        "S2"
+      ],
+      "prerequisites": [
+        "COMP1100",
+        "ENGN2228"
+      ],
+      "description": "Computer Vision is an important field of Artificial Intelligence concerned with automatically extracting useful information from images or videos. The explosive growth in digital imaging technologies, vision datasets and deep learning makes the problems of automated image interpretation even more exciting and more relevant than ever. This course introduces students to fundamental problems in computer vision and foundational techniques for solving them. Topics covered in detail include image form",
+      "type": "major",
+      "prerequisiteAlternatives": [
+        [
+          "COMP1100",
+          "ENGN2228"
+        ],
+        [
+          "COMP1730",
+          "ENGN2228"
+        ],
+        [
+          "COMP1130",
+          "ENGN2228"
+        ]
+      ],
+      "incompatible": [
+        "COMP3600",
+        "COMP2120",
+        "COMP6528",
+        "ENGN6528",
+        "COMP4528"
+      ],
+      "prerequisiteExpression": {
+        "type": "and",
+        "operands": [
+          {
+            "type": "or",
+            "operands": [
+              {
+                "type": "course",
+                "courseCode": "COMP1100"
+              },
+              {
+                "type": "course",
+                "courseCode": "COMP1730"
+              },
+              {
+                "type": "course",
+                "courseCode": "COMP1130"
+              }
+            ]
+          },
+          {
+            "type": "course",
+            "courseCode": "ENGN2228"
+          }
+        ]
+      }
+    },
+    "ENGN4536": {
+      "code": "ENGN4536",
+      "name": "Wireless Communications",
+      "units": 6,
+      "level": 4000,
+      "college": "Engineering",
+      "semesters": [
+        "S2"
+      ],
+      "prerequisites": [
+        "ENGN3226"
+      ],
+      "description": "This course provides a comprehensive overview and advanced knowledge of modern mobile and wireless communication systems. Building on the prior knowledge on digital communications, students develop further understanding on the challenges and opportunities brought by the wireless medium in designing current and future wireless communication systems and networks.Topics include:Overview of digital wireless communications and cellular concept;Interference and traffic analysis for cellular networks;W",
+      "type": "major",
+      "incompatible": [
+        "ENGN6536"
+      ]
+    },
+    "ENGN4537": {
+      "code": "ENGN4537",
+      "name": "Digital Signal Processing",
+      "units": 6,
+      "level": 4000,
+      "college": "Engineering",
+      "semesters": [
+        "S2"
+      ],
+      "prerequisites": [
+        "ENGN2228"
+      ],
+      "description": "Digital Signal Processing (DSP) is a fundamentally essential tool for all modern technology in Electrical and Mechanical Engineering fields. DSP has penetrated many domains of applications, such as digital communications, medical imaging, audio & video systems, human-machine interaction, robotics, remote sensing, finance, autonomous vehicles, etc. The Discrete-Time Signal Processing paradigm is a convenient setting to analyse the basic principles of DSP. At the end of this course, the students s",
+      "type": "major",
+      "incompatible": [
+        "ENGN6537"
+      ]
+    },
+    "ENGN4547": {
+      "code": "ENGN4547",
+      "name": "Grid Integration of Renewable and Storage Technologies",
+      "units": 6,
+      "level": 4000,
+      "college": "Engineering",
+      "semesters": [
+        "S1",
+        "S2"
+      ],
+      "prerequisites": [
+        "ENGN4625"
+      ],
+      "description": "This course will introduce the opportunities for, and the challenges of, integrating different forms of renewable energy generation, distributed energy resources and energy storage into the electricity system. In this context, this course will provide a broad understanding of the structure and operation of modern electricity systems and electricity markets. This course will introduce a variety of tools , techniques, and software to investigate these topics. The course will also provide opportuni",
+      "type": "major"
+    },
+    "ENGN4548": {
+      "code": "ENGN4548",
+      "name": "Wind Energy",
+      "units": 6,
+      "level": 4000,
+      "college": "Engineering",
+      "semesters": [
+        "S2"
+      ],
+      "prerequisites": [
+        "PHYS1101"
+      ],
+      "description": "The Wind Energy course covers the full spectrum of wind energy from the underlying physics of wind and wind generation technologies, to practical issues including site prospecting, project financing, regulation and societal aspects. The course is delivered in collaboration between ANU Energy academics and Windlab, a Canberra-based innovative wind energy company that was a winning bidder in the 2015 ACT Government 200MW Wind Energy Reverse Auction. In addition to meeting the demand for up-to-date",
+      "type": "major",
+      "prerequisiteAlternatives": [
+        [
+          "PHYS1101"
+        ],
+        [
+          "PHYS1001"
+        ],
+        [
+          "PHYS1013"
+        ]
+      ],
+      "incompatible": [
+        "ENGN6548"
+      ],
+      "prerequisiteExpression": {
+        "type": "or",
+        "operands": [
+          {
+            "type": "course",
+            "courseCode": "PHYS1101"
+          },
+          {
+            "type": "course",
+            "courseCode": "PHYS1001"
+          },
+          {
+            "type": "course",
+            "courseCode": "PHYS1013"
+          }
+        ]
+      }
+    },
+    "ENGN4549": {
+      "code": "ENGN4549",
+      "name": "Engineering Nuclear Systems",
+      "units": 6,
+      "level": 4000,
+      "college": "Engineering",
+      "semesters": [
+        "S1",
+        "S2"
+      ],
+      "prerequisites": [
+        "PHYS1001",
+        "ENGN2228",
+        "MATH1014",
+        "MATH1116",
+        "PHYS1101",
+        "ENGN2222",
+        "MATH1115",
+        "MATH1013"
+      ],
+      "description": "Nuclear systems have many beneficial uses, ranging from medical imaging and cancer treatment to environmental monitoring – but the benefits these systems offer come with risks. For some nuclear systems, these risks – if not managed effectively – can have far-reaching and enduring impacts on society and the environment. This course will introduce a wide range of nuclear technologies being used in industry, medical and defence settings today. Students will develop expertise in some of the foundati",
+      "type": "major",
+      "prerequisiteExpression": {
+        "type": "and",
+        "operands": [
+          {
+            "type": "course",
+            "courseCode": "PHYS1001"
+          },
+          {
+            "type": "course",
+            "courseCode": "ENGN2228"
+          },
+          {
+            "type": "course",
+            "courseCode": "MATH1014"
+          },
+          {
+            "type": "course",
+            "courseCode": "MATH1116"
+          },
+          {
+            "type": "course",
+            "courseCode": "PHYS1101"
+          },
+          {
+            "type": "course",
+            "courseCode": "ENGN2222"
+          },
+          {
+            "type": "course",
+            "courseCode": "MATH1115"
+          },
+          {
+            "type": "course",
+            "courseCode": "MATH1013"
+          }
+        ]
+      }
+    },
+    "ENGN4625": {
+      "code": "ENGN4625",
+      "name": "Power Systems and Power Electronics",
+      "units": 6,
+      "level": 4000,
+      "college": "Engineering",
+      "semesters": [
+        "S2"
+      ],
+      "prerequisites": [
+        "ENGN2218"
+      ],
+      "description": "Power systems and power electronics devices are fundamental to the transmission, transformation and use of electrical energy that underpins much of modern society. This course provides a detailed introduction to the theoretical principles and operating characteristics of power systems, electric machines, and electrical energy conversion. By combining several topics that are often covered by separate electrical engineering courses, students will gain an integrated understanding and advanced techn",
+      "type": "major",
+      "incompatible": [
+        "ENGN6625"
+      ]
+    },
+    "ENGN4627": {
+      "code": "ENGN4627",
+      "name": "Robotics",
+      "units": 6,
+      "level": 4000,
+      "college": "Engineering",
+      "semesters": [
+        "S2"
+      ],
+      "prerequisites": [
+        "ENGN3331"
+      ],
+      "description": "This course provides an introduction to modern robotics. The focus is on robot kinematics, sensing techniques, localization, navigation, mapping and planning. Topics to be covered include robot spatial configuration, homogeneous coordinate transformation, mobile robot locomotion, mobile robot kinematics, robot motion control, sensors and perception, navigation and path planning, robot localization, simultaneous localization and mapping SLAM, robotic system architecture.The applied component of t",
+      "type": "major",
+      "incompatible": [
+        "ENGN6627"
+      ]
+    },
+    "ENGN4628": {
+      "code": "ENGN4628",
+      "name": "Optimisation and Control with Uncertainty and Constraints",
+      "units": 6,
+      "level": 4000,
+      "college": "Engineering",
+      "semesters": [
+        "S2"
+      ],
+      "prerequisites": [
+        "ENGN2228",
+        "MATH1116",
+        "MATH1014",
+        "MATH1115",
+        "MATH1013"
+      ],
+      "description": "Optimisation and Control is the study of operation and decision-making over networks. The knowledge and tools in this course can be used in various engineering domains such as communication networks, robotics, smart grids, intelligent transportation systems, biomedical engineering, and financial markets. The emphasis of this course will be on basic continuous statespace optimization theories, dynamic programming principles, linear quadratic optimal control, constrained optimal control and recedi",
+      "type": "major",
+      "prerequisiteExpression": {
+        "type": "and",
+        "operands": [
+          {
+            "type": "course",
+            "courseCode": "ENGN2228"
+          },
+          {
+            "type": "course",
+            "courseCode": "MATH1116"
+          },
+          {
+            "type": "course",
+            "courseCode": "MATH1014"
+          },
+          {
+            "type": "course",
+            "courseCode": "MATH1115"
+          },
+          {
+            "type": "course",
+            "courseCode": "MATH1013"
+          }
+        ]
+      }
+    },
+    "ENGN4901": {
+      "code": "ENGN4901",
+      "name": "Water Systems Engineering",
+      "units": 6,
+      "level": 4000,
+      "college": "Engineering",
+      "semesters": [
+        "S1",
+        "S2"
+      ],
+      "prerequisites": [
+        "ENGN3901"
+      ],
+      "description": "A detailed understanding of the water resources available in different environments, how water moves through the environment, and the management of these water resources are fundamental to the practice of environmental engineering.In this course, students will investigate the foundational elements of how water moves over the surface of the land, including precipitation, evapotranspiration and streamflow, and relevant monitoring and analytical techniques. The second major component of the course ",
+      "type": "major"
+    },
+    "ENGN4902": {
+      "code": "ENGN4902",
+      "name": "The Environmental Impacts of Engineered Systems",
+      "units": 6,
+      "level": 4000,
+      "college": "Engineering",
+      "semesters": [
+        "S1",
+        "S2"
+      ],
+      "prerequisites": [
+        "ENGN3902"
+      ],
+      "description": "The ability to understand and manage the environmental impacts arising from the design and implementation of engineering systems is critical for environmental engineers. This course introduces several critical concepts and tools, including Life Cycle Analyses (LCA), Environmental Impact Statements (EIS) methods and the ISO14001 Environmental Management System (EMS) framework. The course then provides an introduction for Engineers on environmental law in Australia, focusing on planning law, and p",
+      "type": "major",
+      "prerequisiteAlternatives": [
+        [
+          "ENGN3902"
+        ],
+        [
+          "ENGN3903"
+        ]
+      ],
+      "prerequisiteExpression": {
+        "type": "or",
+        "operands": [
+          {
+            "type": "course",
+            "courseCode": "ENGN3902"
+          },
+          {
+            "type": "course",
+            "courseCode": "ENGN3903"
+          }
+        ]
+      }
+    },
+    "ENGN4903": {
+      "code": "ENGN4903",
+      "name": "Infrastructure System Design",
+      "units": 6,
+      "level": 4000,
+      "college": "Engineering",
+      "semesters": [
+        "S2"
+      ],
+      "prerequisites": [
+        "ENGN4902"
+      ],
+      "description": "The design of infrastructure systems can have significant positive and negative environmental impacts. Across its construction, operation and retirement, contemporary infrastructure must be designed to consider the environment, not just on a local scale but nationally and internationally. This course will consider the impacts of design decisions on large- and small-scale infrastructure across all stages of the life-cycle. Infrastructure design to support significant transitions such as zero-carb",
+      "type": "major"
+    },
+    "MATH1013": {
+      "code": "MATH1013",
+      "name": "Mathematics and Applications 1",
+      "units": 6,
+      "level": 1000,
+      "college": "Science",
+      "semesters": [
+        "S1",
+        "S2"
+      ],
+      "prerequisites": [],
+      "description": "This course covers single-variable calculus and introductory linear algebra. The emphasis is on understanding the material such that it both can be applied across a range of fields including the physical and biological sciences, engineering and information technologies, economics and commerce, and can also serve as a base for future mathematics courses. Many applications and connections with other fields will be discussed although not developed in detail. Not all the material will be developed i",
+      "type": "foundation",
+      "incompatible": [
+        "MATH1113",
+        "MATH1115"
+      ]
+    },
+    "MATH1014": {
+      "code": "MATH1014",
+      "name": "Mathematics and Applications 2",
+      "units": 6,
+      "level": 1000,
+      "college": "Science",
+      "semesters": [
+        "S1",
+        "S2"
+      ],
+      "prerequisites": [
+        "MATH1115"
+      ],
+      "description": "This course continues on fromMATH1013. It emphasises an understanding of the fundamental results from calculus and linear algebra which both can be applied across a range of fields including the physical and biological sciences, engineering and information technologies, economics and commerce, and can also serve as a base for future mathematics courses. Many applications and connections with other fields will be discussed although not developed in detail.Topics to be covered include:Calculus - I",
+      "type": "foundation",
+      "prerequisiteAlternatives": [
+        [
+          "MATH1115"
+        ],
+        [
+          "MATH1013"
+        ],
+        [
+          "MATH1113"
+        ]
+      ],
+      "incompatible": [
+        "MATH1116"
+      ],
+      "prerequisiteExpression": {
+        "type": "or",
+        "operands": [
+          {
+            "type": "course",
+            "courseCode": "MATH1115"
+          },
+          {
+            "type": "course",
+            "courseCode": "MATH1013"
+          },
+          {
+            "type": "course",
+            "courseCode": "MATH1113"
+          }
+        ]
+      }
+    },
+    "MATH1115": {
+      "code": "MATH1115",
+      "name": "Advanced Mathematics and Applications 1",
+      "units": 6,
+      "level": 1000,
+      "college": "Science",
+      "semesters": [
+        "S1",
+        "S2"
+      ],
+      "prerequisites": [],
+      "description": "This course begins an in-depth study of the fundamental concepts of calculus and linear algebra, with a particular emphasis on the underlying foundations of mathematics. The use and understanding of proof and abstract ideas will allow students to develop analytical skills which will form a base for further study in fundamental mathematics, as well as providing a foundation for a wide range of quantitative areas such as actuarial studies, computer science, economics, engineering, physics and stat",
+      "type": "foundation",
+      "incompatible": [
+        "MATH1113",
+        "MATH1013",
+        "MATH1115"
+      ]
+    },
+    "MATH1116": {
+      "code": "MATH1116",
+      "name": "Advanced Mathematics and Applications  2",
+      "units": 6,
+      "level": 1000,
+      "college": "Science",
+      "semesters": [
+        "S2"
+      ],
+      "prerequisites": [
+        "MATH1115"
+      ],
+      "description": "This course continues on from MATH1115, providing an in-depth development of fundamental concepts of calculus and linear algebra, with a particular emphasis on the underlying foundations of mathematics. The use and understanding of proof and abstract ideas will allow students to develop analytical skills which will form a base for further study in fundamental mathematics, as well as providing a foundation for a wide range of quantitative areas such as actuarial studies, computer science, economi",
+      "type": "foundation",
+      "prerequisiteAlternatives": [
+        [
+          "MATH1115"
+        ],
+        [
+          "MATH1113"
+        ]
+      ],
+      "incompatible": [
+        "MATH1116",
+        "MATH1014"
+      ],
+      "prerequisiteExpression": {
+        "type": "or",
+        "operands": [
+          {
+            "type": "course",
+            "courseCode": "MATH1115"
+          },
+          {
+            "type": "course",
+            "courseCode": "MATH1113"
+          }
+        ]
+      }
+    },
+    "PHYS1001": {
+      "code": "PHYS1001",
+      "name": "Foundations of Physics",
+      "units": 6,
+      "level": 1000,
+      "college": "Science",
+      "semesters": [
+        "S1",
+        "S2"
+      ],
+      "prerequisites": [],
+      "description": "Nationally recognised with two teaching awards, Foundations of Physics aims to teach you tothink like a physicist!A course for anyone who wants to get a solid foundation in basic-physics concepts, or needs to catch up before entering into a major. It will also teach you skills and an approach to problem solving that you will take forward in your life.The course offers a unique hands-on approach to learning physics. You will get the background material for each week in a short one hour theory lec",
+      "type": "foundation",
+      "incompatible": [
+        "PHYS1101",
+        "PHYS1201"
+      ]
+    },
+    "PHYS1101": {
+      "code": "PHYS1101",
+      "name": "Physics I",
+      "units": 6,
+      "level": 1000,
+      "college": "Science",
+      "semesters": [
+        "S1",
+        "S2"
+      ],
+      "prerequisites": [
+        "MATH1115"
+      ],
+      "description": "Physics 1 introduces the fundamentals of university physics, and should be taken by all students planning to major or minor in physics.The course focuses on using modelling and estimation to figure out the physics of complex real-world situations, on applying the mathematical concepts of vectors and vector fields, and on experimental skills. It is taught in small-group hands-on workshops and laboratories.Syllabus: Mechanics, point-particle models, contact forces, rigid body models and rotation. ",
+      "type": "foundation",
+      "prerequisiteAlternatives": [
+        [
+          "MATH1115"
+        ],
+        [
+          "MATH1013"
+        ]
+      ],
+      "prerequisiteExpression": {
+        "type": "or",
+        "operands": [
+          {
+            "type": "course",
+            "courseCode": "MATH1115"
+          },
+          {
+            "type": "course",
+            "courseCode": "MATH1013"
+          }
+        ]
+      }
+    },
+    "COMP2300": {
+      "code": "COMP2300",
+      "name": "Computer Architecture",
+      "units": 6,
+      "level": 2000,
+      "college": "Computing",
+      "semesters": [
+        "S1",
+        "S2"
+      ],
+      "prerequisites": [
+        "COMP1100"
+      ],
+      "description": "This course is a rigorous introduction to the design of digital circuits and computer architecture. It provides technical foundations for how a computer system is built from the bottom up and how the high-level programming languages you learn in other courses are translated into simple instructions the computer executes. The course introduces the different abstraction layers necessary to make a computer system work, and a key focus is the connection between hardware and software.The course intro",
+      "type": "elective",
+      "prerequisiteAlternatives": [
+        [
+          "COMP1100"
+        ],
+        [
+          "COMP1730"
+        ],
+        [
+          "COMP1130"
+        ]
+      ],
+      "incompatible": [
+        "COMP6300",
+        "ENGN2219",
+        "COMP6719"
+      ],
+      "prerequisiteExpression": {
+        "type": "or",
+        "operands": [
+          {
+            "type": "course",
+            "courseCode": "COMP1100"
+          },
+          {
+            "type": "course",
+            "courseCode": "COMP1730"
+          },
+          {
+            "type": "course",
+            "courseCode": "COMP1130"
+          }
+        ]
+      }
+    },
+    "ENGN2226": {
+      "code": "ENGN2226",
+      "name": "Programs and Courses",
+      "units": 6,
+      "level": 2000,
+      "college": "Engineering",
+      "semesters": [],
+      "prerequisites": [],
+      "description": "You may have mistyped the address or the page may have moved.",
+      "type": "core"
+    },
+    "MATH1113": {
+      "code": "MATH1113",
+      "name": "Mathematical Foundations for Actuarial Studies",
+      "units": 6,
+      "level": 1000,
+      "college": "Science",
+      "semesters": [
+        "S2"
+      ],
+      "prerequisites": [],
+      "description": "This course provides a study of the fundamental concepts of calculus and linear algebra. The use and understanding of proof and abstract ideas, will allow students to develop analytical skills which will form a foundation for further study in the quantitative areas of actuarial studies.Calculus topics to be covered include: limits, continuity, differentiation, inverse functions, transcendental functions, extrema, concavity and inflections, applications of derivatives, Taylor Polynomials, integra",
+      "type": "foundation",
+      "incompatible": [
+        "MATH1115",
+        "MATH1013"
+      ]
+    },
+    "PHYS1013": {
+      "code": "PHYS1013",
+      "name": "Programs and Courses",
+      "units": 6,
+      "level": 1000,
+      "college": "Science",
+      "semesters": [],
+      "prerequisites": [],
+      "description": "You may have mistyped the address or the page may have moved.",
+      "type": "foundation"
+    }
+  }
+}

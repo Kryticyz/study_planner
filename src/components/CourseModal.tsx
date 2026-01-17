@@ -1,5 +1,6 @@
 import { courses } from '../data/courses';
-import { X, BookOpen, Calendar, AlertTriangle, Link, CheckCircle } from 'lucide-react';
+import { getEquivalentCourses } from '../data/equivalences';
+import { X, BookOpen, Calendar, AlertTriangle, Link, CheckCircle, ArrowLeftRight } from 'lucide-react';
 
 interface CourseModalProps {
   courseCode: string;
@@ -137,6 +138,7 @@ export function CourseModal({ courseCode, onClose }: CourseModalProps) {
                 <CheckCircle size={16} />
                 Corequisites
               </h3>
+              <p className="text-xs text-gray-500 mb-2">Must be taken in the same semester or before</p>
               <div className="flex flex-wrap gap-2">
                 {course.corequisites.map(code => (
                   <span key={code} className="px-2 py-1 bg-purple-50 text-purple-700 rounded text-sm font-mono">
@@ -146,6 +148,28 @@ export function CourseModal({ courseCode, onClose }: CourseModalProps) {
               </div>
             </div>
           )}
+
+          {/* Equivalent Courses */}
+          {(() => {
+            const equivalents = getEquivalentCourses(courseCode).filter(c => c !== courseCode);
+            if (equivalents.length === 0) return null;
+            return (
+              <div>
+                <h3 className="flex items-center gap-2 text-sm font-semibold text-gray-500 uppercase mb-2">
+                  <ArrowLeftRight size={16} />
+                  Equivalent Courses
+                </h3>
+                <p className="text-xs text-gray-500 mb-2">These courses can substitute for each other</p>
+                <div className="flex flex-wrap gap-2">
+                  {equivalents.map(code => (
+                    <span key={code} className="px-2 py-1 bg-indigo-50 text-indigo-700 rounded text-sm font-mono">
+                      {code}
+                    </span>
+                  ))}
+                </div>
+              </div>
+            );
+          })()}
 
           {/* Incompatible */}
           {course.incompatible && course.incompatible.length > 0 && (

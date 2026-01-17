@@ -91,6 +91,9 @@ class Course:
     # Additional metadata
     convener: Optional[str] = None
     academic_career: str = "UGRD"  # "UGRD", "PGRD"
+    mode_of_delivery: str = "In Person"  # "In Person", "Online", "Hybrid"
+    offered_by: str = ""  # Offering unit
+    graduate_attributes: list = field(default_factory=list)
     stem_course: bool = False
     url: str = ""
 
@@ -458,6 +461,50 @@ class ANUCourseScraper:
         """Check if course is marked as STEM."""
         return soup.find(string=re.compile(r"STEM Course", re.IGNORECASE)) is not None
 
+    def extract_mode_of_delivery(self, soup: BeautifulSoup) -> str:
+        """Extract mode of delivery (In Person, Online, etc.)."""
+        mode_elem = soup.find(
+            "dt", string=re.compile(r"Mode of delivery", re.IGNORECASE)
+        )
+        if mode_elem:
+            dd = mode_elem.find_next_sibling("dd")
+            if dd:
+                return dd.get_text(strip=True)
+        return "In Person"  # Default
+
+    def extract_academic_career(self, soup: BeautifulSoup) -> str:
+        """Extract academic career (UGRD, PGRD)."""
+        career_elem = soup.find(
+            "dt", string=re.compile(r"Academic career", re.IGNORECASE)
+        )
+        if career_elem:
+            dd = career_elem.find_next_sibling("dd")
+            if dd:
+                return dd.get_text(strip=True)
+        return "UGRD"  # Default
+
+    def extract_graduate_attributes(self, soup: BeautifulSoup) -> list:
+        """Extract graduate attributes."""
+        attr_elem = soup.find(
+            "dt", string=re.compile(r"Graduate Attributes", re.IGNORECASE)
+        )
+        if attr_elem:
+            dd = attr_elem.find_next_sibling("dd")
+            if dd:
+                # May be comma-separated or in a list
+                text = dd.get_text(strip=True)
+                return [a.strip() for a in text.split(",") if a.strip()]
+        return []
+
+    def extract_offered_by(self, soup: BeautifulSoup) -> str:
+        """Extract the offering unit (may differ from ANU College)."""
+        offered_elem = soup.find("dt", string=re.compile(r"Offered by", re.IGNORECASE))
+        if offered_elem:
+            dd = offered_elem.find_next_sibling("dd")
+            if dd:
+                return dd.get_text(strip=True)
+        return ""
+
     def _extract_course_from_soup(
         self, soup: BeautifulSoup, code: str
     ) -> Optional[Course]:
@@ -480,6 +527,10 @@ class ANUCourseScraper:
             learning_outcomes=self.extract_learning_outcomes(soup),
             assessment=self.extract_assessment(soup),
             convener=self.extract_convener(soup),
+            academic_career=self.extract_academic_career(soup),
+            mode_of_delivery=self.extract_mode_of_delivery(soup),
+            offered_by=self.extract_offered_by(soup),
+            graduate_attributes=self.extract_graduate_attributes(soup),
             areas_of_interest=self.extract_areas_of_interest(soup),
             workload=self.extract_workload(soup),
             stem_course=self.is_stem(soup),
@@ -555,7 +606,13 @@ def course_to_simple_format(course: Course) -> dict:
         else course.description,
         "type": course.type,
         "majorRelevance": course.major_relevance,
+        # Sidebar fields
+        "convener": course.convener,
+        "academicCareer": course.academic_career,
+        "modeOfDelivery": course.mode_of_delivery,
+        "offeredBy": course.offered_by,
         "areasOfInterest": course.areas_of_interest,
+        "graduateAttributes": course.graduate_attributes,
         "assumedKnowledge": course.assumed_knowledge,
         "stemCourse": course.stem_course,
     }

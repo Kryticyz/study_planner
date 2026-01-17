@@ -1,3 +1,5 @@
+import { PrerequisiteExpression } from './types/prerequisites';
+
 export type Semester = 'S1' | 'S2' | 'Summer' | 'Full Year';
 
 export type CourseType =
@@ -33,6 +35,10 @@ export interface Course {
   offeredYears?: number[];
   semesterSpan?: number;
   honoursWeight?: number;
+  /** Expression-based prerequisite (takes precedence over legacy fields when present) */
+  prerequisiteExpression?: PrerequisiteExpression;
+  /** Other courses this is equivalent to (can substitute for each other) */
+  equivalentTo?: string[];
 }
 
 export interface PlannedCourse {
@@ -54,7 +60,7 @@ export interface StudyPlan {
 
 export interface ValidationError {
   courseCode: string;
-  type: 'prerequisite' | 'semester' | 'incompatible' | 'overload' | 'year';
+  type: 'prerequisite' | 'semester' | 'incompatible' | 'overload' | 'year' | 'corequisite';
   message: string;
 }
 

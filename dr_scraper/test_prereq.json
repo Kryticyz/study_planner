@@ -1,0 +1,213 @@
+{
+  "metadata": {
+    "year": 2026,
+    "scrapedAt": "2025-12-25T22:27:31.542850+00:00",
+    "stats": {
+      "courses": 9
+    }
+  },
+  "courses": {
+    "ENGN4339": {
+      "code": "ENGN4339",
+      "name": "Aerospace Instrumentation and Avionics",
+      "units": 6,
+      "level": 4000,
+      "college": "Engineering",
+      "semesters": [
+        "S2"
+      ],
+      "prerequisites": [
+        "ENGN2218",
+        "ENGN3338"
+      ],
+      "description": "This course provides students with experience in developing microcontroller-based instrumentation for aerospace applications, with particular emphasis on measurement of fluid quantities, including temperature, velocity and species concentration.  Students are introduced by practical activities to various transducer types, signal conditioning and noise and integration of sensors into avionic systems used for control and sensing in aerospace environments.  The course also provides experience in re",
+      "type": "major",
+      "prerequisiteExpression": {
+        "type": "and",
+        "operands": [
+          {
+            "type": "course",
+            "courseCode": "ENGN2218"
+          },
+          {
+            "type": "course",
+            "courseCode": "ENGN3338"
+          }
+        ]
+      }
+    },
+    "ENGN2218": {
+      "code": "ENGN2218",
+      "name": "Electronic Systems and Design",
+      "units": 6,
+      "level": 2000,
+      "college": "Engineering",
+      "semesters": [
+        "S1",
+        "S2"
+      ],
+      "prerequisites": [
+        "ENGN1218"
+      ],
+      "description": "ENGN2218 Electrical Systems & Design builds directly on ENGN1218 Introduction to Electrical Systems by developing the students' understanding of the principles and operation of advanced electronic circuits and devices (bipolar junction transistor, operational amplifier, filters, digital logic gates, ADC and DAC, 555 Timer and Instrumentation amplifiers). It also emphasizes the importance of modelling the behaviour of complex electronic circuits and devices using systematic mathematical technique",
+      "type": "core"
+    },
+    "ENGN3338": {
+      "code": "ENGN3338",
+      "name": "Aerodynamics",
+      "units": 6,
+      "level": 3000,
+      "college": "Engineering",
+      "semesters": [
+        "S1",
+        "S2"
+      ],
+      "prerequisites": [
+        "ENGN2222"
+      ],
+      "description": "In this course students will develop an understanding of low speed and high-speed aerodynamics of wings and bodies. The course includes the fundamental principles of aerodynamics, the derivation of flow equations, the potential flows in two and three dimensions, the theory of airfoils and wings for inviscid and incompressible flow and the determination of lift and induced drag of finite wings. The course also includes the comprehension of the phenomena related to the aerodynamic behaviour under ",
+      "type": "major"
+    },
+    "ENGN1218": {
+      "code": "ENGN1218",
+      "name": "Introduction to Electronics",
+      "units": 6,
+      "level": 1000,
+      "college": "Engineering",
+      "semesters": [
+        "S2"
+      ],
+      "prerequisites": [],
+      "description": "This course introduces students to the fundamentals of electrical and electronic engineering. It provides the students with an understanding of basic electrical quantities, circuit elements and circuit analysis techniques. It also provides an understanding of the principles and operation of diodes (which are the basis of the ubiquitous DC power supply circuit) and operational amplifiers (which provide the easiest method to build an amplifier circuit). Specific topics include:Introduction to Elec",
+      "type": "foundation"
+    },
+    "ENGN2222": {
+      "code": "ENGN2222",
+      "name": "Engineering Thermodynamics",
+      "units": 6,
+      "level": 2000,
+      "college": "Engineering",
+      "semesters": [
+        "S2"
+      ],
+      "prerequisites": [
+        "PHYS1001"
+      ],
+      "description": "This course conveys the fundamental thermodynamic principles and analysis methods. The topics covered include basic concepts and definitions, first law of thermodynamics and its applications to closed and open systems, second law of thermodynamics, equations of state, thermodynamic property relations, ideal gas mixtures, psychrometrics, reacting mixtures, chemical and phase equilibrium. The course briefly explores relations between thermodynamics and information theory. Application examples are ",
+      "type": "core",
+      "prerequisiteAlternatives": [
+        [
+          "PHYS1001"
+        ],
+        [
+          "PHYS1101"
+        ]
+      ],
+      "prerequisiteExpression": {
+        "type": "or",
+        "operands": [
+          {
+            "type": "course",
+            "courseCode": "PHYS1001"
+          },
+          {
+            "type": "course",
+            "courseCode": "PHYS1101"
+          }
+        ]
+      }
+    },
+    "PHYS1001": {
+      "code": "PHYS1001",
+      "name": "Foundations of Physics",
+      "units": 6,
+      "level": 1000,
+      "college": "Science",
+      "semesters": [
+        "S1",
+        "S2"
+      ],
+      "prerequisites": [],
+      "description": "Nationally recognised with two teaching awards, Foundations of Physics aims to teach you tothink like a physicist!A course for anyone who wants to get a solid foundation in basic-physics concepts, or needs to catch up before entering into a major. It will also teach you skills and an approach to problem solving that you will take forward in your life.The course offers a unique hands-on approach to learning physics. You will get the background material for each week in a short one hour theory lec",
+      "type": "foundation",
+      "incompatible": [
+        "PHYS1101",
+        "PHYS1201"
+      ]
+    },
+    "PHYS1101": {
+      "code": "PHYS1101",
+      "name": "Physics I",
+      "units": 6,
+      "level": 1000,
+      "college": "Science",
+      "semesters": [
+        "S1",
+        "S2"
+      ],
+      "prerequisites": [
+        "MATH1115"
+      ],
+      "description": "Physics 1 introduces the fundamentals of university physics, and should be taken by all students planning to major or minor in physics.The course focuses on using modelling and estimation to figure out the physics of complex real-world situations, on applying the mathematical concepts of vectors and vector fields, and on experimental skills. It is taught in small-group hands-on workshops and laboratories.Syllabus: Mechanics, point-particle models, contact forces, rigid body models and rotation. ",
+      "type": "foundation",
+      "prerequisiteAlternatives": [
+        [
+          "MATH1115"
+        ],
+        [
+          "MATH1013"
+        ]
+      ],
+      "prerequisiteExpression": {
+        "type": "or",
+        "operands": [
+          {
+            "type": "course",
+            "courseCode": "MATH1115"
+          },
+          {
+            "type": "course",
+            "courseCode": "MATH1013"
+          }
+        ]
+      }
+    },
+    "MATH1013": {
+      "code": "MATH1013",
+      "name": "Mathematics and Applications 1",
+      "units": 6,
+      "level": 1000,
+      "college": "Science",
+      "semesters": [
+        "S1",
+        "S2"
+      ],
+      "prerequisites": [],
+      "description": "This course covers single-variable calculus and introductory linear algebra. The emphasis is on understanding the material such that it both can be applied across a range of fields including the physical and biological sciences, engineering and information technologies, economics and commerce, and can also serve as a base for future mathematics courses. Many applications and connections with other fields will be discussed although not developed in detail. Not all the material will be developed i",
+      "type": "foundation",
+      "incompatible": [
+        "MATH1113",
+        "MATH1115"
+      ]
+    },
+    "MATH1115": {
+      "code": "MATH1115",
+      "name": "Advanced Mathematics and Applications 1",
+      "units": 6,
+      "level": 1000,
+      "college": "Science",
+      "semesters": [
+        "S1",
+        "S2"
+      ],
+      "prerequisites": [],
+      "description": "This course begins an in-depth study of the fundamental concepts of calculus and linear algebra, with a particular emphasis on the underlying foundations of mathematics. The use and understanding of proof and abstract ideas will allow students to develop analytical skills which will form a base for further study in fundamental mathematics, as well as providing a foundation for a wide range of quantitative areas such as actuarial studies, computer science, economics, engineering, physics and stat",
+      "type": "foundation",
+      "incompatible": [
+        "MATH1113",
+        "MATH1115",
+        "MATH1013"
+      ]
+    }
+  }
+}

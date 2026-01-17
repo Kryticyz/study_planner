@@ -382,6 +382,21 @@ export const courses: Record<string, Course> = {
   // ============================================
 
   // Mathematics - Third Year
+
+  MATH3320: {
+    code: "MATH3320",
+    name: "Advanced Analysis 2",
+    units: 6,
+    level: 3000,
+    college: "CSS",
+    semesters: ["S1"],
+    prerequisites: ["MATH2320"],
+    description:
+      "Explain the fundamental concepts of advanced analysis such as Lebesgue measure and integration and Hilbert space theory and their role in modern mathematics and applied contexts",
+    type: "elective",
+    recommended: "Improved Analysis techniques",
+  },
+
   MATH3511: {
     code: "MATH3511",
     name: "Scientific Computing",
@@ -545,6 +560,41 @@ export const courses: Record<string, Course> = {
     majorRelevance: ["ECSY-MAJ"],
     note: "Being replaced by ENGN3350 from 2027",
   },
+  ENGN3331: {
+    code: "ENGN3331",
+    name: "System Dynamics",
+    units: 6,
+    level: 3000,
+    college: "Engineering",
+    semesters: ["S1"],
+    prerequisites: ["MATH1013"],
+    description:
+      "System dynamics is the study of the response of engineering systems with changing time",
+    type: "engnElective",
+  },
+  ENGN3338: {
+    code: "ENGN3338",
+    name: "Aerodynamics",
+    units: 6,
+    level: 3000,
+    college: "Engineering",
+    semesters: ["S1"],
+    prerequisites: ["ENGN2222"],
+    description: "low speed and high-speed aerodynamics of wings and bodies",
+    type: "engnElective",
+  },
+  ENGN4339: {
+    code: "ENGN4339",
+    name: "Aerospace Instrumentation and Avionics",
+    units: 6,
+    level: 3000,
+    college: "Engineering",
+    semesters: ["S2"],
+    prerequisites: ["ENGN3338"],
+    description:
+      "developing microcontroller-based instrumentation for aerospace applications",
+    type: "engnElective",
+  },
   ENGN3350: {
     code: "ENGN3350",
     name: "Communications Systems",
@@ -702,7 +752,7 @@ export const courses: Record<string, Course> = {
     units: 12,
     level: 4000,
     college: "Engineering",
-    semesters: ["Full Year"],
+    semesters: ["S1", "S2"],
     semesterSpan: 2,
     prerequisites: ["ENGN3301"],
     description: "Year-long team project with industry partner",

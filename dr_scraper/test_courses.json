@@ -1,0 +1,52 @@
+{
+  "metadata": {
+    "year": 2026,
+    "scrapedAt": "2025-12-25T22:26:13.002428+00:00",
+    "stats": {
+      "courses": 3
+    }
+  },
+  "courses": {
+    "COMP1100": {
+      "code": "COMP1100",
+      "name": "Programming as Problem Solving",
+      "units": 6,
+      "level": 1000,
+      "college": "Computing",
+      "semesters": [
+        "S1",
+        "S2"
+      ],
+      "prerequisites": [],
+      "description": "This course is the first of three core computer science courses on programming. It introduces students to the field of computer science as a discipline for solving problems through computation and provides the foundation for more advanced courses on programming and software development. Data structures and algorithms, the key concepts at the core of computer science, receive their first treatment in this course.The course covers functional programming in depth, developing the core idea of functi",
+      "type": "foundation"
+    },
+    "ENGN4339": {
+      "code": "ENGN4339",
+      "name": "Aerospace Instrumentation and Avionics",
+      "units": 6,
+      "level": 4000,
+      "college": "Engineering",
+      "semesters": [
+        "S2"
+      ],
+      "prerequisites": [],
+      "description": "This course provides students with experience in developing microcontroller-based instrumentation for aerospace applications, with particular emphasis on measurement of fluid quantities, including temperature, velocity and species concentration.  Students are introduced by practical activities to various transducer types, signal conditioning and noise and integration of sensors into avionic systems used for control and sensing in aerospace environments.  The course also provides experience in re",
+      "type": "major"
+    },
+    "MATH1013": {
+      "code": "MATH1013",
+      "name": "Mathematics and Applications 1",
+      "units": 6,
+      "level": 1000,
+      "college": "Science",
+      "semesters": [
+        "S1",
+        "S2"
+      ],
+      "prerequisites": [],
+      "description": "This course covers single-variable calculus and introductory linear algebra. The emphasis is on understanding the material such that it both can be applied across a range of fields including the physical and biological sciences, engineering and information technologies, economics and commerce, and can also serve as a base for future mathematics courses. Many applications and connections with other fields will be discussed although not developed in detail. Not all the material will be developed i",
+      "type": "foundation"
+    }
+  }
+}
