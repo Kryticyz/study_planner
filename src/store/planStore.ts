@@ -110,7 +110,7 @@ export const usePlanStore = create<PlanStore>()(
       comparisonPlanIds: [],
       isCompareMode: false,
 
-      createPlan: (name: string, startYear = 2025, startSemester: 1 | 2 = 1) => {
+      createPlan: (name: string, startYear = 2025, startSemester: 1 | 2 = 1, program: string) => {
         const id = generateId();
         const newPlan: StudyPlan = {
           id,
@@ -119,6 +119,7 @@ export const usePlanStore = create<PlanStore>()(
           updatedAt: Date.now(),
           startYear,
           startSemester,
+          program,
           courses: [],
           completedCourses: [],
         };
@@ -155,6 +156,7 @@ export const usePlanStore = create<PlanStore>()(
           createdAt: Date.now(),
           updatedAt: Date.now(),
           startSemester: plan.startSemester ?? 1,
+          program,
           courses: [...plan.courses],
           completedCourses: [...plan.completedCourses],
         };
@@ -350,11 +352,11 @@ export const usePlanStore = create<PlanStore>()(
         if (!course) return false;
 
         // Convert to expression tree (handles legacy format automatically)
-        const expression = convertLegacyPrerequisites(course);
+        const expression = convertLegacyPrerequisites(course); // just remove legacy format? TODO
         if (!expression) return true; // No prerequisites
 
         const startSemester = plan.startSemester ?? 1;
-        const targetPosition = getChronologicalPosition(year, semester, startSemester);
+        const targetPosition = getChronologicalPosition(year, semester, startSemester); // normalise for start sem
 
         // Get prior courses with full data for unit calculations
         const priorCourseCodes = plan.courses

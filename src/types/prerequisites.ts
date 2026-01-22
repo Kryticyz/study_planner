@@ -58,6 +58,7 @@ export interface UnitLevelRequirement {
 /**
  * Equivalence registry for courses that can substitute for each other.
  */
+// TODO remove equivalence registry
 export interface EquivalenceRegistry {
   /** Map from course code to its equivalence group ID */
   courseToGroup: Record<string, string>;

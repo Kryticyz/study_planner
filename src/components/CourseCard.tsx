@@ -17,9 +17,11 @@ const typeColors: Record<CourseType, string> = {
   foundation: 'bg-blue-50 border-blue-200 hover:border-blue-400',
   core: 'bg-purple-50 border-purple-200 hover:border-purple-400',
   professionalCore: 'bg-orange-50 border-orange-200 hover:border-orange-400',
+  compCore: 'bg-gold-50 border-gold-200 hover:border-gold-400',
   major: 'bg-green-50 border-green-200 hover:border-green-400',
   elective: 'bg-gray-50 border-gray-200 hover:border-gray-400',
   engnElective: 'bg-teal-50 border-teal-200 hover:border-teal-400',
+  compElective: 'bg-teal-50 border-teal-200 hover:border-teal-400',
   capstone: 'bg-amber-50 border-amber-200 hover:border-amber-400',
   industryExperience: 'bg-pink-50 border-pink-200 hover:border-pink-400',
 };
@@ -27,10 +29,12 @@ const typeColors: Record<CourseType, string> = {
 const typeLabels: Record<CourseType, string> = {
   foundation: 'Foundation',
   core: 'Core',
+  compCore: "Computing Core",
   professionalCore: 'Professional',
   major: 'Major',
   elective: 'Elective',
-  engnElective: 'ENGN Elec',
+  engnElective: 'Engineering Elective',
+  compElective: "Computing Elective",
   capstone: 'Capstone',
   industryExperience: 'Industry',
 };
