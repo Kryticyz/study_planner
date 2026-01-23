@@ -4,6 +4,7 @@ import { DndContext, DragEndEvent, DragOverlay, DragStartEvent, closestCenter } 
 import { useState } from 'react';
 import { CourseCard } from './CourseCard';
 import { courses } from '../data/courses';
+import { getProgram } from '../data/degreeRegistry';
 
 interface SemesterGridProps {
   planId: string;
@@ -16,7 +17,9 @@ export function SemesterGrid({ planId }: SemesterGridProps) {
   const plan = getPlanById(planId);
   if (!plan) return null;
 
-  const years = [1, 2, 3, 4];
+  const program = getProgram(plan.program ?? 'AENGI');
+  const maxYear = program ? Math.ceil(program.duration / 2) : 4;
+  const years = Array.from({ length: maxYear }, (_, i) => i + 1);
   const startSemester = plan.startSemester ?? 1;
   // When starting in S2, show S2 first, then S1
   const semesters = startSemester === 1 ? [1, 2] as const : [2, 1] as const;
@@ -56,10 +59,15 @@ export function SemesterGrid({ planId }: SemesterGridProps) {
             <span className="text-sm font-normal text-gray-500 ml-2">
               Starting: {plan.startYear} S{plan.startSemester ?? 1}
             </span>
+            {program && (
+              <span className="text-xs font-normal text-gray-400 ml-2">
+                ({program.name})
+              </span>
+            )}
           </h2>
         </div>
 
-        <div className="grid grid-cols-4 gap-4">
+        <div className={`grid gap-4 ${maxYear <= 4 ? 'grid-cols-4' : maxYear <= 6 ? 'grid-cols-6' : 'grid-cols-6'}`} style={{ gridTemplateColumns: `repeat(${Math.min(maxYear, 6)}, minmax(0, 1fr))` }}>
           {years.map((year) => (
             <div key={year} className="space-y-4">
               <div className="text-center">

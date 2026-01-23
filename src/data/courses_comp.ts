@@ -1,4 +1,4 @@
-import Course from "../types/"
+import { Course } from "../types"
 
 export const courses: Record<string, Course> = {
   COMP1100: {

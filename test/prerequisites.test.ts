@@ -1,20 +1,37 @@
-import {parsePreqStatement} from "../src/utils/prerequisiteEvaluator.ts"
-import {expect, test} from "bun:test";
+import { convertLegacyPrerequisites, evaluateExpression, courseReq } from "../src/utils/prerequisiteEvaluator.ts"
+import { expect, test, describe } from "bun:test";
+import { createContext } from "./testHelpers.ts";
+import type { Course } from "../src/types/index.ts";
 
-const none = []
-const single = ["COMP1100"]
-const double_and = ["COMP1100", "COMP1110"]
-const double_or = [["COMP1100", "COMP1110"]]
-const units = ["COMP-0-12"]
-const complex = [["COMP1100", "COMP1110"], "COMP2100", "MATH-0-6"]
+describe("Prerequisites Basic Tests", () => {
+  test("simple math", () => {
+    expect(2+2).toBe(4);
+  });
 
-test("simple maff", () => {
-  expect(2+2).toBe(4);
-})
+  test("Single prerequisite converts to CourseRequirement", () => {
+    const course: Partial<Course> = {
+      code: "TEST1110",
+      prerequisites: ["COMP1100"]
+    };
 
-test("Single preq", () => {
-  const course = {
-    prerequisites: single
-  }
-  expect(parsePreqStatement(course)).toBe({type:'course', courseCode: 'COMP1100'})
-})
+    const result = convertLegacyPrerequisites(course as Course);
+    expect(result).toEqual({ type: 'course', courseCode: 'COMP1100' });
+  });
+
+  test("Single prerequisite evaluates correctly when satisfied", () => {
+    const expr = courseReq("COMP1100");
+    const context = createContext(["COMP1100"]);
+
+    const result = evaluateExpression(expr, context);
+    expect(result.satisfied).toBe(true);
+  });
+
+  test("Single prerequisite evaluates correctly when not satisfied", () => {
+    const expr = courseReq("COMP1100");
+    const context = createContext([]);
+
+    const result = evaluateExpression(expr, context);
+    expect(result.satisfied).toBe(false);
+    expect(result.details?.missingCourses).toContain("COMP1100");
+  });
+});

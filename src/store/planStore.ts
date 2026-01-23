@@ -1,12 +1,13 @@
 import { create } from 'zustand';
 import { persist } from 'zustand/middleware';
-import { StudyPlan, PlannedCourse, ValidationError } from '../types';
+import { StudyPlan, PlannedCourse, ValidationError, CombinedDegreeProgress, DegreeComponentProgress, RequirementProgress } from '../types';
 import { courses } from '../data/courses';
 import { degreeRequirements, electronicsCommunicationsMajor } from '../data/requirements';
 import { getEquivalenceRegistry } from '../data/equivalences';
 import { evaluateExpression, convertLegacyPrerequisites, describeExpression } from '../utils/prerequisiteEvaluator';
 import { validateCorequisites } from '../utils/corequisiteValidator';
 import { EvaluationContext } from '../types/prerequisites';
+import { getProgram, getDegree, getMaxYear, getDefaultDegreeAttribution, canUseAsElective } from '../data/degreeRegistry';
 
 interface PlanStore {
   plans: StudyPlan[];
@@ -15,7 +16,7 @@ interface PlanStore {
   isCompareMode: boolean;
 
   // Actions
-  createPlan: (name: string, startYear?: number, startSemester?: 1 | 2) => string;
+  createPlan: (name: string, startYear?: number, startSemester?: 1 | 2, program?: string) => string;
   deletePlan: (id: string) => void;
   duplicatePlan: (id: string) => string;
   renamePlan: (id: string, name: string) => void;
@@ -27,6 +28,7 @@ interface PlanStore {
   moveCourse: (planId: string, courseCode: string, year: number, semester: 1 | 2) => void;
   markCompleted: (planId: string, courseCode: string) => void;
   unmarkCompleted: (planId: string, courseCode: string) => void;
+  setCourseCountingOverride: (planId: string, courseCode: string, degrees: string[]) => void;
 
   // Comparison mode
   toggleCompareMode: () => void;
@@ -39,6 +41,7 @@ interface PlanStore {
   validatePlan: (planId: string) => ValidationError[];
   getPrerequisitesMet: (planId: string, courseCode: string, year: number, semester: 1 | 2) => boolean;
   getSemesterUnits: (planId: string, year: number, semester: 1 | 2) => number;
+  getMaxYearForPlan: (planId: string) => number;
   getDegreeProgress: (planId: string) => {
     foundations: { required: number; completed: number; courses: string[] };
     engineeringFundamentals: { required: number; completed: number; courses: string[] };
@@ -49,6 +52,7 @@ interface PlanStore {
     universityElectives: { required: number; completed: number; courses: string[] };
     total: { required: number; completed: number };
   };
+  getCombinedDegreeProgress: (planId: string) => CombinedDegreeProgress | null;
 }
 
 const generateId = () => Math.random().toString(36).substring(2, 15);
@@ -66,16 +70,16 @@ const getChronologicalPosition = (year: number, semester: 1 | 2, startSemester: 
 };
 
 // Helper to get the next semester slot chronologically
-const getNextSemester = (year: number, semester: 1 | 2, startSemester: 1 | 2): { year: number; semester: 1 | 2 } | null => {
+const getNextSemester = (year: number, semester: 1 | 2, startSemester: 1 | 2, maxYear: number = 4): { year: number; semester: 1 | 2 } | null => {
   if (startSemester === 1) {
     // S1 -> S2 (same year), S2 -> S1 (next year)
     if (semester === 1) return { year, semester: 2 };
-    if (year >= 4) return null; // Can't go beyond year 4
+    if (year >= maxYear) return null; // Can't go beyond max year
     return { year: year + 1, semester: 1 };
   } else {
     // S2 -> S1 (next year), S1 -> S2 (same year)
     if (semester === 2) {
-      if (year >= 4) return null; // Can't go beyond year 4
+      if (year >= maxYear) return null; // Can't go beyond max year
       return { year: year + 1, semester: 1 };
     }
     return { year, semester: 2 };
@@ -87,14 +91,15 @@ const getOccupiedSlots = (
   year: number,
   semester: 1 | 2,
   semesterSpan: number,
-  startSemester: 1 | 2
+  startSemester: 1 | 2,
+  maxYear: number = 4
 ): { year: number; semester: 1 | 2 }[] => {
   const slots: { year: number; semester: 1 | 2 }[] = [{ year, semester }];
   let current = { year, semester };
 
   for (let i = 1; i < semesterSpan; i++) {
-    const next = getNextSemester(current.year, current.semester, startSemester);
-    if (!next) break; // Can't extend beyond year 4
+    const next = getNextSemester(current.year, current.semester, startSemester, maxYear);
+    if (!next) break; // Can't extend beyond max year
     slots.push(next);
     current = next;
   }
@@ -110,7 +115,7 @@ export const usePlanStore = create<PlanStore>()(
       comparisonPlanIds: [],
       isCompareMode: false,
 
-      createPlan: (name: string, startYear = 2025, startSemester: 1 | 2 = 1, program: string) => {
+      createPlan: (name: string, startYear = 2025, startSemester: 1 | 2 = 1, program: string = 'AENGI') => {
         const id = generateId();
         const newPlan: StudyPlan = {
           id,
@@ -156,7 +161,7 @@ export const usePlanStore = create<PlanStore>()(
           createdAt: Date.now(),
           updatedAt: Date.now(),
           startSemester: plan.startSemester ?? 1,
-          program,
+          program: plan.program ?? 'AENGI',
           courses: [...plan.courses],
           completedCourses: [...plan.completedCourses],
         };
@@ -189,12 +194,16 @@ export const usePlanStore = create<PlanStore>()(
             if (exists) return p;
 
             const startSemester = p.startSemester ?? 1;
+            const maxYear = getMaxYear(p.program ?? 'AENGI');
+
+            // Check year is within valid range for this degree
+            if (year > maxYear) return p;
 
             // For multi-semester courses, check that all slots are available
             if (semesterSpan > 1) {
-              const occupiedSlots = getOccupiedSlots(year, semester, semesterSpan, startSemester);
+              const occupiedSlots = getOccupiedSlots(year, semester, semesterSpan, startSemester, maxYear);
 
-              // Check course doesn't extend beyond year 4
+              // Check course doesn't extend beyond max year
               if (occupiedSlots.length < semesterSpan) return p;
 
               // Check no conflicts with existing courses in any occupied slot
@@ -203,7 +212,7 @@ export const usePlanStore = create<PlanStore>()(
                   const existingCourseData = courses[existingCourse.courseCode];
                   const existingSpan = existingCourseData?.semesterSpan ?? 1;
                   const existingOccupied = getOccupiedSlots(
-                    existingCourse.year, existingCourse.semester, existingSpan, startSemester
+                    existingCourse.year, existingCourse.semester, existingSpan, startSemester, maxYear
                   );
                   return existingOccupied.some(s => s.year === slot.year && s.semester === slot.semester);
                 });
@@ -243,12 +252,16 @@ export const usePlanStore = create<PlanStore>()(
             if (p.id !== planId) return p;
 
             const startSemester = p.startSemester ?? 1;
+            const maxYear = getMaxYear(p.program ?? 'AENGI');
+
+            // Check year is within valid range for this degree
+            if (year > maxYear) return p;
 
             // For multi-semester courses, check that all slots are available
             if (semesterSpan > 1) {
-              const occupiedSlots = getOccupiedSlots(year, semester, semesterSpan, startSemester);
+              const occupiedSlots = getOccupiedSlots(year, semester, semesterSpan, startSemester, maxYear);
 
-              // Check course doesn't extend beyond year 4
+              // Check course doesn't extend beyond max year
               if (occupiedSlots.length < semesterSpan) return p;
 
               // Check no conflicts with OTHER existing courses in any occupied slot
@@ -259,7 +272,7 @@ export const usePlanStore = create<PlanStore>()(
                   const existingCourseData = courses[existingCourse.courseCode];
                   const existingSpan = existingCourseData?.semesterSpan ?? 1;
                   const existingOccupied = getOccupiedSlots(
-                    existingCourse.year, existingCourse.semester, existingSpan, startSemester
+                    existingCourse.year, existingCourse.semester, existingSpan, startSemester, maxYear
                   );
                   return existingOccupied.some(s => s.year === slot.year && s.semester === slot.semester);
                 });
@@ -305,6 +318,23 @@ export const usePlanStore = create<PlanStore>()(
         }));
       },
 
+      setCourseCountingOverride: (planId: string, courseCode: string, degrees: string[]) => {
+        set(state => ({
+          plans: state.plans.map(p => {
+            if (p.id !== planId) return p;
+            return {
+              ...p,
+              courses: p.courses.map(c =>
+                c.courseCode === courseCode
+                  ? { ...c, countTowardDegree: degrees.length > 0 ? degrees : undefined }
+                  : c
+              ),
+              updatedAt: Date.now(),
+            };
+          }),
+        }));
+      },
+
       toggleCompareMode: () => {
         set(state => ({ isCompareMode: !state.isCompareMode }));
       },
@@ -327,6 +357,7 @@ export const usePlanStore = create<PlanStore>()(
         if (!plan) return [];
 
         const startSemester = plan.startSemester ?? 1;
+        const maxYear = getMaxYear(plan.program ?? 'AENGI');
 
         // Return courses that occupy this slot (either start here or span into here)
         return plan.courses.filter(c => {
@@ -339,7 +370,7 @@ export const usePlanStore = create<PlanStore>()(
           }
 
           // Multi-semester course - check if any of its occupied slots match
-          const occupiedSlots = getOccupiedSlots(c.year, c.semester, semesterSpan, startSemester);
+          const occupiedSlots = getOccupiedSlots(c.year, c.semester, semesterSpan, startSemester, maxYear);
           return occupiedSlots.some(slot => slot.year === year && slot.semester === semester);
         });
       },
@@ -390,11 +421,17 @@ export const usePlanStore = create<PlanStore>()(
         }, 0);
       },
 
+      getMaxYearForPlan: (planId: string) => {
+        const plan = get().plans.find(p => p.id === planId);
+        return getMaxYear(plan?.program ?? 'AENGI');
+      },
+
       validatePlan: (planId: string) => {
         const plan = get().plans.find(p => p.id === planId);
         if (!plan) return [];
 
         const errors: ValidationError[] = [];
+        const maxYear = getMaxYear(plan.program ?? 'AENGI');
 
         plan.courses.forEach(pc => {
           const course = courses[pc.courseCode];
@@ -468,14 +505,14 @@ export const usePlanStore = create<PlanStore>()(
           const semesterSpan = course.semesterSpan ?? 1;
           if (semesterSpan > 1) {
             const startSemester = plan.startSemester ?? 1;
-            const occupiedSlots = getOccupiedSlots(pc.year, pc.semester, semesterSpan, startSemester);
+            const occupiedSlots = getOccupiedSlots(pc.year, pc.semester, semesterSpan, startSemester, maxYear);
 
-            // Check course doesn't extend beyond year 4
+            // Check course doesn't extend beyond max year for this degree
             if (occupiedSlots.length < semesterSpan) {
               errors.push({
                 courseCode: pc.courseCode,
                 type: 'semester',
-                message: `${course.code} extends beyond Year 4`,
+                message: `${course.code} extends beyond Year ${maxYear}`,
               });
             }
 
@@ -485,7 +522,7 @@ export const usePlanStore = create<PlanStore>()(
               const otherCourse = courses[otherPc.courseCode];
               if (!otherCourse) return;
               const otherSpan = otherCourse.semesterSpan ?? 1;
-              const otherOccupied = getOccupiedSlots(otherPc.year, otherPc.semester, otherSpan, startSemester);
+              const otherOccupied = getOccupiedSlots(otherPc.year, otherPc.semester, otherSpan, startSemester, maxYear);
 
               for (const slot of occupiedSlots) {
                 if (otherOccupied.some(s => s.year === slot.year && s.semester === slot.semester)) {
@@ -501,8 +538,8 @@ export const usePlanStore = create<PlanStore>()(
           }
         });
 
-        // Check semester overload
-        for (let year = 1; year <= 4; year++) {
+        // Check semester overload (check all years for this degree)
+        for (let year = 1; year <= maxYear; year++) {
           for (const semester of [1, 2] as const) {
             const units = get().getSemesterUnits(planId, year, semester);
             if (units > 24) {
@@ -603,6 +640,178 @@ export const usePlanStore = create<PlanStore>()(
           engnElectives: { required: 24, completed: Math.min(24, engnElectiveUnits), courses: remainingEngn },
           universityElectives: { required: 24, completed: Math.min(24, uniElectiveUnits), courses: remainingOther },
           total: { required: 192, completed: totalCompleted },
+        };
+      },
+
+      getCombinedDegreeProgress: (planId: string): CombinedDegreeProgress | null => {
+        const plan = get().plans.find(p => p.id === planId);
+        if (!plan) return null;
+
+        const programCode = plan.program ?? 'AENGI';
+        const program = getProgram(programCode);
+        if (!program) return null;
+
+        const plannedCourses = plan.courses;
+        const plannedCodes = new Set(plannedCourses.map(c => c.courseCode));
+
+        // Helper to calculate progress for a single degree component
+        const calculateDegreeProgress = (degreeCode: string, usedByOther: Set<string>): DegreeComponentProgress => {
+          const degree = getDegree(degreeCode);
+          if (!degree) {
+            return {
+              name: degreeCode,
+              code: degreeCode,
+              requirements: {},
+              total: { required: 0, completed: 0 },
+            };
+          }
+
+          const requirements: Record<string, RequirementProgress> = {};
+          const usedInThisDegree = new Set<string>();
+          let totalRequired = 0;
+          let totalCompleted = 0;
+
+          for (const [key, category] of Object.entries(degree.requirements)) {
+            const completedCourses: string[] = [];
+            let completedUnits = 0;
+
+            if (category.courses) {
+              for (const courseSpec of category.courses) {
+                if (Array.isArray(courseSpec)) {
+                  // Choice group - find one that's planned
+                  const found = courseSpec.find(code =>
+                    plannedCodes.has(code) && !usedByOther.has(code) && !usedInThisDegree.has(code)
+                  );
+                  if (found) {
+                    completedCourses.push(found);
+                    usedInThisDegree.add(found);
+                    completedUnits += courses[found]?.units ?? 0;
+                  }
+                } else {
+                  // Single required course
+                  if (plannedCodes.has(courseSpec) && !usedByOther.has(courseSpec) && !usedInThisDegree.has(courseSpec)) {
+                    completedCourses.push(courseSpec);
+                    usedInThisDegree.add(courseSpec);
+                    completedUnits += courses[courseSpec]?.units ?? 0;
+                  }
+                }
+              }
+            }
+
+            // Handle prefix requirements (e.g., ENGN electives)
+            if (category.prefixRequirements) {
+              for (const prefixReq of category.prefixRequirements) {
+                let prefixUnits = 0;
+                for (const pc of plannedCourses) {
+                  if (usedByOther.has(pc.courseCode) || usedInThisDegree.has(pc.courseCode)) continue;
+                  const course = courses[pc.courseCode];
+                  if (course && course.code.startsWith(prefixReq.prefix)) {
+                    completedCourses.push(pc.courseCode);
+                    usedInThisDegree.add(pc.courseCode);
+                    prefixUnits += course.units;
+                    if (prefixUnits >= prefixReq.minUnits) break;
+                  }
+                }
+                completedUnits += Math.min(prefixUnits, prefixReq.minUnits);
+              }
+            }
+
+            // Handle elective categories (remaining courses)
+            if (!category.courses && !category.prefixRequirements && category.units > 0) {
+              // This is a general elective category - fill with remaining courses
+              for (const pc of plannedCourses) {
+                if (completedUnits >= category.units) break;
+                if (usedByOther.has(pc.courseCode) || usedInThisDegree.has(pc.courseCode)) continue;
+
+                // For double degrees, check if this course can be used as elective for this degree
+                if (program.isDoubleDegree && !canUseAsElective(pc.courseCode, degreeCode, programCode)) {
+                  continue;
+                }
+
+                const course = courses[pc.courseCode];
+                if (course) {
+                  completedCourses.push(pc.courseCode);
+                  usedInThisDegree.add(pc.courseCode);
+                  completedUnits += course.units;
+                }
+              }
+            }
+
+            requirements[key] = {
+              name: category.name,
+              description: category.description,
+              required: category.units,
+              completed: Math.min(completedUnits, category.units),
+              courses: category.courses?.flat() ?? [],
+              completedCourses,
+            };
+
+            totalRequired += category.units;
+            totalCompleted += Math.min(completedUnits, category.units);
+          }
+
+          return {
+            name: degree.name,
+            code: degree.code,
+            requirements,
+            total: { required: totalRequired, completed: totalCompleted },
+          };
+        };
+
+        // For single degrees
+        if (!program.isDoubleDegree) {
+          const primary = calculateDegreeProgress(program.degreeComponents[0], new Set());
+          return {
+            programCode,
+            programName: program.name,
+            isDoubleDegree: false,
+            primary,
+            overallTotal: primary.total,
+          };
+        }
+
+        // For double degrees
+        // First, identify shared mandatory courses that count for both
+        const sharedCourses = new Set<string>();
+        for (const pc of plannedCourses) {
+          const attribution = getDefaultDegreeAttribution(pc.courseCode, programCode, pc.countTowardDegree);
+          if (attribution.length > 1) {
+            sharedCourses.add(pc.courseCode);
+          }
+        }
+
+        // Calculate primary degree progress
+        const primary = calculateDegreeProgress(program.degreeComponents[0], new Set());
+
+        // For secondary, exclude courses used exclusively by primary (but allow shared)
+        const usedByPrimary = new Set<string>();
+        for (const reqs of Object.values(primary.requirements)) {
+          for (const code of reqs.completedCourses) {
+            if (!sharedCourses.has(code)) {
+              usedByPrimary.add(code);
+            }
+          }
+        }
+
+        const secondary = calculateDegreeProgress(program.degreeComponents[1], usedByPrimary);
+
+        // Calculate overall total (shared courses count once for overall)
+        const allUsedCourses = new Set<string>();
+        for (const reqs of Object.values(primary.requirements)) {
+          reqs.completedCourses.forEach(c => allUsedCourses.add(c));
+        }
+        for (const reqs of Object.values(secondary.requirements)) {
+          reqs.completedCourses.forEach(c => allUsedCourses.add(c));
+        }
+        const overallCompleted = [...allUsedCourses].reduce((sum, code) => sum + (courses[code]?.units ?? 0), 0);
+
+        return {
+          programCode,
+          programName: program.name,
+          isDoubleDegree: true,
+          primary,
+          secondary,
+          overallTotal: { required: program.totalUnits, completed: overallCompleted },
         };
       },
     }),

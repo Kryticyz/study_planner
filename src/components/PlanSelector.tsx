@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { usePlanStore } from '../store/planStore';
 import { Plus, Copy, Trash2, Edit2, Check, X } from 'lucide-react';
+import { getAvailablePrograms } from '../data/degreeRegistry';
 
 export function PlanSelector() {
   const { plans, activePlanId, setActivePlan, createPlan, deletePlan, duplicatePlan, renamePlan } = usePlanStore();
@@ -10,6 +11,8 @@ export function PlanSelector() {
   const [newPlanStartSemester, setNewPlanStartSemester] = useState<1 | 2>(1);
   const [editingId, setEditingId] = useState<string | null>(null);
   const [editName, setEditName] = useState('');
+
+  const availablePrograms = getAvailablePrograms();
 
   const handleCreate = () => {
     if (newPlanName.trim()) {
@@ -75,11 +78,14 @@ export function PlanSelector() {
           <select
             value={newPlanProgram}
             onChange={(e) => setNewPlanProgram(e.target.value)}
-            className="px-3 py-1.5 border rounded-lg focus:outline-none focus:ring-2 focus:ring-anu-gold bg-white"
+            className="px-3 py-1.5 border rounded-lg focus:outline-none focus:ring-2 focus:ring-anu-gold bg-white text-sm"
             title="Program"
           >
-            <option value={"AENGI"}>Bachelor of Engineering (Honours)</option>
-            <option value={"AENGI-BCOMP"}>Bachelor of Engineering (Honours) and Bachelor of Computing Double</option>
+            {availablePrograms.map(program => (
+              <option key={program.code} value={program.code}>
+                {program.name} ({Math.ceil(program.duration / 2)} years)
+              </option>
+            ))}
           </select>
           <button
             onClick={handleCreate}
