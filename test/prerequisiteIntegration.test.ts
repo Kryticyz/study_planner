@@ -1,7 +1,7 @@
 import { test, expect, describe } from "bun:test";
 import { convertLegacyPrerequisites, evaluateExpression } from "../src/utils/prerequisiteEvaluator";
 import { createContext, createEmptyContext, expectSatisfied, expectNotSatisfied } from "./testHelpers";
-import { courses as compCourses } from "../src/data/courses_comp";
+import { COMP_COURSES as compCourses } from "../src/data/courses";
 import { Course, CourseType } from "../src/types";
 
 // Helper to create minimal course objects for testing

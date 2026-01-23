@@ -1,6 +1,6 @@
-import { Course } from "../types"
+import { Course } from "../../types";
 
-export const courses: Record<string, Course> = {
+export const COMP_COURSES: Record<string, Course> = {
   COMP1100: {
     code: "COMP1100",
     name: "Programming as Problem Solving",
@@ -48,7 +48,7 @@ export const courses: Record<string, Course> = {
     prerequisites: ["COMP1130"],
     incompatible: ["COMP1100"],
     description: "Advanced structured programming",
-    type: "unknown",
+    type: "elective",
   },
   COMP1600: {
     code: "COMP1600",
@@ -59,7 +59,7 @@ export const courses: Record<string, Course> = {
     semesters: ["S2"],
     prerequisites: ["MATH-0-6", ["COMP1100", "COMP1130"]],
     description: "Presents some formal notations that are commonly used for the description of computation of computer systems",
-    type: 'unknown',
+    type: "elective",
   },
   COMP1710: {
     code: "COMP1710",
@@ -70,7 +70,7 @@ export const courses: Record<string, Course> = {
     semesters: [],
     prerequisites: [],
     description: "Introduces the construction of web sites and web interface/interaction design.",
-    type: "unknown",
+    type: "elective",
   },
   COMP2100: {
     code: "COMP2100",
@@ -78,10 +78,10 @@ export const courses: Record<string, Course> = {
     units: 6,
     level: 2000,
     college: "CSS",
-    semesters: ["S1","S2"],
+    semesters: ["S1", "S2"],
     prerequisites: [["COMP1100", "COMP1140"]],
     description: "Group Project app development",
-    type: "unkown",
+    type: "elective",
   },
   COMP2310: {
     code: "COMP2310",
@@ -92,7 +92,7 @@ export const courses: Record<string, Course> = {
     semesters: ["S2"],
     prerequisites: [["COMP1110", "COMP1140"], ["COMP2300", "ENGN2219"]],
     description: "Introduces all basic mechanisms to analyse, design, and manage concurrent, single computer-node as well as distributed applications.",
-    type: "unknown",
+    type: "elective",
   },
   COMP2400: {
     code: "COMP2400",
@@ -103,7 +103,7 @@ export const courses: Record<string, Course> = {
     semesters: ["S1", "S2"],
     prerequisites: [["COMP1100", "COMP1130", "INFS1001", "COMP1730"]],
     description: "Introduction to releational databases and the general skills for designing and using them.",
-    type: "unknown",
+    type: "elective",
   },
   COMP2610: {
     code: "COMP2610",
@@ -114,18 +114,18 @@ export const courses: Record<string, Course> = {
     semesters: ["S2"],
     prerequisites: [],
     description: "Study the fundamental limits of representation and transmission of information",
-    type: "unknown", //type may be outdated once the rewrite is in, otherwise unknowns will be replaced
+    type: "elective",
   },
   COMP2700: {
     code: "COMP2700",
     name: "Cyber Security Foundations",
-   units: 6,
-   level: 2000,
-   college: "CSS",
+    units: 6,
+    level: 2000,
+    college: "CSS",
     semesters: ["S1"],
     prerequisites: [["COMP1100", "COMP1130"], ["COMP1600", "MATH"]],
-   description: "Introduces all essential cyber security principles",
-   type: "unknown"
+    description: "Introduces all essential cyber security principles",
+    type: "elective",
   },
   COMP3242: {
     code: "COMP3242",
@@ -134,9 +134,9 @@ export const courses: Record<string, Course> = {
     level: 3000,
     college: "CSS",
     semesters: ["S1"],
-    prerequisites: [["COMP3670", "MATH1013", "MATH1014", "MATH1115", "MATH1116"],["COMP1110", "COMP1140"]],
+    prerequisites: [["COMP3670", "MATH1013", "MATH1014", "MATH1115", "MATH1116"], ["COMP1110", "COMP1140"]],
     description: "The theory and practice of deep learning",
-    type: "unkown",
+    type: "elective",
   },
   COMP3300: {
     code: "COMP3300",
@@ -147,10 +147,10 @@ export const courses: Record<string, Course> = {
     semesters: ["S2"],
     prerequisites: ["COMP2310"],
     description: "A detailed look at the services provided by, and the internals of, an existing operating system.",
-    type: "unkown",
+    type: "elective",
   },
   COMP3310: {
-    code:"COMP3310",
+    code: "COMP3310",
     name: "Computer Networks",
     units: 6,
     level: 3000,
@@ -158,7 +158,7 @@ export const courses: Record<string, Course> = {
     semesters: ["S1"],
     prerequisites: [["COMP2100", "COMP2300"], "COMP-2-6"],
     description: "Study the standard models of the layered approach to communication between autonomous devices in a network.",
-    type: "unknown",
+    type: "elective",
   },
   COMP3320: {
     code: "COMP3320",
@@ -169,7 +169,7 @@ export const courses: Record<string, Course> = {
     semesters: ["S2"],
     prerequisites: [["COMP2100", "COMP2300", "ENGN2219"], ["COMP1600", "MATH-0-6"]],
     description: "Intro to High Performance computing, oriented toward problems in science and engineering.",
-    type: "unknown",
+    type: "elective",
   },
   COMP3430: {
     code: "COMP3430",
@@ -180,7 +180,7 @@ export const courses: Record<string, Course> = {
     semesters: ["S1"],
     prerequisites: [["COMP1030", "COMP1100", "COMP1130", "COMP1730"], ["COMP1040", "COMP1110", "COMP1140"], "COMP2400"],
     description: "Introduces core concepts of data cleaning, standardisation, and data integration.",
-    type: "unkown",
+    type: "elective",
   },
   COMP3540: {
     code: "COMP3540",
@@ -191,7 +191,7 @@ export const courses: Record<string, Course> = {
     semesters: [],
     prerequisites: ["COMP-2-12"],
     description: "Not currently offered",
-    type: "unkown",
+    type: "elective",
   },
   COMP3600: {
     code: "COMP3600",
@@ -202,7 +202,7 @@ export const courses: Record<string, Course> = {
     semesters: ["S2"],
     prerequisites: ["COMP-0-24", ["MATH-0-6", "COMP1600"]],
     description: "Familiarise students with basic concepts in the design and analysis of algorithms and data structures",
-    type: "unkown",
+    type: "elective",
   },
   COMP3610: {
     code: "COMP3610",
@@ -213,7 +213,7 @@ export const courses: Record<string, Course> = {
     semesters: ["S2"],
     prerequisites: ["COMP2100", ["COMP1600", "MATH-0-6"]],
     description: "Introduction to the theory and design of programming languages",
-    type: "unknown",
+    type: "elective",
   },
   COMP3620: {
     code: "COMP3620",
@@ -224,7 +224,7 @@ export const courses: Record<string, Course> = {
     semesters: ["S1"],
     prerequisites: [["COMP1100", "COMP1140"], "COMP2620"],
     description: "Focuses on core AI techniques for search, knowledge representation and reasoning, planning and designing intelligent agents.",
-    type: "unknown",
+    type: "elective",
   },
   COMP3630: {
     code: "COMP3630",
@@ -235,7 +235,7 @@ export const courses: Record<string, Course> = {
     semesters: ["S1"],
     prerequisites: ["COMP-0-24", ["COMP1600", "MATH-0-6"]],
     description: "Formal languages and automata, computability and complexity.",
-    type: "unknown",
+    type: "elective",
   },
   COMP3670: {
     code: "COMP3670",
@@ -246,7 +246,7 @@ export const courses: Record<string, Course> = {
     semesters: ["S2"],
     prerequisites: [["COMP1110", "COMP1140"]],
     description: "Essential foundations for any machine learning application",
-    type: "unknown",
+    type: "elective",
   },
   COMP3704: {
     code: "COMP3704",
@@ -257,7 +257,7 @@ export const courses: Record<string, Course> = {
     prerequisites: ["COMP2700", ["COMP3310", "ENGN3539"]],
     semesters: ["S2"],
     description: "Concepts, techniques and technologies in network security",
-    type: "unknown",
+    type: "elective",
   },
   COMP4045: {
     code: "COMP4045",
@@ -268,7 +268,7 @@ export const courses: Record<string, Course> = {
     prerequisites: [["COMP-3-6", "COMP-4-6"]],
     semesters: ["S2"],
     description: "Advanced study of a special thematic area within the discipline of computer systems and architecture",
-    type: "unknown",
+    type: "elective",
   },
   COMP4300: {
     code: "COMP4300",
@@ -278,8 +278,8 @@ export const courses: Record<string, Course> = {
     college: "CSS",
     semesters: ["S1"],
     prerequisites: ["COMP2310"],
-    descrption: "Introduction to programming paradigms form parallel computers.",
-    type: "unknown",
+    description: "Introduction to programming paradigms form parallel computers.",
+    type: "elective",
   },
   COMP4350: {
     code: "COMP4350",
@@ -288,10 +288,10 @@ export const courses: Record<string, Course> = {
     level: 4000,
     college: "CSS",
     semesters: ["S1"],
-    prerequisites: ["COMP-2-12"], // not exactly true but fuck MUSI, DESN, and ARTV courses tbh, im not writing them in.
+    prerequisites: ["COMP-2-12"],
     description: "Introduction ot the fundamental concepts of music computing",
-    type: "unknown",
-  }, 
+    type: "elective",
+  },
   COMP4528: {
     code: "COMP4528",
     name: "Computer Vision",
@@ -301,7 +301,7 @@ export const courses: Record<string, Course> = {
     semesters: ["S1"],
     prerequisites: [["ENGN2228", "COMP2120", "COMP3600", "COMP3670"]],
     description: "Introduces students to fundamental problems in computer vision and foundational techniques for solving them",
-    type: "unknown",
+    type: "elective",
   },
   COMP4600: {
     code: "COMP4600",
@@ -312,7 +312,7 @@ export const courses: Record<string, Course> = {
     semesters: ["S1"],
     prerequisites: ["COMP3600", "COMP-3-18"],
     description: "Approximation algorithms, randomised algorithms, parallel/distributed algorithms, and online algorithms",
-    type: "unknown",
+    type: "elective",
   },
   COMP4610: {
     code: "COMP4610",
@@ -323,7 +323,7 @@ export const courses: Record<string, Course> = {
     semesters: ["S1"],
     prerequisites: ["COMP2100", ["COMP3600", "COMP3540", "COMP3900", "COMP3320"]],
     description: "Fundamental algorithms, data structures and programming models used in 3D graphics applications. ",
-    type: "unknown"
+    type: "elective",
   },
   COMP4880: {
     code: "COMP4880",
@@ -334,7 +334,7 @@ export const courses: Record<string, Course> = {
     semesters: ["S1"],
     prerequisites: [["COMP3670", [["COMP1110, COMP1140"], ["MATH1014", "MATH1115"]]]],
     description: "Covers the essentials of using computational approaches to pose and answer social science research problems.",
-    type: "unknown",
+    type: "elective",
   },
   COMP4712: {
     code: "COMP4712",
@@ -345,11 +345,6 @@ export const courses: Record<string, Course> = {
     semesters: ["S1"],
     prerequisites: ["COMP2100", "COMP2310", ["COMP-4-6", "COMP-3-6"]],
     description: "An in depth treatment of programming language translation, compilation, and run-time systems.",
-    type: "unknown",
-  }
-
-
-
-
-
-}
+    type: "elective",
+  },
+};
