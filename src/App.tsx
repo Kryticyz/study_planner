@@ -8,6 +8,7 @@ import { RequirementsTracker } from './components/RequirementsTracker';
 import { ComparisonView } from './components/ComparisonView';
 import { CourseModal } from './components/CourseModal';
 import { PlanSelector } from './components/PlanSelector';
+import { ApprovedCreditManager } from './components/ApprovedCreditManager';
 
 function App() {
   const { plans, activePlanId, isCompareMode, createPlan } = usePlanStore();
@@ -38,8 +39,9 @@ function App() {
             <div className="xl:col-span-3">
               <SemesterGrid planId={activePlan.id} />
             </div>
-            <div className="xl:col-span-1">
+            <div className="xl:col-span-1 space-y-6">
               <RequirementsTracker planId={activePlan.id} />
+              <ApprovedCreditManager planId={activePlan.id} />
             </div>
           </div>
         ) : (

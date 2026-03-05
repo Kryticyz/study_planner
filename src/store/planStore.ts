@@ -1,6 +1,15 @@
 import { create } from 'zustand';
 import { persist } from 'zustand/middleware';
-import { StudyPlan, PlannedCourse, ValidationError, CombinedDegreeProgress, DegreeComponentProgress, RequirementProgress } from '../types';
+import {
+  StudyPlan,
+  PlannedCourse,
+  ValidationError,
+  CombinedDegreeProgress,
+  DegreeComponentProgress,
+  RequirementProgress,
+  ApprovedCredit,
+  ApprovedCreditLevel,
+} from '../types';
 import { courses } from '../data/courses';
 import { degreeRequirements, electronicsCommunicationsMajor } from '../data/requirements';
 import { getEquivalenceRegistry } from '../data/equivalences';
@@ -24,6 +33,9 @@ interface PlanStore {
 
   // Course management
   addCourse: (planId: string, courseCode: string, year: number, semester: 1 | 2) => void;
+  addApprovedCourseCredit: (planId: string, courseCode: string) => void;
+  addUnspecifiedCredit: (planId: string, school: string, level: ApprovedCreditLevel, units?: number) => void;
+  removeApprovedCredit: (planId: string, approvedCreditId: string) => void;
   removeCourse: (planId: string, courseCode: string) => void;
   moveCourse: (planId: string, courseCode: string, year: number, semester: 1 | 2) => void;
   markCompleted: (planId: string, courseCode: string) => void;
@@ -56,6 +68,149 @@ interface PlanStore {
 }
 
 const generateId = () => Math.random().toString(36).substring(2, 15);
+const APPROVED_LEVELS: ApprovedCreditLevel[] = [1000, 2000, 3000, 4000];
+
+interface DegreeCreditEntry {
+  id: string;
+  courseCode?: string;
+  code: string;
+  prefix: string;
+  units: number;
+  level: number;
+  countTowardDegree?: string[];
+}
+
+const sanitizeApprovedCredits = (plan: StudyPlan): ApprovedCredit[] => plan.approvedCredits ?? [];
+
+const isApprovedLevel = (level: number): level is ApprovedCreditLevel =>
+  APPROVED_LEVELS.includes(level as ApprovedCreditLevel);
+
+const normalizeSchoolPrefix = (school: string): string => {
+  return school.trim().toUpperCase().replace(/[^A-Z]/g, '');
+};
+
+const inferLevelFromCourseCode = (courseCode: string): number => {
+  const match = courseCode.match(/(\d{4})/);
+  if (!match) return 1000;
+  const levelDigit = parseInt(match[1].charAt(0), 10);
+  return Number.isNaN(levelDigit) ? 1000 : levelDigit * 1000;
+};
+
+const getCoursePrefix = (courseCode: string): string => {
+  const match = courseCode.match(/^[A-Z]+/);
+  return match ? match[0] : '';
+};
+
+const getApprovedCourseCodeSet = (plan: StudyPlan): Set<string> => {
+  const approvedCourseCodes = sanitizeApprovedCredits(plan)
+    .filter((credit): credit is ApprovedCredit & { kind: 'course'; courseCode: string } =>
+      credit.kind === 'course' && Boolean(credit.courseCode)
+    )
+    .map(credit => credit.courseCode);
+  return new Set(approvedCourseCodes);
+};
+
+const getApprovedCreditsForPrerequisiteEvaluation = (
+  plan: StudyPlan
+): {
+  approvedCourseCodes: string[];
+  unitContributions: Array<{ code: string; units: number; level: number }>;
+} => {
+  const approvedCourseCodes: string[] = [];
+  const unitContributions: Array<{ code: string; units: number; level: number }> = [];
+
+  for (const credit of sanitizeApprovedCredits(plan)) {
+    if (credit.kind === 'course' && credit.courseCode) {
+      approvedCourseCodes.push(credit.courseCode);
+      const knownCourse = courses[credit.courseCode];
+      if (!knownCourse) {
+        unitContributions.push({
+          code: credit.courseCode,
+          units: credit.units > 0 ? credit.units : 6,
+          level: inferLevelFromCourseCode(credit.courseCode),
+        });
+      }
+      continue;
+    }
+
+    if (credit.kind === 'unspecified') {
+      const school = normalizeSchoolPrefix(credit.school ?? '');
+      const level = isApprovedLevel(credit.level ?? 0) ? (credit.level ?? 1000) : 1000;
+      if (!school) continue;
+
+      unitContributions.push({
+        code: `${school}${level}-APPROVED-${credit.id}`,
+        units: credit.units > 0 ? credit.units : 6,
+        level,
+      });
+    }
+  }
+
+  return { approvedCourseCodes, unitContributions };
+};
+
+const buildDegreeCreditEntries = (plan: StudyPlan): DegreeCreditEntry[] => {
+  const entries: DegreeCreditEntry[] = [];
+
+  for (const plannedCourse of plan.courses) {
+    const course = courses[plannedCourse.courseCode];
+    if (!course) continue;
+    entries.push({
+      id: `planned:${plannedCourse.courseCode}`,
+      courseCode: plannedCourse.courseCode,
+      code: course.code,
+      prefix: getCoursePrefix(course.code),
+      units: course.units,
+      level: course.level,
+      countTowardDegree: plannedCourse.countTowardDegree,
+    });
+  }
+
+  for (const approvedCredit of sanitizeApprovedCredits(plan)) {
+    if (approvedCredit.kind === 'course' && approvedCredit.courseCode) {
+      const knownCourse = courses[approvedCredit.courseCode];
+      if (knownCourse) {
+        entries.push({
+          id: `approved:${approvedCredit.id}`,
+          courseCode: approvedCredit.courseCode,
+          code: knownCourse.code,
+          prefix: getCoursePrefix(knownCourse.code),
+          units: knownCourse.units,
+          level: knownCourse.level,
+          countTowardDegree: approvedCredit.countTowardDegree,
+        });
+      } else {
+        entries.push({
+          id: `approved:${approvedCredit.id}`,
+          courseCode: approvedCredit.courseCode,
+          code: approvedCredit.courseCode,
+          prefix: getCoursePrefix(approvedCredit.courseCode),
+          units: approvedCredit.units > 0 ? approvedCredit.units : 6,
+          level: inferLevelFromCourseCode(approvedCredit.courseCode),
+          countTowardDegree: approvedCredit.countTowardDegree,
+        });
+      }
+      continue;
+    }
+
+    if (approvedCredit.kind === 'unspecified') {
+      const school = normalizeSchoolPrefix(approvedCredit.school ?? '');
+      const level = isApprovedLevel(approvedCredit.level ?? 0) ? (approvedCredit.level ?? 1000) : 1000;
+      if (!school) continue;
+
+      entries.push({
+        id: `approved:${approvedCredit.id}`,
+        code: `${school}${level}-APPROVED-${approvedCredit.id}`,
+        prefix: school,
+        units: approvedCredit.units > 0 ? approvedCredit.units : 6,
+        level,
+        countTowardDegree: approvedCredit.countTowardDegree,
+      });
+    }
+  }
+
+  return entries;
+};
 
 // Helper to get chronological position of a semester slot
 // Returns a number that can be compared to determine which slot comes first
@@ -126,6 +281,7 @@ export const usePlanStore = create<PlanStore>()(
           startSemester,
           program,
           courses: [],
+          approvedCredits: [],
           completedCourses: [],
         };
         set(state => ({
@@ -163,6 +319,7 @@ export const usePlanStore = create<PlanStore>()(
           startSemester: plan.startSemester ?? 1,
           program: plan.program ?? 'AENGI',
           courses: [...plan.courses],
+          approvedCredits: sanitizeApprovedCredits(plan).map(credit => ({ ...credit })),
           completedCourses: [...plan.completedCourses],
         };
         set(state => ({
@@ -192,6 +349,7 @@ export const usePlanStore = create<PlanStore>()(
             if (p.id !== planId) return p;
             const exists = p.courses.some(c => c.courseCode === courseCode);
             if (exists) return p;
+            if (getApprovedCourseCodeSet(p).has(courseCode)) return p;
 
             const startSemester = p.startSemester ?? 1;
             const maxYear = getMaxYear(p.program ?? 'AENGI');
@@ -223,6 +381,75 @@ export const usePlanStore = create<PlanStore>()(
             return {
               ...p,
               courses: [...p.courses, { courseCode, year, semester }],
+              updatedAt: Date.now(),
+            };
+          }),
+        }));
+      },
+
+      addApprovedCourseCredit: (planId: string, courseCode: string) => {
+        const course = courses[courseCode];
+        if (!course) return;
+
+        set(state => ({
+          plans: state.plans.map(p => {
+            if (p.id !== planId) return p;
+
+            const alreadyPlanned = p.courses.some(c => c.courseCode === courseCode);
+            const alreadyApproved = getApprovedCourseCodeSet(p).has(courseCode);
+            if (alreadyPlanned || alreadyApproved) return p;
+
+            return {
+              ...p,
+              approvedCredits: [
+                ...sanitizeApprovedCredits(p),
+                {
+                  id: generateId(),
+                  kind: 'course',
+                  courseCode,
+                  units: course.units,
+                },
+              ],
+              updatedAt: Date.now(),
+            };
+          }),
+        }));
+      },
+
+      addUnspecifiedCredit: (planId: string, school: string, level: ApprovedCreditLevel, units: number = 6) => {
+        const normalizedSchool = normalizeSchoolPrefix(school);
+        if (!normalizedSchool || !isApprovedLevel(level)) return;
+        const validUnits = Number.isFinite(units) && units > 0 ? units : 6;
+
+        set(state => ({
+          plans: state.plans.map(p => {
+            if (p.id !== planId) return p;
+
+            return {
+              ...p,
+              approvedCredits: [
+                ...sanitizeApprovedCredits(p),
+                {
+                  id: generateId(),
+                  kind: 'unspecified',
+                  school: normalizedSchool,
+                  level,
+                  units: validUnits,
+                },
+              ],
+              updatedAt: Date.now(),
+            };
+          }),
+        }));
+      },
+
+      removeApprovedCredit: (planId: string, approvedCreditId: string) => {
+        set(state => ({
+          plans: state.plans.map(p => {
+            if (p.id !== planId) return p;
+            return {
+              ...p,
+              approvedCredits: sanitizeApprovedCredits(p).filter(credit => credit.id !== approvedCreditId),
               updatedAt: Date.now(),
             };
           }),
@@ -394,11 +621,18 @@ export const usePlanStore = create<PlanStore>()(
           .filter(c => getChronologicalPosition(c.year, c.semester, startSemester) < targetPosition)
           .map(c => c.courseCode);
 
-        const completedSet = new Set([...priorCourseCodes, ...plan.completedCourses]);
+        const approvedCreditData = getApprovedCreditsForPrerequisiteEvaluation(plan);
+        const completedSet = new Set([
+          ...priorCourseCodes,
+          ...plan.completedCourses,
+          ...approvedCreditData.approvedCourseCodes,
+        ]);
+
         const completedCoursesData = [...completedSet]
           .map(code => courses[code])
           .filter(Boolean)
           .map(c => ({ code: c.code, units: c.units, level: c.level }));
+        completedCoursesData.push(...approvedCreditData.unitContributions);
 
         const context: EvaluationContext = {
           completedCourses: completedSet,
@@ -432,6 +666,18 @@ export const usePlanStore = create<PlanStore>()(
 
         const errors: ValidationError[] = [];
         const maxYear = getMaxYear(plan.program ?? 'AENGI');
+        const approvedCourseCodes = getApprovedCourseCodeSet(plan);
+        const plannedCodes = plan.courses.map(c => c.courseCode);
+
+        for (const approvedCode of approvedCourseCodes) {
+          if (plannedCodes.includes(approvedCode)) {
+            errors.push({
+              courseCode: approvedCode,
+              type: 'incompatible',
+              message: `${approvedCode} is both in semesters and approved credit`,
+            });
+          }
+        }
 
         plan.courses.forEach(pc => {
           const course = courses[pc.courseCode];
@@ -489,9 +735,8 @@ export const usePlanStore = create<PlanStore>()(
 
           // Check incompatibilities
           if (course.incompatible) {
-            const plannedCodes = plan.courses.map(c => c.courseCode);
             course.incompatible.forEach(incomp => {
-              if (plannedCodes.includes(incomp)) {
+              if (plannedCodes.includes(incomp) || approvedCourseCodes.has(incomp)) {
                 errors.push({
                   courseCode: pc.courseCode,
                   type: 'incompatible',
@@ -573,61 +818,83 @@ export const usePlanStore = create<PlanStore>()(
 
         if (!plan) return empty;
 
-        const plannedCodes = new Set(plan.courses.map(c => c.courseCode));
+        const entries = buildDegreeCreditEntries(plan);
+        const courseEntriesByCode = new Map<string, DegreeCreditEntry>();
+        entries.forEach(entry => {
+          if (entry.courseCode && !courseEntriesByCode.has(entry.courseCode)) {
+            courseEntriesByCode.set(entry.courseCode, entry);
+          }
+        });
         const usedForCategory = new Set<string>();
 
         // Foundations
-        const foundationCourses = reqs.foundations.courses.filter(c => plannedCodes.has(c));
-        foundationCourses.forEach(c => usedForCategory.add(c));
-        const foundationUnits = foundationCourses.reduce((sum, c) => sum + (courses[c]?.units || 0), 0);
+        const foundationCourses = reqs.foundations.courses.filter(code => courseEntriesByCode.has(code));
+        foundationCourses.forEach(code => usedForCategory.add(code));
+        const foundationUnits = foundationCourses.reduce(
+          (sum, code) => sum + (courseEntriesByCode.get(code)?.units ?? 0),
+          0
+        );
 
         // Engineering Fundamentals
-        const engFundCourses = reqs.engineeringFundamentals.courses.filter(c => plannedCodes.has(c));
-        engFundCourses.forEach(c => usedForCategory.add(c));
-        const engFundUnits = engFundCourses.reduce((sum, c) => sum + (courses[c]?.units || 0), 0);
+        const engFundCourses = reqs.engineeringFundamentals.courses.filter(code => courseEntriesByCode.has(code));
+        engFundCourses.forEach(code => usedForCategory.add(code));
+        const engFundUnits = engFundCourses.reduce(
+          (sum, code) => sum + (courseEntriesByCode.get(code)?.units ?? 0),
+          0
+        );
 
         // Professional Core
-        const profCoreCourses = reqs.professionalCore.courses.filter(c => plannedCodes.has(c));
-        profCoreCourses.forEach(c => usedForCategory.add(c));
-        const profCoreUnits = profCoreCourses.reduce((sum, c) => sum + (courses[c]?.units || 0), 0);
+        const profCoreCourses = reqs.professionalCore.courses.filter(code => courseEntriesByCode.has(code));
+        profCoreCourses.forEach(code => usedForCategory.add(code));
+        const profCoreUnits = profCoreCourses.reduce(
+          (sum, code) => sum + (courseEntriesByCode.get(code)?.units ?? 0),
+          0
+        );
 
         // Major (Electronic and Communications Systems)
         const majorCodes = major.requiredCourses.map(c => c.code);
         const majorActual: string[] = [];
         majorCodes.forEach(code => {
-          if (plannedCodes.has(code)) {
+          if (courseEntriesByCode.has(code)) {
             majorActual.push(code);
           } else {
             const alt = major.alternativeCourses[code];
-            if (alt && plannedCodes.has(alt)) {
+            if (alt && courseEntriesByCode.has(alt)) {
               majorActual.push(alt);
             }
           }
         });
-        majorActual.forEach(c => usedForCategory.add(c));
-        const majorUnits = majorActual.reduce((sum, c) => sum + (courses[c]?.units || 0), 0);
+        majorActual.forEach(code => usedForCategory.add(code));
+        const majorUnits = majorActual.reduce(
+          (sum, code) => sum + (courseEntriesByCode.get(code)?.units ?? 0),
+          0
+        );
 
         // Capstone
-        const capstoneCourses = reqs.capstone.courses.filter(c => plannedCodes.has(c));
-        capstoneCourses.forEach(c => usedForCategory.add(c));
-        const capstoneUnits = capstoneCourses.reduce((sum, c) => sum + (courses[c]?.units || 0), 0);
+        const capstoneCourses = reqs.capstone.courses.filter(code => courseEntriesByCode.has(code));
+        capstoneCourses.forEach(code => usedForCategory.add(code));
+        const capstoneUnits = capstoneCourses.reduce(
+          (sum, code) => sum + (courseEntriesByCode.get(code)?.units ?? 0),
+          0
+        );
 
-        // Electives (remaining ENGN courses and others)
+        // Electives (remaining ENGN courses and others, including unspecified approved credits)
         const remainingEngn: string[] = [];
         const remainingOther: string[] = [];
-        plan.courses.forEach(pc => {
-          if (usedForCategory.has(pc.courseCode)) return;
-          const course = courses[pc.courseCode];
-          if (!course) return;
-          if (course.code.startsWith('ENGN')) {
-            remainingEngn.push(pc.courseCode);
+        let engnElectiveUnits = 0;
+        let uniElectiveUnits = 0;
+
+        entries.forEach(entry => {
+          if (entry.courseCode && usedForCategory.has(entry.courseCode)) return;
+
+          if (entry.prefix === 'ENGN') {
+            engnElectiveUnits += entry.units;
+            if (entry.courseCode) remainingEngn.push(entry.courseCode);
           } else {
-            remainingOther.push(pc.courseCode);
+            uniElectiveUnits += entry.units;
+            if (entry.courseCode) remainingOther.push(entry.courseCode);
           }
         });
-
-        const engnElectiveUnits = remainingEngn.reduce((sum, c) => sum + (courses[c]?.units || 0), 0);
-        const uniElectiveUnits = remainingOther.reduce((sum, c) => sum + (courses[c]?.units || 0), 0);
 
         const totalCompleted = foundationUnits + engFundUnits + profCoreUnits + majorUnits + capstoneUnits + engnElectiveUnits + uniElectiveUnits;
 
@@ -651,18 +918,47 @@ export const usePlanStore = create<PlanStore>()(
         const program = getProgram(programCode);
         if (!program) return null;
 
-        const plannedCourses = plan.courses;
-        const plannedCodes = new Set(plannedCourses.map(c => c.courseCode));
+        const creditEntries = buildDegreeCreditEntries(plan);
+        const entryById = new Map(creditEntries.map(entry => [entry.id, entry] as const));
+        const attributionByEntryId = new Map<string, string[]>();
 
-        // Helper to calculate progress for a single degree component
-        const calculateDegreeProgress = (degreeCode: string, usedByOther: Set<string>): DegreeComponentProgress => {
+        for (const entry of creditEntries) {
+          let attribution: string[] = [];
+          if (entry.countTowardDegree && entry.countTowardDegree.length > 0) {
+            attribution = entry.countTowardDegree;
+          } else if (!program.isDoubleDegree) {
+            attribution = [program.degreeComponents[0]];
+          } else if (entry.courseCode) {
+            attribution = getDefaultDegreeAttribution(entry.courseCode, programCode);
+          }
+          attributionByEntryId.set(entry.id, attribution);
+        }
+
+        const canCountForDegree = (entry: DegreeCreditEntry, degreeCode: string): boolean => {
+          const attribution = attributionByEntryId.get(entry.id) ?? [];
+          return attribution.length === 0 || attribution.includes(degreeCode);
+        };
+
+        const sharedEntries = new Set(
+          creditEntries
+            .filter(entry => (attributionByEntryId.get(entry.id)?.length ?? 0) > 1)
+            .map(entry => entry.id)
+        );
+
+        const calculateDegreeProgress = (
+          degreeCode: string,
+          usedByOther: Set<string>
+        ): { progress: DegreeComponentProgress; usedEntries: Set<string> } => {
           const degree = getDegree(degreeCode);
           if (!degree) {
             return {
-              name: degreeCode,
-              code: degreeCode,
-              requirements: {},
-              total: { required: 0, completed: 0 },
+              progress: {
+                name: degreeCode,
+                code: degreeCode,
+                requirements: {},
+                total: { required: 0, completed: 0 },
+              },
+              usedEntries: new Set(),
             };
           }
 
@@ -671,6 +967,22 @@ export const usePlanStore = create<PlanStore>()(
           let totalRequired = 0;
           let totalCompleted = 0;
 
+          const isAvailable = (entry: DegreeCreditEntry): boolean => {
+            return (
+              !usedByOther.has(entry.id) &&
+              !usedInThisDegree.has(entry.id) &&
+              canCountForDegree(entry, degreeCode)
+            );
+          };
+
+          const useEntry = (entry: DegreeCreditEntry, completedCourses: string[]): number => {
+            usedInThisDegree.add(entry.id);
+            if (entry.courseCode) {
+              completedCourses.push(entry.courseCode);
+            }
+            return entry.units;
+          };
+
           for (const [key, category] of Object.entries(degree.requirements)) {
             const completedCourses: string[] = [];
             let completedUnits = 0;
@@ -678,62 +990,52 @@ export const usePlanStore = create<PlanStore>()(
             if (category.courses) {
               for (const courseSpec of category.courses) {
                 if (Array.isArray(courseSpec)) {
-                  // Choice group - find one that's planned
-                  const found = courseSpec.find(code =>
-                    plannedCodes.has(code) && !usedByOther.has(code) && !usedInThisDegree.has(code)
+                  const found = creditEntries.find(entry =>
+                    Boolean(entry.courseCode) &&
+                    courseSpec.includes(entry.courseCode as string) &&
+                    isAvailable(entry)
                   );
                   if (found) {
-                    completedCourses.push(found);
-                    usedInThisDegree.add(found);
-                    completedUnits += courses[found]?.units ?? 0;
+                    completedUnits += useEntry(found, completedCourses);
                   }
                 } else {
-                  // Single required course
-                  if (plannedCodes.has(courseSpec) && !usedByOther.has(courseSpec) && !usedInThisDegree.has(courseSpec)) {
-                    completedCourses.push(courseSpec);
-                    usedInThisDegree.add(courseSpec);
-                    completedUnits += courses[courseSpec]?.units ?? 0;
+                  const found = creditEntries.find(entry =>
+                    entry.courseCode === courseSpec && isAvailable(entry)
+                  );
+                  if (found) {
+                    completedUnits += useEntry(found, completedCourses);
                   }
                 }
               }
             }
 
-            // Handle prefix requirements (e.g., ENGN electives)
             if (category.prefixRequirements) {
               for (const prefixReq of category.prefixRequirements) {
                 let prefixUnits = 0;
-                for (const pc of plannedCourses) {
-                  if (usedByOther.has(pc.courseCode) || usedInThisDegree.has(pc.courseCode)) continue;
-                  const course = courses[pc.courseCode];
-                  if (course && course.code.startsWith(prefixReq.prefix)) {
-                    completedCourses.push(pc.courseCode);
-                    usedInThisDegree.add(pc.courseCode);
-                    prefixUnits += course.units;
-                    if (prefixUnits >= prefixReq.minUnits) break;
-                  }
+                for (const entry of creditEntries) {
+                  if (prefixUnits >= prefixReq.minUnits) break;
+                  if (!isAvailable(entry)) continue;
+                  if (!entry.prefix.startsWith(prefixReq.prefix)) continue;
+                  prefixUnits += useEntry(entry, completedCourses);
                 }
                 completedUnits += Math.min(prefixUnits, prefixReq.minUnits);
               }
             }
 
-            // Handle elective categories (remaining courses)
             if (!category.courses && !category.prefixRequirements && category.units > 0) {
-              // This is a general elective category - fill with remaining courses
-              for (const pc of plannedCourses) {
+              for (const entry of creditEntries) {
                 if (completedUnits >= category.units) break;
-                if (usedByOther.has(pc.courseCode) || usedInThisDegree.has(pc.courseCode)) continue;
+                if (!isAvailable(entry)) continue;
 
-                // For double degrees, check if this course can be used as elective for this degree
-                if (program.isDoubleDegree && !canUseAsElective(pc.courseCode, degreeCode, programCode)) {
+                if (
+                  entry.courseCode &&
+                  program.isDoubleDegree &&
+                  !canUseAsElective(entry.courseCode, degreeCode, programCode)
+                ) {
                   continue;
                 }
 
-                const course = courses[pc.courseCode];
-                if (course) {
-                  completedCourses.push(pc.courseCode);
-                  usedInThisDegree.add(pc.courseCode);
-                  completedUnits += course.units;
-                }
+                completedUnits += useEntry(entry, completedCourses);
               }
             }
 
@@ -743,7 +1045,7 @@ export const usePlanStore = create<PlanStore>()(
               required: category.units,
               completed: Math.min(completedUnits, category.units),
               courses: category.courses?.flat() ?? [],
-              completedCourses,
+              completedCourses: [...new Set(completedCourses)],
             };
 
             totalRequired += category.units;
@@ -751,16 +1053,19 @@ export const usePlanStore = create<PlanStore>()(
           }
 
           return {
-            name: degree.name,
-            code: degree.code,
-            requirements,
-            total: { required: totalRequired, completed: totalCompleted },
+            progress: {
+              name: degree.name,
+              code: degree.code,
+              requirements,
+              total: { required: totalRequired, completed: totalCompleted },
+            },
+            usedEntries: usedInThisDegree,
           };
         };
 
         // For single degrees
         if (!program.isDoubleDegree) {
-          const primary = calculateDegreeProgress(program.degreeComponents[0], new Set());
+          const { progress: primary } = calculateDegreeProgress(program.degreeComponents[0], new Set());
           return {
             programCode,
             programName: program.name,
@@ -770,40 +1075,31 @@ export const usePlanStore = create<PlanStore>()(
           };
         }
 
-        // For double degrees
-        // First, identify shared mandatory courses that count for both
-        const sharedCourses = new Set<string>();
-        for (const pc of plannedCourses) {
-          const attribution = getDefaultDegreeAttribution(pc.courseCode, programCode, pc.countTowardDegree);
-          if (attribution.length > 1) {
-            sharedCourses.add(pc.courseCode);
-          }
-        }
-
         // Calculate primary degree progress
-        const primary = calculateDegreeProgress(program.degreeComponents[0], new Set());
+        const { progress: primary, usedEntries: primaryUsedEntries } = calculateDegreeProgress(
+          program.degreeComponents[0],
+          new Set()
+        );
 
-        // For secondary, exclude courses used exclusively by primary (but allow shared)
+        // For secondary, exclude credits used exclusively by primary (but allow shared)
         const usedByPrimary = new Set<string>();
-        for (const reqs of Object.values(primary.requirements)) {
-          for (const code of reqs.completedCourses) {
-            if (!sharedCourses.has(code)) {
-              usedByPrimary.add(code);
-            }
+        for (const entryId of primaryUsedEntries) {
+          if (!sharedEntries.has(entryId)) {
+            usedByPrimary.add(entryId);
           }
         }
 
-        const secondary = calculateDegreeProgress(program.degreeComponents[1], usedByPrimary);
+        const { progress: secondary, usedEntries: secondaryUsedEntries } = calculateDegreeProgress(
+          program.degreeComponents[1],
+          usedByPrimary
+        );
 
-        // Calculate overall total (shared courses count once for overall)
-        const allUsedCourses = new Set<string>();
-        for (const reqs of Object.values(primary.requirements)) {
-          reqs.completedCourses.forEach(c => allUsedCourses.add(c));
-        }
-        for (const reqs of Object.values(secondary.requirements)) {
-          reqs.completedCourses.forEach(c => allUsedCourses.add(c));
-        }
-        const overallCompleted = [...allUsedCourses].reduce((sum, code) => sum + (courses[code]?.units ?? 0), 0);
+        // Calculate overall total (shared credits count once for overall)
+        const allUsedEntryIds = new Set<string>([...primaryUsedEntries, ...secondaryUsedEntries]);
+        const overallCompleted = [...allUsedEntryIds].reduce(
+          (sum, entryId) => sum + (entryById.get(entryId)?.units ?? 0),
+          0
+        );
 
         return {
           programCode,

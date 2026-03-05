@@ -28,6 +28,11 @@ export function CoursePanel({ planId }: CoursePanelProps) {
 
   const plan = getPlanById(planId);
   const plannedCodes = new Set(plan?.courses.map(c => c.courseCode) || []);
+  const approvedCourseCodes = new Set(
+    (plan?.approvedCredits ?? [])
+      .filter(credit => credit.kind === 'course' && Boolean(credit.courseCode))
+      .map(credit => credit.courseCode as string)
+  );
 
   const filteredCourses = useMemo(() => {
     return courseList.filter(course => {
@@ -77,6 +82,9 @@ export function CoursePanel({ planId }: CoursePanelProps) {
     // Check if already planned
     if (plannedCodes.has(courseCode)) {
       return { available: false, reason: 'Already in plan' };
+    }
+    if (approvedCourseCodes.has(courseCode)) {
+      return { available: false, reason: 'Already added as approved credit' };
     }
 
     // Check semester availability
@@ -213,12 +221,14 @@ export function CoursePanel({ planId }: CoursePanelProps) {
           {filteredCourses.map(course => {
             const availability = checkCourseAvailability(course.code);
             const isPlanned = plannedCodes.has(course.code);
+            const isCredited = approvedCourseCodes.has(course.code);
+            const isAlreadyAdded = isPlanned || isCredited;
 
             return (
               <div
                 key={course.code}
                 className={`p-3 rounded-lg border transition-all ${
-                  isPlanned
+                  isAlreadyAdded
                     ? 'bg-green-50 border-green-200'
                     : availability.available
                     ? 'bg-white border-gray-200 hover:border-anu-gold'
@@ -232,7 +242,7 @@ export function CoursePanel({ planId }: CoursePanelProps) {
                       <span className="text-xs px-1.5 py-0.5 rounded bg-gray-100 text-gray-600">
                         {course.units}u
                       </span>
-                      {isPlanned && (
+                      {isAlreadyAdded && (
                         <CheckCircle size={14} className="text-green-500" />
                       )}
                       {availability.warning && (
@@ -253,6 +263,9 @@ export function CoursePanel({ planId }: CoursePanelProps) {
                     {!availability.available && availability.reason && (
                       <p className="text-xs text-red-500 mt-1">{availability.reason}</p>
                     )}
+                    {isCredited && (
+                      <p className="text-xs text-green-600 mt-1">Approved credit</p>
+                    )}
                     {availability.warning && availability.reason && (
                       <p className="text-xs text-amber-600 mt-1">{availability.reason}</p>
                     )}
@@ -269,7 +282,7 @@ export function CoursePanel({ planId }: CoursePanelProps) {
                     >
                       <Info size={16} className="text-gray-400" />
                     </button>
-                    {!isPlanned && (
+                    {!isAlreadyAdded && (
                       <button
                         onClick={() => handleAddCourse(course.code)}
                         disabled={!availability.available}

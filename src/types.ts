@@ -5,10 +5,12 @@ export type Semester = 'S1' | 'S2' | 'Summer' | 'Full Year';
 export type CourseType =
   | 'foundation'
   | 'core'
+  | 'compCore'
   | 'professionalCore'
   | 'major'
   | 'elective'
   | 'engnElective'
+  | 'compElective'
   | 'capstone'
   | 'industryExperience';
 
@@ -21,7 +23,7 @@ export interface Course {
   level: number;
   college: string;
   semesters: Semester[];
-  prerequisites: string[];
+  prerequisites: (string | string[])[];
   prerequisiteAlternatives?: string[][];
   corequisites?: string[];
   incompatible?: string[];
@@ -49,6 +51,23 @@ export interface PlannedCourse {
   countTowardDegree?: string[];
 }
 
+export type ApprovedCreditKind = 'course' | 'unspecified';
+export type ApprovedCreditLevel = 1000 | 2000 | 3000 | 4000;
+
+export interface ApprovedCredit {
+  id: string;
+  kind: ApprovedCreditKind;
+  units: number;
+  /** Used when kind is 'course' */
+  courseCode?: string;
+  /** Used when kind is 'unspecified' */
+  school?: string;
+  /** Used when kind is 'unspecified' */
+  level?: ApprovedCreditLevel;
+  /** Manual override: which degree(s) this credit counts toward in double degrees */
+  countTowardDegree?: string[];
+}
+
 export interface StudyPlan {
   id: string;
   name: string;
@@ -59,6 +78,7 @@ export interface StudyPlan {
   /** Degree program code (e.g., 'AENGI', 'AENGI-BCOMP') */
   program: string;
   courses: PlannedCourse[];
+  approvedCredits: ApprovedCredit[];
   completedCourses: string[];
 }
 
