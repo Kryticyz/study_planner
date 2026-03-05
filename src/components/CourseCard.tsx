@@ -3,7 +3,6 @@ import { useUIStore } from '../store/uiStore';
 import { courses } from '../data/courses';
 import { useDraggable } from '@dnd-kit/core';
 import { X, AlertTriangle, Info, CheckCircle } from 'lucide-react';
-import { CourseType } from '../types';
 
 interface CourseCardProps {
   courseCode: string;
@@ -13,27 +12,7 @@ interface CourseCardProps {
   isSpanContinuation?: boolean;
 }
 
-const typeColors: Record<CourseType, string> = {
-  foundation: 'bg-blue-50 border-blue-200 hover:border-blue-400',
-  core: 'bg-purple-50 border-purple-200 hover:border-purple-400',
-  professionalCore: 'bg-orange-50 border-orange-200 hover:border-orange-400',
-  major: 'bg-green-50 border-green-200 hover:border-green-400',
-  elective: 'bg-gray-50 border-gray-200 hover:border-gray-400',
-  engnElective: 'bg-teal-50 border-teal-200 hover:border-teal-400',
-  capstone: 'bg-amber-50 border-amber-200 hover:border-amber-400',
-  industryExperience: 'bg-pink-50 border-pink-200 hover:border-pink-400',
-};
-
-const typeLabels: Record<CourseType, string> = {
-  foundation: 'Foundation',
-  core: 'Core',
-  professionalCore: 'Professional',
-  major: 'Major',
-  elective: 'Elective',
-  engnElective: 'ENGN Elec',
-  capstone: 'Capstone',
-  industryExperience: 'Industry',
-};
+const defaultCardStyle = 'bg-white border-gray-200 hover:border-gray-400';
 
 export function CourseCard({ courseCode, planId, isDragging, compact, isSpanContinuation }: CourseCardProps) {
   const { removeCourse, validatePlan, getPlanById, markCompleted, unmarkCompleted } = usePlanStore();
@@ -77,7 +56,7 @@ export function CourseCard({ courseCode, planId, isDragging, compact, isSpanCont
   if (compact) {
     return (
       <div
-        className={`px-2 py-1 rounded text-xs border ${typeColors[course.type]} ${
+        className={`px-2 py-1 rounded text-xs border ${defaultCardStyle} ${
           isCompleted ? 'opacity-60' : ''
         }`}
       >
@@ -91,7 +70,7 @@ export function CourseCard({ courseCode, planId, isDragging, compact, isSpanCont
   if (isSpanContinuation) {
     return (
       <div
-        className={`p-2 rounded-lg border-2 border-dashed ${typeColors[course.type]} opacity-70`}
+        className={`p-2 rounded-lg border-2 border-dashed ${defaultCardStyle} opacity-70`}
       >
         <div className="flex items-center justify-between gap-2">
           <div className="flex-1 min-w-0">
@@ -112,9 +91,7 @@ export function CourseCard({ courseCode, planId, isDragging, compact, isSpanCont
       style={style}
       {...listeners}
       {...attributes}
-      className={`group relative p-2 rounded-lg border-2 cursor-grab active:cursor-grabbing transition-all ${
-        typeColors[course.type]
-      } ${isDragging ? 'shadow-lg scale-105' : ''} ${
+      className={`group relative p-2 rounded-lg border-2 cursor-grab active:cursor-grabbing transition-all ${defaultCardStyle} ${isDragging ? 'shadow-lg scale-105' : ''} ${
         hasError ? 'ring-2 ring-red-400' : ''
       } ${isCompleted ? 'opacity-60' : ''}`}
     >
@@ -164,16 +141,6 @@ export function CourseCard({ courseCode, planId, isDragging, compact, isSpanCont
       </div>
 
       <div className="mt-1 flex items-center gap-2">
-        <span className={`text-[10px] px-1.5 py-0.5 rounded ${
-          course.type === 'foundation' ? 'bg-blue-100 text-blue-700' :
-          course.type === 'core' ? 'bg-purple-100 text-purple-700' :
-          course.type === 'professionalCore' ? 'bg-orange-100 text-orange-700' :
-          course.type === 'major' ? 'bg-green-100 text-green-700' :
-          course.type === 'capstone' ? 'bg-amber-100 text-amber-700' :
-          'bg-gray-100 text-gray-600'
-        }`}>
-          {typeLabels[course.type]}
-        </span>
         {isMultiSemester && (
           <span className="text-[10px] px-1.5 py-0.5 rounded bg-indigo-100 text-indigo-700">
             {course.semesterSpan} sem

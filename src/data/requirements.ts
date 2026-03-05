@@ -57,7 +57,25 @@ export const degreeRequirements = {
       level3000Minimum: 30,
       quantitativeResearch: 6
     }
-  }
+  },
+  doubleDegreeComp: {
+    name: "Bachelor of Engineering (Honours) / Bachelor of Computing",
+    code: "AENGI-BCOMP",
+    totalUnits: 264,
+    duration: 11,
+    additionalRequirements: {
+      core: {
+        units: 48,
+        description: "Base requirements for computing",
+        courses: [["COMP1100", "COMP1130"], ["COMP1110", "COMP1140"], ["MATH1005", "MATH2222"], "COMP1600", "COMP2100", "COMP2300", "COMP2400"]
+      },
+      relatedCourse: {
+        units: 6,
+        description: "ICT Related courses",
+        courses: ["ARTH2181", "ASIA3032", "DESN2010", "ENGN1211", "ENVS2015", "INFS2024", "INFS3002", "INFS3024", "MATH1013", "MATH1115", "MATH2301", "MATH2307", "MGMT2009", "MUSI3309", "SCOM3029", "SOCY2038", "SOCY2166", "STAT1003", "STAT1008"]
+      }
+    }
+}
 };
 
 export const electronicsCommunicationsMajor = {

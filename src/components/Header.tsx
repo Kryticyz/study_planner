@@ -28,11 +28,32 @@ export function Header() {
         if (Array.isArray(imported)) {
           const store = usePlanStore.getState();
           imported.forEach(plan => {
-            store.createPlan(plan.name + ' (Imported)', plan.startYear || 2025);
-            // Add courses from imported plan
-            const newPlan = store.plans[store.plans.length - 1];
+            const newPlanId = store.createPlan(
+              `${plan.name} (Imported)`,
+              plan.startYear || 2025,
+              plan.startSemester || 1,
+              plan.program || 'AENGI'
+            );
+
+            // Add scheduled courses from imported plan
             plan.courses?.forEach((c: { courseCode: string; year: number; semester: 1 | 2 }) => {
-              store.addCourse(newPlan.id, c.courseCode, c.year, c.semester);
+              store.addCourse(newPlanId, c.courseCode, c.year, c.semester);
+            });
+
+            // Add approved credits from imported plan
+            plan.approvedCredits?.forEach((credit: {
+              kind: 'course' | 'unspecified';
+              courseCode?: string;
+              school?: string;
+              level?: 1000 | 2000 | 3000 | 4000;
+              units?: number;
+            }) => {
+              if (credit.kind === 'course' && credit.courseCode) {
+                store.addApprovedCourseCredit(newPlanId, credit.courseCode);
+              }
+              if (credit.kind === 'unspecified' && credit.school && credit.level) {
+                store.addUnspecifiedCredit(newPlanId, credit.school, credit.level, credit.units);
+              }
             });
           });
         }

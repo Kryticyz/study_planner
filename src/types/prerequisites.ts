@@ -21,6 +21,8 @@ export type PrerequisiteExpression =
 export interface CourseRequirement {
   type: 'course';
   courseCode: string;
+  /** If true, this prerequisite can be taken in the same semester */
+  concurrentAllowed?: boolean;
 }
 
 /**
@@ -57,6 +59,7 @@ export interface UnitLevelRequirement {
 
 /**
  * Equivalence registry for courses that can substitute for each other.
+ * Derived from the `equivalentTo` field on Course objects.
  */
 export interface EquivalenceRegistry {
   /** Map from course code to its equivalence group ID */
@@ -75,6 +78,8 @@ export interface EvaluationContext {
   completedCoursesData: Array<{ code: string; units: number; level: number }>;
   /** Equivalence registry for course substitutions */
   equivalenceRegistry: EquivalenceRegistry;
+  /** Courses being taken concurrently (same semester) */
+  concurrentCourses?: Set<string>;
 }
 
 /**

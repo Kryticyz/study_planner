@@ -2,6 +2,7 @@ import { useMemo } from 'react';
 import { usePlanStore } from '../store/planStore';
 import { useUIStore } from '../store/uiStore';
 import { courses, courseList } from '../data/courses';
+import { describeExpression } from '../utils/prerequisiteEvaluator';
 import { X, Search, Plus, AlertTriangle, CheckCircle, Info } from 'lucide-react';
 
 interface CoursePanelProps {
@@ -13,13 +14,11 @@ export function CoursePanel({ planId }: CoursePanelProps) {
   const {
     searchQuery,
     levelFilter,
-    typeFilter,
     semesterFilter,
     showPrerequisitesMet,
     targetSemester,
     setSearchQuery,
     setLevelFilter,
-    setTypeFilter,
     setSemesterFilter,
     setShowPrerequisitesMet,
     closeCoursePanel,
@@ -28,6 +27,11 @@ export function CoursePanel({ planId }: CoursePanelProps) {
 
   const plan = getPlanById(planId);
   const plannedCodes = new Set(plan?.courses.map(c => c.courseCode) || []);
+  const approvedCourseCodes = new Set(
+    (plan?.approvedCredits ?? [])
+      .filter(credit => credit.kind === 'course' && Boolean(credit.courseCode))
+      .map(credit => credit.courseCode as string)
+  );
 
   const filteredCourses = useMemo(() => {
     return courseList.filter(course => {
@@ -41,9 +45,6 @@ export function CoursePanel({ planId }: CoursePanelProps) {
 
       // Level filter
       if (levelFilter && course.level !== levelFilter) return false;
-
-      // Type filter
-      if (typeFilter && course.type !== typeFilter) return false;
 
       // Semester filter
       if (semesterFilter && !course.semesters.includes(semesterFilter)) return false;
@@ -61,7 +62,7 @@ export function CoursePanel({ planId }: CoursePanelProps) {
 
       return true;
     });
-  }, [searchQuery, levelFilter, typeFilter, semesterFilter, showPrerequisitesMet, targetSemester, planId, getPrerequisitesMet]);
+  }, [searchQuery, levelFilter, semesterFilter, showPrerequisitesMet, targetSemester, planId, getPrerequisitesMet]);
 
   const handleAddCourse = (courseCode: string) => {
     if (!targetSemester) return;
@@ -77,6 +78,9 @@ export function CoursePanel({ planId }: CoursePanelProps) {
     // Check if already planned
     if (plannedCodes.has(courseCode)) {
       return { available: false, reason: 'Already in plan' };
+    }
+    if (approvedCourseCodes.has(courseCode)) {
+      return { available: false, reason: 'Already added as approved credit' };
     }
 
     // Check semester availability
@@ -167,21 +171,6 @@ export function CoursePanel({ planId }: CoursePanelProps) {
           </select>
 
           <select
-            value={typeFilter || ''}
-            onChange={(e) => setTypeFilter(e.target.value || null)}
-            className="px-2 py-1 text-sm border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-anu-gold"
-          >
-            <option value="">All Types</option>
-            <option value="foundation">Foundation</option>
-            <option value="core">Core</option>
-            <option value="professionalCore">Professional</option>
-            <option value="major">Major</option>
-            <option value="elective">Elective</option>
-            <option value="engnElective">ENGN Elective</option>
-            <option value="capstone">Capstone</option>
-          </select>
-
-          <select
             value={semesterFilter || ''}
             onChange={(e) => setSemesterFilter(e.target.value as 'S1' | 'S2' | null || null)}
             className="px-2 py-1 text-sm border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-anu-gold"
@@ -213,12 +202,14 @@ export function CoursePanel({ planId }: CoursePanelProps) {
           {filteredCourses.map(course => {
             const availability = checkCourseAvailability(course.code);
             const isPlanned = plannedCodes.has(course.code);
+            const isCredited = approvedCourseCodes.has(course.code);
+            const isAlreadyAdded = isPlanned || isCredited;
 
             return (
               <div
                 key={course.code}
                 className={`p-3 rounded-lg border transition-all ${
-                  isPlanned
+                  isAlreadyAdded
                     ? 'bg-green-50 border-green-200'
                     : availability.available
                     ? 'bg-white border-gray-200 hover:border-anu-gold'
@@ -232,7 +223,7 @@ export function CoursePanel({ planId }: CoursePanelProps) {
                       <span className="text-xs px-1.5 py-0.5 rounded bg-gray-100 text-gray-600">
                         {course.units}u
                       </span>
-                      {isPlanned && (
+                      {isAlreadyAdded && (
                         <CheckCircle size={14} className="text-green-500" />
                       )}
                       {availability.warning && (
@@ -244,14 +235,17 @@ export function CoursePanel({ planId }: CoursePanelProps) {
                       <span className="text-xs text-gray-400">
                         {course.semesters.join(', ')}
                       </span>
-                      {course.prerequisites.length > 0 && (
+                      {course.prerequisiteExpression && (
                         <span className="text-xs text-gray-400">
-                          • Prereqs: {course.prerequisites.join(', ')}
+                          • Prereqs: {describeExpression(course.prerequisiteExpression)}
                         </span>
                       )}
                     </div>
                     {!availability.available && availability.reason && (
                       <p className="text-xs text-red-500 mt-1">{availability.reason}</p>
+                    )}
+                    {isCredited && (
+                      <p className="text-xs text-green-600 mt-1">Approved credit</p>
                     )}
                     {availability.warning && availability.reason && (
                       <p className="text-xs text-amber-600 mt-1">{availability.reason}</p>
@@ -269,7 +263,7 @@ export function CoursePanel({ planId }: CoursePanelProps) {
                     >
                       <Info size={16} className="text-gray-400" />
                     </button>
-                    {!isPlanned && (
+                    {!isAlreadyAdded && (
                       <button
                         onClick={() => handleAddCourse(course.code)}
                         disabled={!availability.available}
