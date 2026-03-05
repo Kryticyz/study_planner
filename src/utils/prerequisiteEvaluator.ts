@@ -7,7 +7,6 @@ import {
   EvaluationContext,
   EvaluationResult,
 } from '../types/prerequisites';
-import { Course } from '../types';
 import { getEquivalentCourses } from '../data/equivalences';
 
 /**
@@ -40,10 +39,19 @@ function evaluateCourseRequirement(
     return { satisfied: true };
   }
 
+  // Check concurrent enrollment if allowed
+  if (expr.concurrentAllowed && context.concurrentCourses?.has(expr.courseCode)) {
+    return { satisfied: true };
+  }
+
   // Check equivalents
   const equivalents = getEquivalentCourses(expr.courseCode);
   for (const equiv of equivalents) {
     if (context.completedCourses.has(equiv)) {
+      return { satisfied: true };
+    }
+    // Also check concurrent equivalents if concurrent allowed
+    if (expr.concurrentAllowed && context.concurrentCourses?.has(equiv)) {
       return { satisfied: true };
     }
   }
@@ -53,7 +61,7 @@ function evaluateCourseRequirement(
     reason: `Missing: ${expr.courseCode}`,
     details: { missingCourses: [expr.courseCode] }
   };
-} 
+}
 
 function evaluateAndExpression(
   expr: AndExpression,
@@ -180,134 +188,6 @@ export function describeExpression(expr: PrerequisiteExpression): string {
     default:
       return 'Unknown requirement';
   }
-}
-
-export function convertPrerequisites(course: Course): PrerequisiteExpression | null {
-  
-  // example prerequisite structure
-  const example = [["COMP1100", "COMP1130"],["COMP1110", "COMP1140"], "MATH-0-6"];
-  
-  var preqs = course.prerequisites
-  
-  // this course has no prerequisites
-  if (preqs.length == 0) {
-    return null
-  }
-
-
-   // HOF it up man
-  //
-  preqs.map(parsePreqStatement)
-
-  // handle AND expressions
-  if (preqs.length > 1) {
-    return {
-      type: 'and',
-      operands: preqs
-    }
-  } else {
-    return preqs[0]
-  }
-  // p is either an array or a string
-  // if p is an array it's an OrExpression
-  // if p is a string it can be a unit level requirement or a course code
-  function parsePreqStatement(p: PrerequisiteExpression[]): PrerequisiteExpression {
-
-  
-    // check OR
-
-    const isOr = p.length > 1;
-    if (Array.isArray(p) && p.length > 1) {
-      return {
-        type: 'or',
-        operands: p.map(parsePreqStatement)
-      }
-    }
-
-    // Unit Level Requirement
-    if (p[4] == '-') {
-      const unitl_pieces = p.split('_')
-      const ret = () => {
-        if (unitl_pieces[1] == 0){
-          return [1000, "atLeast"]
-        }
-        if (unitl_pieces[1] == 1){
-          return [1000, "atLeast"]
-        }
-        if (unitl_pieces[1] == 2){
-          return [2000, "atLeast"]
-        }
-        if (unitl_pieces[1] == 3){
-          return [3000, "atLeast"]
-        }
-        if (unitl_pieces[1] == 4){
-          return [4000, "atLeast"]
-        }
-      };
-
-      const clevel = ret[0];
-      const lopr = ret[1];
-      
-      return {
-        type: 'unitLevel',
-        minUnits: unitl_pieces[2],
-        level: clevel,
-        levelOperator: lopr,
-        coursePrefix: unitl_pieces[0]
-      };
-    }
-
-    // not or, not unit level requirement, therefore Course Requirement
-    return {
-      type: 'course',
-      courseCode: p
-    };
-  }
-}
-
-
-
-/**  
- * Converts legacy prerequisite format to expression tree.
- * This ensures backwards compatibility with existing course data.
- */
-export function convertLegacyPrerequisites(course: Course): PrerequisiteExpression | null {
-  // If new format exists, use it directly
-  if (course.prerequisiteExpression) {
-    return course.prerequisiteExpression;
-  }
-
-  // Handle prerequisiteAlternatives (OR between groups, AND within)
-  if (course.prerequisiteAlternatives && course.prerequisiteAlternatives.length > 0) {
-    const orOperands: PrerequisiteExpression[] = course.prerequisiteAlternatives.map(group => {
-      if (group.length === 1) {
-        return { type: 'course', courseCode: group[0] } as CourseRequirement;
-      }
-      return {
-        type: 'and',
-        operands: group.map(code => ({ type: 'course', courseCode: code } as CourseRequirement))
-      } as AndExpression;
-    });
-
-    if (orOperands.length === 1) {
-      return orOperands[0];
-    }
-
-    return { type: 'or', operands: orOperands } as OrExpression;
-  }
-
-  // Handle simple prerequisites (all AND)
-  if (course.prerequisites.length > 0) {
-    if (course.prerequisites.length === 1) {
-      return { type: 'course', courseCode: course.prerequisites[0] };
-    }
-    return {
-      type: 'and',
-      operands: course.prerequisites.map(code => ({ type: 'course', courseCode: code }))
-    };
-  }
-
-  return null;
 }
 
 /**

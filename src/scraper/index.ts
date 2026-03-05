@@ -15,7 +15,7 @@
 
 import * as fs from 'fs';
 import { ANUFetcher, type FetcherOptions } from './fetcher';
-import { scrapeCourse, extractCourseCodesFromHTML } from './courseScraper';
+import { scrapeCourse } from './courseScraper';
 import { scrapeProgram, scrapeMajor } from './programScraper';
 import type { Course } from '../types';
 
@@ -145,14 +145,19 @@ export async function scrapeFullProgram(
       const missingCodes = new Set<string>();
 
       for (const course of Object.values(result.courses)) {
-        for (const prereq of course.prerequisites) {
-          if (!result.courses[prereq]) missingCodes.add(prereq);
-        }
-        if (course.prerequisiteAlternatives) {
-          for (const alts of course.prerequisiteAlternatives) {
-            for (const alt of alts) {
-              if (!result.courses[alt]) missingCodes.add(alt);
+        // Extract course codes from prerequisiteExpression
+        if (course.prerequisiteExpression) {
+          const extractCodes = (expr: import('../types/prerequisites').PrerequisiteExpression): string[] => {
+            switch (expr.type) {
+              case 'course': return [expr.courseCode];
+              case 'and':
+              case 'or': return expr.operands.flatMap(extractCodes);
+              case 'unitLevel': return [];
+              default: return [];
             }
+          };
+          for (const prereq of extractCodes(course.prerequisiteExpression)) {
+            if (!result.courses[prereq]) missingCodes.add(prereq);
           }
         }
         if (course.corequisites) {

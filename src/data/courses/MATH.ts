@@ -1,4 +1,5 @@
 import { Course } from "../../types";
+import { courseReq, or } from "../../utils/prerequisiteEvaluator";
 
 export const MATH_COURSES: Record<string, Course> = {
   MATH1013: {
@@ -8,10 +9,9 @@ export const MATH_COURSES: Record<string, Course> = {
     level: 1000,
     college: "Science",
     semesters: ["S1", "S2"],
-    prerequisites: [],
     incompatible: ["MATH1115", "MATH1116"],
+    equivalentTo: ["MATH1115"],
     description: "Calculus, linear algebra, probability basics",
-    type: "foundation",
   },
   MATH1014: {
     code: "MATH1014",
@@ -20,10 +20,10 @@ export const MATH_COURSES: Record<string, Course> = {
     level: 1000,
     college: "Science",
     semesters: ["S1", "S2"],
-    prerequisites: ["MATH1013"],
+    prerequisiteExpression: courseReq("MATH1013"),
     incompatible: ["MATH1116"],
+    equivalentTo: ["MATH1116"],
     description: "Multivariable calculus, ODEs, linear algebra continuation",
-    type: "foundation",
   },
   MATH1115: {
     code: "MATH1115",
@@ -32,12 +32,11 @@ export const MATH_COURSES: Record<string, Course> = {
     level: 1000,
     college: "Science",
     semesters: ["S1"],
-    prerequisites: [],
     corequisites: [],
     assumedKnowledge: "Mathematics Extension 2 or equivalent",
     incompatible: [],
+    equivalentTo: ["MATH1013"],
     description: "Honours-track calculus and linear algebra",
-    type: "elective",
   },
   MATH1116: {
     code: "MATH1116",
@@ -46,11 +45,10 @@ export const MATH_COURSES: Record<string, Course> = {
     level: 1000,
     college: "Science",
     semesters: ["S2"],
-    prerequisites: ["MATH1115"],
-    prerequisiteAlternatives: [["MATH1115"], ["MATH1013"]],
+    prerequisiteExpression: or(courseReq("MATH1115"), courseReq("MATH1013")),
     incompatible: ["MATH1014"],
+    equivalentTo: ["MATH1014"],
     description: "Honours-track multivariable calculus and ODEs",
-    type: "foundation",
   },
   MATH2305: {
     code: "MATH2305",
@@ -59,11 +57,9 @@ export const MATH_COURSES: Record<string, Course> = {
     level: 2000,
     college: "Science",
     semesters: ["S1"],
-    prerequisites: ["MATH1014"],
-    prerequisiteAlternatives: [["MATH1014"], ["MATH1116"]],
+    prerequisiteExpression: or(courseReq("MATH1014"), courseReq("MATH1116")),
     description:
       "ODEs, vector calculus (Green's, Stokes', divergence theorems), numerical methods in MATLAB",
-    type: "elective",
     recommended: "Essential for engineering applications",
   },
   MATH2306: {
@@ -73,9 +69,8 @@ export const MATH_COURSES: Record<string, Course> = {
     level: 2000,
     college: "Science",
     semesters: ["S2"],
-    prerequisites: ["MATH2305"],
+    prerequisiteExpression: courseReq("MATH2305"),
     description: "PDEs, Fourier series and transforms, boundary value problems",
-    type: "elective",
     recommended: "Critical for electromagnetic wave problems",
   },
   MATH2320: {
@@ -85,10 +80,8 @@ export const MATH_COURSES: Record<string, Course> = {
     level: 2000,
     college: "Science",
     semesters: ["S1"],
-    prerequisites: ["MATH1116"],
-    prerequisiteAlternatives: [["MATH1116"], ["MATH1014"]],
+    prerequisiteExpression: or(courseReq("MATH1116"), courseReq("MATH1014")),
     description: "Honours-track real analysis, metric spaces",
-    type: "elective",
   },
   MATH2322: {
     code: "MATH2322",
@@ -97,10 +90,8 @@ export const MATH_COURSES: Record<string, Course> = {
     level: 2000,
     college: "Science",
     semesters: ["S2"],
-    prerequisites: ["MATH1014"],
-    prerequisiteAlternatives: [["MATH1014"], ["MATH1116"]],
+    prerequisiteExpression: or(courseReq("MATH1014"), courseReq("MATH1116")),
     description: "Abstract algebra, groups, rings",
-    type: "elective",
   },
   MATH3029: {
     code: "MATH3029",
@@ -109,9 +100,8 @@ export const MATH_COURSES: Record<string, Course> = {
     level: 3000,
     college: "Science",
     semesters: ["S1"],
-    prerequisites: ["MATH1014"],
+    prerequisiteExpression: courseReq("MATH1014"),
     description: "Stochastic processes, Markov chains, queueing theory",
-    type: "elective",
   },
   MATH3228: {
     code: "MATH3228",
@@ -120,10 +110,8 @@ export const MATH_COURSES: Record<string, Course> = {
     level: 3000,
     college: "Science",
     semesters: ["S1"],
-    prerequisites: ["MATH2320"],
-    prerequisiteAlternatives: [["MATH2320"], ["MATH2305"]],
+    prerequisiteExpression: or(courseReq("MATH2320"), courseReq("MATH2305")),
     description: "Complex functions, contour integration, residue theorem",
-    type: "elective",
   },
   MATH3320: {
     code: "MATH3320",
@@ -132,10 +120,9 @@ export const MATH_COURSES: Record<string, Course> = {
     level: 3000,
     college: "CSS",
     semesters: ["S1"],
-    prerequisites: ["MATH2320"],
+    prerequisiteExpression: courseReq("MATH2320"),
     description:
       "Explain the fundamental concepts of advanced analysis such as Lebesgue measure and integration and Hilbert space theory and their role in modern mathematics and applied contexts",
-    type: "elective",
     recommended: "Improved Analysis techniques",
   },
   MATH3325: {
@@ -145,9 +132,8 @@ export const MATH_COURSES: Record<string, Course> = {
     level: 3000,
     college: "Science",
     semesters: ["S2"],
-    prerequisites: ["MATH2320"],
+    prerequisiteExpression: courseReq("MATH2320"),
     description: "Banach and Hilbert spaces, bounded operators",
-    type: "elective",
   },
   MATH3511: {
     code: "MATH3511",
@@ -156,11 +142,9 @@ export const MATH_COURSES: Record<string, Course> = {
     level: 3000,
     college: "Science",
     semesters: ["S1"],
-    prerequisites: ["MATH2305"],
-    prerequisiteAlternatives: [["MATH2305"], ["MATH2405"]],
+    prerequisiteExpression: or(courseReq("MATH2305"), courseReq("MATH2405")),
     description:
       "Numerical methods for ODEs and PDEs, iterative methods, stability analysis",
-    type: "elective",
     recommended: "Core numerical methods course",
   },
   MATH3512: {
@@ -172,11 +156,9 @@ export const MATH_COURSES: Record<string, Course> = {
     semesters: ["S2"],
     semesterPattern: "odd_years_only",
     offeredYears: [2025, 2027, 2029],
-    prerequisites: ["MATH2305"],
-    prerequisiteAlternatives: [["MATH2305"], ["MATH1014"]],
+    prerequisiteExpression: or(courseReq("MATH2305"), courseReq("MATH1014")),
     description:
       "Numerical linear algebra, matrix factorizations, eigenvalue algorithms, SVD",
-    type: "elective",
     recommended:
       "Essential for large-scale simulations. OFFERED ODD YEARS ONLY.",
   },
@@ -189,11 +171,9 @@ export const MATH_COURSES: Record<string, Course> = {
     semesters: ["S2"],
     semesterPattern: "even_years_only",
     offeredYears: [2026, 2028, 2030],
-    prerequisites: ["MATH2305"],
-    prerequisiteAlternatives: [["MATH2305"], ["MATH1014"]],
+    prerequisiteExpression: or(courseReq("MATH2305"), courseReq("MATH1014")),
     description:
       "Gradient descent, Newton methods, constrained optimization, convex optimization",
-    type: "elective",
     recommended:
       "Critical for antenna design and control systems. OFFERED EVEN YEARS ONLY.",
   },

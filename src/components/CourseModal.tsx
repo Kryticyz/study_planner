@@ -1,5 +1,6 @@
 import { courses } from '../data/courses';
 import { getEquivalentCourses } from '../data/equivalences';
+import { describeExpression } from '../utils/prerequisiteEvaluator';
 import { X, BookOpen, Calendar, AlertTriangle, Link, CheckCircle, ArrowLeftRight } from 'lucide-react';
 
 interface CourseModalProps {
@@ -45,18 +46,6 @@ export function CourseModal({ courseCode, onClose }: CourseModalProps) {
             <span className="px-3 py-1 bg-gray-100 text-gray-700 rounded-full text-sm">
               {course.college}
             </span>
-            <span className={`px-3 py-1 rounded-full text-sm ${
-              course.type === 'foundation' ? 'bg-blue-100 text-blue-700' :
-              course.type === 'core' ? 'bg-purple-100 text-purple-700' :
-              course.type === 'professionalCore' ? 'bg-orange-100 text-orange-700' :
-              course.type === 'major' ? 'bg-green-100 text-green-700' :
-              course.type === 'capstone' ? 'bg-amber-100 text-amber-700' :
-              'bg-gray-100 text-gray-700'
-            }`}>
-              {course.type === 'professionalCore' ? 'Professional Core' :
-               course.type === 'engnElective' ? 'ENGN Elective' :
-               course.type.charAt(0).toUpperCase() + course.type.slice(1)}
-            </span>
           </div>
         </div>
 
@@ -95,39 +84,15 @@ export function CourseModal({ courseCode, onClose }: CourseModalProps) {
           </div>
 
           {/* Prerequisites */}
-          {course.prerequisites.length > 0 && (
+          {course.prerequisiteExpression && (
             <div>
               <h3 className="flex items-center gap-2 text-sm font-semibold text-gray-500 uppercase mb-2">
                 <Link size={16} />
                 Prerequisites
               </h3>
-              <div className="space-y-2">
-                {course.prerequisiteAlternatives ? (
-                  <div>
-                    <p className="text-sm text-gray-500 mb-2">One of the following combinations:</p>
-                    {course.prerequisiteAlternatives.map((alt, i) => (
-                      <div key={i} className="flex items-center gap-2 mb-1">
-                        <span className="text-sm text-gray-400">{i + 1}.</span>
-                        <div className="flex flex-wrap gap-1">
-                          {alt.map(code => (
-                            <span key={code} className="px-2 py-1 bg-blue-50 text-blue-700 rounded text-sm font-mono">
-                              {code}
-                            </span>
-                          ))}
-                        </div>
-                      </div>
-                    ))}
-                  </div>
-                ) : (
-                  <div className="flex flex-wrap gap-2">
-                    {course.prerequisites.map(code => (
-                      <span key={code} className="px-2 py-1 bg-blue-50 text-blue-700 rounded text-sm font-mono">
-                        {code}
-                      </span>
-                    ))}
-                  </div>
-                )}
-              </div>
+              <p className="text-sm text-gray-700 font-mono">
+                {describeExpression(course.prerequisiteExpression)}
+              </p>
             </div>
           )}
 

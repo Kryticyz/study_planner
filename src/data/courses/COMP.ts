@@ -1,4 +1,5 @@
 import { Course } from "../../types";
+import { courseReq, and, or, unitLevel } from "../../utils/prerequisiteEvaluator";
 
 export const COMP_COURSES: Record<string, Course> = {
   COMP1100: {
@@ -8,10 +9,9 @@ export const COMP_COURSES: Record<string, Course> = {
     level: 1000,
     college: "Engineering & Computing",
     semesters: ["S1", "S2"],
-    prerequisites: [],
     incompatible: ["COMP1130"],
+    equivalentTo: ["COMP1130"],
     description: "Functional programming in Haskell, computational thinking",
-    type: "foundation",
   },
   COMP1110: {
     code: "COMP1110",
@@ -20,11 +20,9 @@ export const COMP_COURSES: Record<string, Course> = {
     level: 1000,
     college: "Engineering & Computing",
     semesters: ["S1", "S2"],
-    prerequisites: ["COMP1100"],
-    prerequisiteAlternatives: [["COMP1100"], ["COMP1130"]],
+    prerequisiteExpression: or(courseReq("COMP1100"), courseReq("COMP1130")),
     incompatible: ["COMP1140"],
     description: "Object-oriented programming in Java",
-    type: "elective",
   },
   COMP1130: {
     code: "COMP1130",
@@ -33,10 +31,9 @@ export const COMP_COURSES: Record<string, Course> = {
     level: 1000,
     college: "Engineering & Computing",
     semesters: ["S1"],
-    prerequisites: [],
     incompatible: ["COMP1100"],
+    equivalentTo: ["COMP1100"],
     description: "Advanced functional programming",
-    type: "elective",
   },
   COMP1140: {
     code: "COMP1140",
@@ -45,10 +42,9 @@ export const COMP_COURSES: Record<string, Course> = {
     level: 1000,
     college: "ANU College of Systems and Society",
     semesters: ["S2"],
-    prerequisites: ["COMP1130"],
+    prerequisiteExpression: courseReq("COMP1130"),
     incompatible: ["COMP1100"],
     description: "Advanced structured programming",
-    type: "elective",
   },
   COMP1600: {
     code: "COMP1600",
@@ -57,9 +53,11 @@ export const COMP_COURSES: Record<string, Course> = {
     level: 1000,
     college: "CSS",
     semesters: ["S2"],
-    prerequisites: ["MATH-0-6", ["COMP1100", "COMP1130"]],
+    prerequisiteExpression: and(
+      unitLevel(6, 1000, 'atLeast', 'MATH'),
+      or(courseReq("COMP1100"), courseReq("COMP1130"))
+    ),
     description: "Presents some formal notations that are commonly used for the description of computation of computer systems",
-    type: "elective",
   },
   COMP1710: {
     code: "COMP1710",
@@ -68,9 +66,7 @@ export const COMP_COURSES: Record<string, Course> = {
     level: 1000,
     college: "CSS",
     semesters: [],
-    prerequisites: [],
     description: "Introduces the construction of web sites and web interface/interaction design.",
-    type: "elective",
   },
   COMP2100: {
     code: "COMP2100",
@@ -79,9 +75,8 @@ export const COMP_COURSES: Record<string, Course> = {
     level: 2000,
     college: "CSS",
     semesters: ["S1", "S2"],
-    prerequisites: [["COMP1100", "COMP1140"]],
+    prerequisiteExpression: or(courseReq("COMP1100"), courseReq("COMP1140")),
     description: "Group Project app development",
-    type: "elective",
   },
   COMP2310: {
     code: "COMP2310",
@@ -90,9 +85,11 @@ export const COMP_COURSES: Record<string, Course> = {
     level: 2000,
     college: "CSS",
     semesters: ["S2"],
-    prerequisites: [["COMP1110", "COMP1140"], ["COMP2300", "ENGN2219"]],
+    prerequisiteExpression: and(
+      or(courseReq("COMP1110"), courseReq("COMP1140")),
+      or(courseReq("COMP2300"), courseReq("ENGN2219"))
+    ),
     description: "Introduces all basic mechanisms to analyse, design, and manage concurrent, single computer-node as well as distributed applications.",
-    type: "elective",
   },
   COMP2400: {
     code: "COMP2400",
@@ -101,9 +98,8 @@ export const COMP_COURSES: Record<string, Course> = {
     level: 2000,
     college: "CSS",
     semesters: ["S1", "S2"],
-    prerequisites: [["COMP1100", "COMP1130", "INFS1001", "COMP1730"]],
+    prerequisiteExpression: or(courseReq("COMP1100"), courseReq("COMP1130"), courseReq("INFS1001"), courseReq("COMP1730")),
     description: "Introduction to releational databases and the general skills for designing and using them.",
-    type: "elective",
   },
   COMP2610: {
     code: "COMP2610",
@@ -112,9 +108,7 @@ export const COMP_COURSES: Record<string, Course> = {
     level: 2000,
     college: "CSS",
     semesters: ["S2"],
-    prerequisites: [],
     description: "Study the fundamental limits of representation and transmission of information",
-    type: "elective",
   },
   COMP2700: {
     code: "COMP2700",
@@ -123,9 +117,11 @@ export const COMP_COURSES: Record<string, Course> = {
     level: 2000,
     college: "CSS",
     semesters: ["S1"],
-    prerequisites: [["COMP1100", "COMP1130"], ["COMP1600", "MATH"]],
+    prerequisiteExpression: and(
+      or(courseReq("COMP1100"), courseReq("COMP1130")),
+      or(courseReq("COMP1600"), unitLevel(6, 1000, 'atLeast', 'MATH'))
+    ),
     description: "Introduces all essential cyber security principles",
-    type: "elective",
   },
   COMP3242: {
     code: "COMP3242",
@@ -134,9 +130,11 @@ export const COMP_COURSES: Record<string, Course> = {
     level: 3000,
     college: "CSS",
     semesters: ["S1"],
-    prerequisites: [["COMP3670", "MATH1013", "MATH1014", "MATH1115", "MATH1116"], ["COMP1110", "COMP1140"]],
+    prerequisiteExpression: and(
+      or(courseReq("COMP3670"), courseReq("MATH1013"), courseReq("MATH1014"), courseReq("MATH1115"), courseReq("MATH1116")),
+      or(courseReq("COMP1110"), courseReq("COMP1140"))
+    ),
     description: "The theory and practice of deep learning",
-    type: "elective",
   },
   COMP3300: {
     code: "COMP3300",
@@ -145,9 +143,8 @@ export const COMP_COURSES: Record<string, Course> = {
     level: 3000,
     college: "CSS",
     semesters: ["S2"],
-    prerequisites: ["COMP2310"],
+    prerequisiteExpression: courseReq("COMP2310"),
     description: "A detailed look at the services provided by, and the internals of, an existing operating system.",
-    type: "elective",
   },
   COMP3310: {
     code: "COMP3310",
@@ -156,9 +153,11 @@ export const COMP_COURSES: Record<string, Course> = {
     level: 3000,
     college: "CSS",
     semesters: ["S1"],
-    prerequisites: [["COMP2100", "COMP2300"], "COMP-2-6"],
+    prerequisiteExpression: and(
+      or(courseReq("COMP2100"), courseReq("COMP2300")),
+      unitLevel(6, 2000, 'atLeast', 'COMP')
+    ),
     description: "Study the standard models of the layered approach to communication between autonomous devices in a network.",
-    type: "elective",
   },
   COMP3320: {
     code: "COMP3320",
@@ -167,9 +166,11 @@ export const COMP_COURSES: Record<string, Course> = {
     level: 3000,
     college: "CSS",
     semesters: ["S2"],
-    prerequisites: [["COMP2100", "COMP2300", "ENGN2219"], ["COMP1600", "MATH-0-6"]],
+    prerequisiteExpression: and(
+      or(courseReq("COMP2100"), courseReq("COMP2300"), courseReq("ENGN2219")),
+      or(courseReq("COMP1600"), unitLevel(6, 1000, 'atLeast', 'MATH'))
+    ),
     description: "Intro to High Performance computing, oriented toward problems in science and engineering.",
-    type: "elective",
   },
   COMP3430: {
     code: "COMP3430",
@@ -178,9 +179,12 @@ export const COMP_COURSES: Record<string, Course> = {
     level: 3000,
     college: "CSS",
     semesters: ["S1"],
-    prerequisites: [["COMP1030", "COMP1100", "COMP1130", "COMP1730"], ["COMP1040", "COMP1110", "COMP1140"], "COMP2400"],
+    prerequisiteExpression: and(
+      or(courseReq("COMP1030"), courseReq("COMP1100"), courseReq("COMP1130"), courseReq("COMP1730")),
+      or(courseReq("COMP1040"), courseReq("COMP1110"), courseReq("COMP1140")),
+      courseReq("COMP2400")
+    ),
     description: "Introduces core concepts of data cleaning, standardisation, and data integration.",
-    type: "elective",
   },
   COMP3540: {
     code: "COMP3540",
@@ -189,9 +193,8 @@ export const COMP_COURSES: Record<string, Course> = {
     level: 3000,
     college: "CSS",
     semesters: [],
-    prerequisites: ["COMP-2-12"],
+    prerequisiteExpression: unitLevel(12, 2000, 'atLeast', 'COMP'),
     description: "Not currently offered",
-    type: "elective",
   },
   COMP3600: {
     code: "COMP3600",
@@ -200,9 +203,11 @@ export const COMP_COURSES: Record<string, Course> = {
     level: 3000,
     college: "CSS",
     semesters: ["S2"],
-    prerequisites: ["COMP-0-24", ["MATH-0-6", "COMP1600"]],
+    prerequisiteExpression: and(
+      unitLevel(24, 1000, 'atLeast', 'COMP'),
+      or(unitLevel(6, 1000, 'atLeast', 'MATH'), courseReq("COMP1600"))
+    ),
     description: "Familiarise students with basic concepts in the design and analysis of algorithms and data structures",
-    type: "elective",
   },
   COMP3610: {
     code: "COMP3610",
@@ -211,9 +216,11 @@ export const COMP_COURSES: Record<string, Course> = {
     level: 3000,
     college: "CSS",
     semesters: ["S2"],
-    prerequisites: ["COMP2100", ["COMP1600", "MATH-0-6"]],
+    prerequisiteExpression: and(
+      courseReq("COMP2100"),
+      or(courseReq("COMP1600"), unitLevel(6, 1000, 'atLeast', 'MATH'))
+    ),
     description: "Introduction to the theory and design of programming languages",
-    type: "elective",
   },
   COMP3620: {
     code: "COMP3620",
@@ -222,9 +229,11 @@ export const COMP_COURSES: Record<string, Course> = {
     level: 3000,
     college: "CSS",
     semesters: ["S1"],
-    prerequisites: [["COMP1100", "COMP1140"], "COMP2620"],
+    prerequisiteExpression: and(
+      or(courseReq("COMP1100"), courseReq("COMP1140")),
+      courseReq("COMP2620")
+    ),
     description: "Focuses on core AI techniques for search, knowledge representation and reasoning, planning and designing intelligent agents.",
-    type: "elective",
   },
   COMP3630: {
     code: "COMP3630",
@@ -233,9 +242,11 @@ export const COMP_COURSES: Record<string, Course> = {
     level: 3000,
     college: "CSS",
     semesters: ["S1"],
-    prerequisites: ["COMP-0-24", ["COMP1600", "MATH-0-6"]],
+    prerequisiteExpression: and(
+      unitLevel(24, 1000, 'atLeast', 'COMP'),
+      or(courseReq("COMP1600"), unitLevel(6, 1000, 'atLeast', 'MATH'))
+    ),
     description: "Formal languages and automata, computability and complexity.",
-    type: "elective",
   },
   COMP3670: {
     code: "COMP3670",
@@ -244,9 +255,8 @@ export const COMP_COURSES: Record<string, Course> = {
     level: 3000,
     college: "CSS",
     semesters: ["S2"],
-    prerequisites: [["COMP1110", "COMP1140"]],
+    prerequisiteExpression: or(courseReq("COMP1110"), courseReq("COMP1140")),
     description: "Essential foundations for any machine learning application",
-    type: "elective",
   },
   COMP3704: {
     code: "COMP3704",
@@ -254,10 +264,12 @@ export const COMP_COURSES: Record<string, Course> = {
     units: 6,
     level: 3000,
     college: "CSS",
-    prerequisites: ["COMP2700", ["COMP3310", "ENGN3539"]],
     semesters: ["S2"],
+    prerequisiteExpression: and(
+      courseReq("COMP2700"),
+      or(courseReq("COMP3310"), courseReq("ENGN3539"))
+    ),
     description: "Concepts, techniques and technologies in network security",
-    type: "elective",
   },
   COMP4045: {
     code: "COMP4045",
@@ -265,10 +277,12 @@ export const COMP_COURSES: Record<string, Course> = {
     units: 6,
     level: 4000,
     college: "CSS",
-    prerequisites: [["COMP-3-6", "COMP-4-6"]],
+    prerequisiteExpression: or(
+      unitLevel(6, 3000, 'atLeast', 'COMP'),
+      unitLevel(6, 4000, 'atLeast', 'COMP')
+    ),
     semesters: ["S2"],
     description: "Advanced study of a special thematic area within the discipline of computer systems and architecture",
-    type: "elective",
   },
   COMP4300: {
     code: "COMP4300",
@@ -277,9 +291,8 @@ export const COMP_COURSES: Record<string, Course> = {
     level: 4000,
     college: "CSS",
     semesters: ["S1"],
-    prerequisites: ["COMP2310"],
+    prerequisiteExpression: courseReq("COMP2310"),
     description: "Introduction to programming paradigms form parallel computers.",
-    type: "elective",
   },
   COMP4350: {
     code: "COMP4350",
@@ -288,9 +301,8 @@ export const COMP_COURSES: Record<string, Course> = {
     level: 4000,
     college: "CSS",
     semesters: ["S1"],
-    prerequisites: ["COMP-2-12"],
+    prerequisiteExpression: unitLevel(12, 2000, 'atLeast', 'COMP'),
     description: "Introduction ot the fundamental concepts of music computing",
-    type: "elective",
   },
   COMP4528: {
     code: "COMP4528",
@@ -299,9 +311,8 @@ export const COMP_COURSES: Record<string, Course> = {
     level: 4000,
     college: "CSS",
     semesters: ["S1"],
-    prerequisites: [["ENGN2228", "COMP2120", "COMP3600", "COMP3670"]],
+    prerequisiteExpression: or(courseReq("ENGN2228"), courseReq("COMP2120"), courseReq("COMP3600"), courseReq("COMP3670")),
     description: "Introduces students to fundamental problems in computer vision and foundational techniques for solving them",
-    type: "elective",
   },
   COMP4600: {
     code: "COMP4600",
@@ -310,9 +321,11 @@ export const COMP_COURSES: Record<string, Course> = {
     level: 4000,
     college: "CSS",
     semesters: ["S1"],
-    prerequisites: ["COMP3600", "COMP-3-18"],
+    prerequisiteExpression: and(
+      courseReq("COMP3600"),
+      unitLevel(18, 3000, 'atLeast', 'COMP')
+    ),
     description: "Approximation algorithms, randomised algorithms, parallel/distributed algorithms, and online algorithms",
-    type: "elective",
   },
   COMP4610: {
     code: "COMP4610",
@@ -321,9 +334,11 @@ export const COMP_COURSES: Record<string, Course> = {
     level: 4000,
     college: "CSS",
     semesters: ["S1"],
-    prerequisites: ["COMP2100", ["COMP3600", "COMP3540", "COMP3900", "COMP3320"]],
+    prerequisiteExpression: and(
+      courseReq("COMP2100"),
+      or(courseReq("COMP3600"), courseReq("COMP3540"), courseReq("COMP3900"), courseReq("COMP3320"))
+    ),
     description: "Fundamental algorithms, data structures and programming models used in 3D graphics applications. ",
-    type: "elective",
   },
   COMP4880: {
     code: "COMP4880",
@@ -332,9 +347,14 @@ export const COMP_COURSES: Record<string, Course> = {
     level: 4000,
     college: "CSS",
     semesters: ["S1"],
-    prerequisites: [["COMP3670", [["COMP1110, COMP1140"], ["MATH1014", "MATH1115"]]]],
+    prerequisiteExpression: or(
+      courseReq("COMP3670"),
+      and(
+        or(courseReq("COMP1110"), courseReq("COMP1140")),
+        or(courseReq("MATH1014"), courseReq("MATH1115"))
+      )
+    ),
     description: "Covers the essentials of using computational approaches to pose and answer social science research problems.",
-    type: "elective",
   },
   COMP4712: {
     code: "COMP4712",
@@ -343,8 +363,11 @@ export const COMP_COURSES: Record<string, Course> = {
     level: 4000,
     college: "CSS",
     semesters: ["S1"],
-    prerequisites: ["COMP2100", "COMP2310", ["COMP-4-6", "COMP-3-6"]],
+    prerequisiteExpression: and(
+      courseReq("COMP2100"),
+      courseReq("COMP2310"),
+      or(unitLevel(6, 4000, 'atLeast', 'COMP'), unitLevel(6, 3000, 'atLeast', 'COMP'))
+    ),
     description: "An in depth treatment of programming language translation, compilation, and run-time systems.",
-    type: "elective",
   },
 };

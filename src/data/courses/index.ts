@@ -1,4 +1,4 @@
-import { Course } from "../../types";
+import type { Course } from "../../types";
 import { COMP_COURSES } from "./COMP";
 import { ENGN_COURSES } from "./ENGN";
 import { MATH_COURSES } from "./MATH";
@@ -28,10 +28,6 @@ export { PHYS_COURSES } from "./PHYS";
 
 // Helper exports
 export const courseList = Object.values(courses);
-
-export const getCoursesByType = (type: Course["type"]): Course[] => {
-  return courseList.filter((c) => c.type === type);
-};
 
 export const getCoursesByLevel = (level: number): Course[] => {
   return courseList.filter((c) => c.level === level);

@@ -85,9 +85,7 @@ describe("Course Imports", () => {
       expect(course.level).toBeDefined();
       expect(course.college).toBeDefined();
       expect(course.semesters).toBeDefined();
-      expect(course.prerequisites).toBeDefined();
       expect(course.description).toBeDefined();
-      expect(course.type).toBeDefined();
     }
   });
 

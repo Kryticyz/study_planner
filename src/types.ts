@@ -2,16 +2,6 @@ import { PrerequisiteExpression } from './types/prerequisites';
 
 export type Semester = 'S1' | 'S2' | 'Summer' | 'Full Year';
 
-export type CourseType =
-  | 'foundation'
-  | 'core'
-  | 'professionalCore'
-  | 'major'
-  | 'elective'
-  | 'engnElective'
-  | 'capstone'
-  | 'industryExperience';
-
 export type SemesterPattern = 'odd_years_only' | 'even_years_only';
 
 export interface Course {
@@ -21,13 +11,10 @@ export interface Course {
   level: number;
   college: string;
   semesters: Semester[];
-  prerequisites: string[];
-  prerequisiteAlternatives?: string[][];
   corequisites?: string[];
   incompatible?: string[];
   assumedKnowledge?: string;
   description: string;
-  type: CourseType;
   majorRelevance?: string[];
   recommended?: string;
   note?: string;
@@ -35,7 +22,7 @@ export interface Course {
   offeredYears?: number[];
   semesterSpan?: number;
   honoursWeight?: number;
-  /** Expression-based prerequisite (takes precedence over legacy fields when present) */
+  /** Expression-based prerequisite */
   prerequisiteExpression?: PrerequisiteExpression;
   /** Other courses this is equivalent to (can substitute for each other) */
   equivalentTo?: string[];

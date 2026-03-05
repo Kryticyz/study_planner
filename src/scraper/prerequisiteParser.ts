@@ -402,17 +402,6 @@ function parseTokens(tokens: Token[]): PrerequisiteExpression | null {
 }
 
 /**
- * Determine if a list of course codes connected by commas and "and" represents
- * an AND or OR relationship based on the surrounding text context.
- */
-function inferListRelationship(text: string): 'and' | 'or' {
-  // If the text explicitly uses "or" between items
-  if (/\bor\b/i.test(text)) return 'or';
-  // Default to AND for comma-separated lists
-  return 'and';
-}
-
-/**
  * Flatten a prerequisite expression tree to extract simple lists
  * for the legacy prerequisites/prerequisiteAlternatives fields.
  */

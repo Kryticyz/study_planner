@@ -4,8 +4,9 @@
  */
 
 import * as cheerio from 'cheerio';
-import type { Course, Semester, CourseType } from '../types';
+import type { Course, Semester } from '../types';
 import { parsePrerequisiteText, filterSelfFromExpression } from './prerequisiteParser';
+
 
 const SEMESTER_PATTERNS: Record<string, Semester> = {
   'first semester': 'S1',
@@ -53,22 +54,6 @@ function parseSemesters(text: string): Semester[] {
   }
 
   return semesters;
-}
-
-function determineCourseType(code: string, level: number): CourseType {
-  const prefix = code.slice(0, 4);
-
-  if (code === 'ENGN4300' || code === 'ENGN4350') return 'capstone';
-  if (code === 'ENGN3100') return 'industryExperience';
-
-  if (level === 1000) return 'foundation';
-
-  if (prefix === 'ENGN') {
-    if (level === 2000) return 'core';
-    if (level >= 3000) return 'engnElective';
-  }
-
-  return 'elective';
 }
 
 /**
@@ -219,17 +204,10 @@ export function scrapeCourse(html: string, code: string): Course | null {
     const parsed = parsePrerequisiteText(requisiteText);
 
     // Filter self-references
-    const prerequisites = parsed.prerequisites.filter(c => c !== code);
-    const prerequisiteAlternatives = parsed.prerequisiteAlternatives
-      .map(alts => alts.filter(c => c !== code))
-      .filter(alts => alts.length > 0);
     const prerequisiteExpression = filterSelfFromExpression(
       parsed.prerequisiteExpression,
       code
     );
-
-    // Determine type
-    const type = determineCourseType(code, level);
 
     // Build course object
     const course: Course = {
@@ -239,15 +217,8 @@ export function scrapeCourse(html: string, code: string): Course | null {
       level,
       college,
       semesters,
-      prerequisites,
       description,
-      type,
     };
-
-    // Add optional fields
-    if (prerequisiteAlternatives.length > 0) {
-      course.prerequisiteAlternatives = prerequisiteAlternatives;
-    }
 
     if (parsed.corequisites.length > 0) {
       course.corequisites = parsed.corequisites;
@@ -263,10 +234,6 @@ export function scrapeCourse(html: string, code: string): Course | null {
 
     if (semesters.includes('Full Year') || units === 12) {
       course.semesterSpan = 2;
-    }
-
-    if (type === 'capstone') {
-      course.honoursWeight = 0.4;
     }
 
     return course;

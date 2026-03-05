@@ -3,7 +3,6 @@ import { create } from 'zustand';
 interface UIStore {
   searchQuery: string;
   levelFilter: number | null;
-  typeFilter: string | null;
   semesterFilter: 'S1' | 'S2' | null;
   showPrerequisitesMet: boolean;
   selectedCourse: string | null;
@@ -14,7 +13,6 @@ interface UIStore {
   // Actions
   setSearchQuery: (query: string) => void;
   setLevelFilter: (level: number | null) => void;
-  setTypeFilter: (type: string | null) => void;
   setSemesterFilter: (semester: 'S1' | 'S2' | null) => void;
   setShowPrerequisitesMet: (show: boolean) => void;
   setSelectedCourse: (courseCode: string | null) => void;
@@ -28,7 +26,6 @@ interface UIStore {
 export const useUIStore = create<UIStore>((set) => ({
   searchQuery: '',
   levelFilter: null,
-  typeFilter: null,
   semesterFilter: null,
   showPrerequisitesMet: false,
   selectedCourse: null,
@@ -38,7 +35,6 @@ export const useUIStore = create<UIStore>((set) => ({
 
   setSearchQuery: (query) => set({ searchQuery: query }),
   setLevelFilter: (level) => set({ levelFilter: level }),
-  setTypeFilter: (type) => set({ typeFilter: type }),
   setSemesterFilter: (semester) => set({ semesterFilter: semester }),
   setShowPrerequisitesMet: (show) => set({ showPrerequisitesMet: show }),
   setSelectedCourse: (courseCode) => set({ selectedCourse: courseCode }),
@@ -60,7 +56,6 @@ export const useUIStore = create<UIStore>((set) => ({
   resetFilters: () => set({
     searchQuery: '',
     levelFilter: null,
-    typeFilter: null,
     semesterFilter: null,
     showPrerequisitesMet: false,
   }),

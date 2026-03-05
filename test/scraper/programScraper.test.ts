@@ -3,6 +3,18 @@ import { ANUFetcher } from '../../src/scraper/fetcher';
 import { scrapeProgram } from '../../src/scraper/programScraper';
 import { scrapeCourse } from '../../src/scraper/courseScraper';
 import type { Course } from '../../src/types';
+import type { PrerequisiteExpression } from '../../src/types/prerequisites';
+
+/** Extract all course codes mentioned in a prerequisite expression */
+function extractPrereqCodes(expr: PrerequisiteExpression | undefined): string[] {
+  if (!expr) return [];
+  switch (expr.type) {
+    case 'course': return [expr.courseCode];
+    case 'and':
+    case 'or': return expr.operands.flatMap(extractPrereqCodes);
+    case 'unitLevel': return [];
+  }
+}
 
 const fetcher = new ANUFetcher({ year: 2026, useCache: true, cacheDir: './test-cache' });
 
@@ -88,7 +100,6 @@ describe('AENGI - Course Scraping', () => {
     expect(course!.code).toBe('ENGN1211');
     expect(course!.units).toBe(6);
     expect(course!.level).toBe(1000);
-    expect(course!.type).toBe('foundation');
   });
 
   test('scrapes ENGN2218 with prerequisite', async () => {
@@ -100,10 +111,7 @@ describe('AENGI - Course Scraping', () => {
     expect(course!.level).toBe(2000);
 
     // Should have ENGN1218 as prerequisite
-    const allPrereqs = [
-      ...course!.prerequisites,
-      ...((course!.prerequisiteAlternatives ?? []).flat()),
-    ];
+    const allPrereqs = extractPrereqCodes(course!.prerequisiteExpression);
     expect(allPrereqs).toContain('ENGN1218');
   });
 
@@ -114,10 +122,7 @@ describe('AENGI - Course Scraping', () => {
     expect(course!.code).toBe('ENGN3300');
 
     // Should have ENGN2301 as prerequisite
-    const allPrereqs = [
-      ...course!.prerequisites,
-      ...((course!.prerequisiteAlternatives ?? []).flat()),
-    ];
+    const allPrereqs = extractPrereqCodes(course!.prerequisiteExpression);
     expect(allPrereqs).toContain('ENGN2301');
 
     // Should have ENGN3221 as incompatible
@@ -129,13 +134,9 @@ describe('AENGI - Course Scraping', () => {
     const course = scrapeCourse(html, 'ENGN4300');
     expect(course).not.toBeNull();
     expect(course!.code).toBe('ENGN4300');
-    expect(course!.type).toBe('capstone');
 
     // Should have ENGN3300 as prerequisite
-    const allPrereqs = [
-      ...course!.prerequisites,
-      ...((course!.prerequisiteAlternatives ?? []).flat()),
-    ];
+    const allPrereqs = extractPrereqCodes(course!.prerequisiteExpression);
     expect(allPrereqs).toContain('ENGN3300');
   });
 
@@ -146,7 +147,6 @@ describe('AENGI - Course Scraping', () => {
     expect(course!.code).toBe('MATH1013');
     expect(course!.units).toBe(6);
     expect(course!.level).toBe(1000);
-    expect(course!.type).toBe('foundation');
   });
 
   test('scrapes PHYS1001 foundation course', async () => {
@@ -253,7 +253,6 @@ describe('AACOM - Course Scraping', () => {
     expect(course!.code).toBe('COMP1100');
     expect(course!.units).toBe(6);
     expect(course!.level).toBe(1000);
-    expect(course!.type).toBe('foundation');
   });
 
   test('scrapes COMP2100 with prerequisite', async () => {
@@ -272,10 +271,7 @@ describe('AACOM - Course Scraping', () => {
     expect(course!.code).toBe('COMP2120');
 
     // Should require COMP2100
-    const allPrereqs = [
-      ...course!.prerequisites,
-      ...((course!.prerequisiteAlternatives ?? []).flat()),
-    ];
+    const allPrereqs = extractPrereqCodes(course!.prerequisiteExpression);
     expect(allPrereqs).toContain('COMP2100');
   });
 
@@ -329,14 +325,10 @@ describe('AACOM - Course Scraping', () => {
       expect(course!.level).toBeGreaterThanOrEqual(1000);
       expect(course!.college.length).toBeGreaterThan(0);
       expect(course!.description.length).toBeGreaterThan(0);
-      expect(['foundation', 'core', 'professionalCore', 'major', 'elective', 'engnElective', 'capstone', 'industryExperience']).toContain(course!.type);
 
       // Validate optional fields have correct types when present
-      if (course!.prerequisiteAlternatives) {
-        expect(Array.isArray(course!.prerequisiteAlternatives)).toBe(true);
-        for (const alt of course!.prerequisiteAlternatives) {
-          expect(Array.isArray(alt)).toBe(true);
-        }
+      if (course!.prerequisiteExpression) {
+        expect(['course', 'and', 'or', 'unitLevel']).toContain(course!.prerequisiteExpression.type);
       }
       if (course!.incompatible) {
         expect(Array.isArray(course!.incompatible)).toBe(true);
