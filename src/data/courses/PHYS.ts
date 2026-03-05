@@ -1,4 +1,5 @@
 import { Course } from "../../types";
+import { courseReq, and, or } from "../../utils/prerequisiteEvaluator";
 
 export const PHYS_COURSES: Record<string, Course> = {
   PHYS1101: {
@@ -8,12 +9,11 @@ export const PHYS_COURSES: Record<string, Course> = {
     level: 1000,
     college: "Science",
     semesters: ["S1", "S2"],
-    prerequisites: [],
     assumedKnowledge: "HSC Physics or equivalent",
     incompatible: ["PHYS1001"],
+    equivalentTo: ["PHYS1001"],
     description:
       "Mechanics, circuits, electromagnetism introduction. Recommended for engineering students.",
-    type: "foundation",
   },
   PHYS1201: {
     code: "PHYS1201",
@@ -22,10 +22,8 @@ export const PHYS_COURSES: Record<string, Course> = {
     level: 1000,
     college: "Science",
     semesters: ["S2"],
-    prerequisites: ["PHYS1101"],
-    prerequisiteAlternatives: [["PHYS1101"], ["PHYS1001"]],
+    prerequisiteExpression: or(courseReq("PHYS1101"), courseReq("PHYS1001")),
     description: "Waves, optics, thermodynamics, Fourier analysis introduction",
-    type: "elective",
   },
   PHYS2013: {
     code: "PHYS2013",
@@ -34,9 +32,8 @@ export const PHYS_COURSES: Record<string, Course> = {
     level: 2000,
     college: "Science",
     semesters: ["S1"],
-    prerequisites: ["PHYS1201", "MATH1014"],
+    prerequisiteExpression: and(courseReq("PHYS1201"), courseReq("MATH1014")),
     description: "Introduction to quantum mechanics, wavefunctions, operators",
-    type: "elective",
   },
   PHYS2016: {
     code: "PHYS2016",
@@ -45,10 +42,9 @@ export const PHYS_COURSES: Record<string, Course> = {
     level: 2000,
     college: "Science",
     semesters: ["S1"],
-    prerequisites: ["PHYS1101", "MATH1014"],
+    prerequisiteExpression: and(courseReq("PHYS1101"), courseReq("MATH1014")),
     description:
       "Maxwell's equations, electromagnetic waves, vector calculus applications",
-    type: "elective",
     recommended: "Critical first-principles course for RF electronics",
   },
   PHYS2020: {
@@ -58,9 +54,8 @@ export const PHYS_COURSES: Record<string, Course> = {
     level: 2000,
     college: "Science",
     semesters: ["S2"],
-    prerequisites: ["PHYS1201", "MATH1014"],
+    prerequisiteExpression: and(courseReq("PHYS1201"), courseReq("MATH1014")),
     description: "Thermodynamics, statistical mechanics",
-    type: "elective",
   },
   PHYS2201: {
     code: "PHYS2201",
@@ -69,9 +64,8 @@ export const PHYS_COURSES: Record<string, Course> = {
     level: 2000,
     college: "Science",
     semesters: ["S2"],
-    prerequisites: ["PHYS1101", "MATH1014"],
+    prerequisiteExpression: and(courseReq("PHYS1101"), courseReq("MATH1014")),
     description: "Lagrangian and Hamiltonian mechanics",
-    type: "elective",
   },
   PHYS3032: {
     code: "PHYS3032",
@@ -80,10 +74,9 @@ export const PHYS_COURSES: Record<string, Course> = {
     level: 3000,
     college: "Science",
     semesters: ["S1"],
-    prerequisites: ["PHYS2013"],
+    prerequisiteExpression: courseReq("PHYS2013"),
     description:
       "Crystal structure, band theory, semiconductors, device physics",
-    type: "elective",
     recommended: "Essential for understanding RF component behavior",
   },
   PHYS3101: {
@@ -93,9 +86,8 @@ export const PHYS_COURSES: Record<string, Course> = {
     level: 3000,
     college: "Science",
     semesters: ["S1"],
-    prerequisites: ["PHYS2013", "MATH2306"],
+    prerequisiteExpression: and(courseReq("PHYS2013"), courseReq("MATH2306")),
     description: "Perturbation theory, scattering, identical particles",
-    type: "elective",
   },
   PHYS3102: {
     code: "PHYS3102",
@@ -104,10 +96,9 @@ export const PHYS_COURSES: Record<string, Course> = {
     level: 3000,
     college: "Science",
     semesters: ["S2"],
-    prerequisites: ["PHYS2016", "MATH2306"],
+    prerequisiteExpression: and(courseReq("PHYS2016"), courseReq("MATH2306")),
     description:
       "Radiation from currents, waveguides, transmission lines, covariant formulation",
-    type: "elective",
     recommended: "Advanced EM theory foundation for RF technologies",
   },
 };

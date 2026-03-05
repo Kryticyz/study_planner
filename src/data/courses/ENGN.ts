@@ -1,4 +1,5 @@
 import { Course } from "../../types";
+import { courseReq, and, or } from "../../utils/prerequisiteEvaluator";
 
 export const ENGN_COURSES: Record<string, Course> = {
   ENGN1211: {
@@ -8,9 +9,7 @@ export const ENGN_COURSES: Record<string, Course> = {
     level: 1000,
     college: "Engineering",
     semesters: ["S1"],
-    prerequisites: [],
     description: "Introduction to engineering disciplines, team projects",
-    type: "foundation",
   },
   ENGN1217: {
     code: "ENGN1217",
@@ -19,10 +18,8 @@ export const ENGN_COURSES: Record<string, Course> = {
     level: 1000,
     college: "Engineering",
     semesters: ["S1", "S2"],
-    prerequisites: [],
     corequisites: ["MATH1013"],
     description: "Statics, dynamics, materials introduction",
-    type: "foundation",
   },
   ENGN1218: {
     code: "ENGN1218",
@@ -31,10 +28,8 @@ export const ENGN_COURSES: Record<string, Course> = {
     level: 1000,
     college: "Engineering",
     semesters: ["S1", "S2"],
-    prerequisites: [],
     corequisites: ["MATH1013"],
     description: "Circuit analysis, basic electronics, lab skills",
-    type: "foundation",
     majorRelevance: ["ECSY-MAJ"],
   },
   ENGN2217: {
@@ -44,9 +39,8 @@ export const ENGN_COURSES: Record<string, Course> = {
     level: 2000,
     college: "Engineering",
     semesters: ["S1"],
-    prerequisites: ["ENGN1217", "MATH1013"],
+    prerequisiteExpression: and(courseReq("ENGN1217"), courseReq("MATH1013")),
     description: "Solid mechanics, machine elements, mechanical design",
-    type: "core",
   },
   ENGN2218: {
     code: "ENGN2218",
@@ -55,9 +49,8 @@ export const ENGN_COURSES: Record<string, Course> = {
     level: 2000,
     college: "Engineering",
     semesters: ["S1"],
-    prerequisites: ["ENGN1218", "MATH1013"],
+    prerequisiteExpression: and(courseReq("ENGN1218"), courseReq("MATH1013")),
     description: "BJT/FET amplifiers, op-amps, digital logic, PCB design",
-    type: "core",
     majorRelevance: ["ECSY-MAJ"],
   },
   ENGN2219: {
@@ -67,9 +60,8 @@ export const ENGN_COURSES: Record<string, Course> = {
     level: 2000,
     college: "Engineering",
     semesters: ["S1"],
-    prerequisites: ["COMP1100"],
+    prerequisiteExpression: courseReq("COMP1100"),
     description: "Computer architecture, assembly, memory systems",
-    type: "core",
     note: "Prerequisite for HPC courses",
   },
   ENGN2222: {
@@ -79,9 +71,8 @@ export const ENGN_COURSES: Record<string, Course> = {
     level: 2000,
     college: "Engineering",
     semesters: ["S2"],
-    prerequisites: ["MATH1014", "PHYS1101"],
+    prerequisiteExpression: and(courseReq("MATH1014"), courseReq("PHYS1101")),
     description: "Thermodynamic cycles, heat transfer",
-    type: "core",
   },
   ENGN2228: {
     code: "ENGN2228",
@@ -90,10 +81,9 @@ export const ENGN_COURSES: Record<string, Course> = {
     level: 2000,
     college: "Engineering",
     semesters: ["S2"],
-    prerequisites: ["MATH1013"],
+    prerequisiteExpression: courseReq("MATH1013"),
     description:
       "Fourier analysis, LTI systems, Laplace transforms, frequency response",
-    type: "core",
     majorRelevance: ["ECSY-MAJ"],
   },
   ENGN2300: {
@@ -103,9 +93,8 @@ export const ENGN_COURSES: Record<string, Course> = {
     level: 2000,
     college: "Engineering",
     semesters: ["S1"],
-    prerequisites: ["ENGN1211"],
+    prerequisiteExpression: courseReq("ENGN1211"),
     description: "Team-based design project, project management",
-    type: "professionalCore",
   },
   ENGN2301: {
     code: "ENGN2301",
@@ -114,9 +103,8 @@ export const ENGN_COURSES: Record<string, Course> = {
     level: 2000,
     college: "Engineering",
     semesters: ["S2"],
-    prerequisites: ["ENGN2300"],
+    prerequisiteExpression: courseReq("ENGN2300"),
     description: "Systems engineering, requirements analysis",
-    type: "professionalCore",
   },
   ENGN3100: {
     code: "ENGN3100",
@@ -125,11 +113,9 @@ export const ENGN_COURSES: Record<string, Course> = {
     level: 3000,
     college: "Engineering",
     semesters: ["S1", "S2", "Summer"],
-    prerequisites: [],
     description: "60 days industry work experience requirement",
-    type: "industryExperience",
   },
-  
+
   ENGN3226: {
     code: "ENGN3226",
     name: "Digital Communications",
@@ -137,9 +123,8 @@ export const ENGN_COURSES: Record<string, Course> = {
     level: 3000,
     college: "Engineering",
     semesters: ["S1"],
-    prerequisites: ["ENGN2228"],
+    prerequisiteExpression: courseReq("ENGN2228"),
     description: "Modulation, channel coding, digital transmission systems",
-    type: "major",
     majorRelevance: ["ECSY-MAJ"],
     note: "Being replaced by ENGN3350 from 2027",
   },
@@ -150,9 +135,8 @@ export const ENGN_COURSES: Record<string, Course> = {
     level: 3000,
     college: "Engineering",
     semesters: ["S2"],
-    prerequisites: ["ENGN2228"],
+    prerequisiteExpression: courseReq("ENGN2228"),
     description: "Classical and modern control theory, feedback systems",
-    type: "engnElective",
   },
   ENGN3300: {
     code: "ENGN3300",
@@ -161,9 +145,8 @@ export const ENGN_COURSES: Record<string, Course> = {
     level: 3000,
     college: "Engineering",
     semesters: ["S1"],
-    prerequisites: ["ENGN2301"],
+    prerequisiteExpression: courseReq("ENGN2301"),
     description: "Advanced systems engineering, stakeholder management",
-    type: "professionalCore",
   },
   ENGN3301: {
     code: "ENGN3301",
@@ -172,9 +155,8 @@ export const ENGN_COURSES: Record<string, Course> = {
     level: 3000,
     college: "Engineering",
     semesters: ["S2"],
-    prerequisites: ["ENGN3300"],
+    prerequisiteExpression: courseReq("ENGN3300"),
     description: "Systems integration, verification and validation",
-    type: "professionalCore",
   },
   ENGN3331: {
     code: "ENGN3331",
@@ -183,10 +165,9 @@ export const ENGN_COURSES: Record<string, Course> = {
     level: 3000,
     college: "Engineering",
     semesters: ["S1"],
-    prerequisites: ["MATH1013"],
+    prerequisiteExpression: courseReq("MATH1013"),
     description:
       "System dynamics is the study of the response of engineering systems with changing time",
-    type: "engnElective",
   },
   ENGN3338: {
     code: "ENGN3338",
@@ -195,9 +176,8 @@ export const ENGN_COURSES: Record<string, Course> = {
     level: 3000,
     college: "Engineering",
     semesters: ["S1"],
-    prerequisites: ["ENGN2222"],
+    prerequisiteExpression: courseReq("ENGN2222"),
     description: "low speed and high-speed aerodynamics of wings and bodies",
-    type: "engnElective",
   },
   ENGN3350: {
     code: "ENGN3350",
@@ -206,9 +186,8 @@ export const ENGN_COURSES: Record<string, Course> = {
     level: 3000,
     college: "Engineering",
     semesters: ["S1"],
-    prerequisites: ["ENGN2228"],
+    prerequisiteExpression: courseReq("ENGN2228"),
     description: "Modern communications systems, replacement for ENGN3226",
-    type: "major",
     majorRelevance: ["ECSY-MAJ"],
     note: "Replaces ENGN3226 from 2027",
   },
@@ -219,10 +198,9 @@ export const ENGN_COURSES: Record<string, Course> = {
     level: 3000,
     college: "Engineering",
     semesters: ["S1"],
-    prerequisites: ["ENGN2219"],
+    prerequisiteExpression: courseReq("ENGN2219"),
     description:
       "Network protocols, TCP/IP, wireless networks, network security",
-    type: "major",
     majorRelevance: ["ECSY-MAJ"],
   },
   ENGN4213: {
@@ -232,9 +210,8 @@ export const ENGN_COURSES: Record<string, Course> = {
     level: 4000,
     college: "Engineering",
     semesters: ["S1"],
-    prerequisites: ["ENGN2218", "ENGN2219"],
+    prerequisiteExpression: and(courseReq("ENGN2218"), courseReq("ENGN2219")),
     description: "FPGA design, embedded systems, HDL programming",
-    type: "major",
     majorRelevance: ["ECSY-MAJ"],
   },
   ENGN4300: {
@@ -245,9 +222,8 @@ export const ENGN_COURSES: Record<string, Course> = {
     college: "Engineering",
     semesters: ["S1", "S2"],
     semesterSpan: 2,
-    prerequisites: ["ENGN3301"],
+    prerequisiteExpression: courseReq("ENGN3301"),
     description: "Year-long team project with industry partner",
-    type: "capstone",
     honoursWeight: 0.4,
   },
   ENGN4339: {
@@ -257,10 +233,9 @@ export const ENGN_COURSES: Record<string, Course> = {
     level: 4000,
     college: "Engineering",
     semesters: ["S2"],
-    prerequisites: ["ENGN3338"],
+    prerequisiteExpression: courseReq("ENGN3338"),
     description:
       "developing microcontroller-based instrumentation for aerospace applications",
-    type: "engnElective",
   },
   ENGN4430: {
     code: "ENGN4430",
@@ -269,10 +244,9 @@ export const ENGN_COURSES: Record<string, Course> = {
     level: 4000,
     college: "Engineering",
     semesters: ["S2"],
-    prerequisites: ["ENGN2228"],
+    prerequisiteExpression: courseReq("ENGN2228"),
     description:
       "Modern signal processing with ML integration, replacement for ENGN4537",
-    type: "major",
     majorRelevance: ["ECSY-MAJ"],
     note: "Replaces ENGN4537 from 2027",
   },
@@ -283,10 +257,9 @@ export const ENGN_COURSES: Record<string, Course> = {
     level: 4000,
     college: "Engineering",
     semesters: ["S1"],
-    prerequisites: ["ENGN2228"],
+    prerequisiteExpression: courseReq("ENGN2228"),
     description:
       "Image processing, feature extraction, computer vision algorithms",
-    type: "engnElective",
   },
   ENGN4528: {
     code: "ENGN4528",
@@ -295,9 +268,8 @@ export const ENGN_COURSES: Record<string, Course> = {
     level: 4000,
     college: "Engineering",
     semesters: ["S2"],
-    prerequisites: ["ENGN4524"],
+    prerequisiteExpression: courseReq("ENGN4524"),
     description: "Advanced computer vision, deep learning for vision",
-    type: "engnElective",
   },
   ENGN4536: {
     code: "ENGN4536",
@@ -306,11 +278,9 @@ export const ENGN_COURSES: Record<string, Course> = {
     level: 4000,
     college: "Engineering",
     semesters: ["S2"],
-    prerequisites: ["ENGN3226"],
-    prerequisiteAlternatives: [["ENGN3226"], ["ENGN3350"]],
+    prerequisiteExpression: or(courseReq("ENGN3226"), courseReq("ENGN3350")),
     description:
       "RF channel modeling, MIMO systems, antenna fundamentals, 5G technologies",
-    type: "major",
     majorRelevance: ["ECSY-MAJ"],
   },
   ENGN4537: {
@@ -320,9 +290,8 @@ export const ENGN_COURSES: Record<string, Course> = {
     level: 4000,
     college: "Engineering",
     semesters: ["S2"],
-    prerequisites: ["ENGN2228"],
+    prerequisiteExpression: courseReq("ENGN2228"),
     description: "Z-transforms, digital filter design, FFT, DSP implementation",
-    type: "major",
     majorRelevance: ["ECSY-MAJ"],
     note: "Being replaced by ENGN4430 from 2027",
   },
@@ -333,9 +302,8 @@ export const ENGN_COURSES: Record<string, Course> = {
     level: 4000,
     college: "Engineering",
     semesters: ["S2"],
-    prerequisites: ["ENGN2218", "ENGN2228"],
+    prerequisiteExpression: and(courseReq("ENGN2218"), courseReq("ENGN2228")),
     description: "Power conversion, inverters, power system analysis",
-    type: "major",
     majorRelevance: ["ECSY-MAJ"],
   },
 };

@@ -13,7 +13,7 @@ import {
 import { courses } from '../data/courses';
 import { degreeRequirements, electronicsCommunicationsMajor } from '../data/requirements';
 import { getEquivalenceRegistry } from '../data/equivalences';
-import { evaluateExpression, convertLegacyPrerequisites, describeExpression } from '../utils/prerequisiteEvaluator';
+import { evaluateExpression, describeExpression } from '../utils/prerequisiteEvaluator';
 import { validateCorequisites } from '../utils/corequisiteValidator';
 import { EvaluationContext } from '../types/prerequisites';
 import { getProgram, getDegree, getMaxYear, getDefaultDegreeAttribution, canUseAsElective } from '../data/degreeRegistry';
@@ -609,8 +609,7 @@ export const usePlanStore = create<PlanStore>()(
         const course = courses[courseCode];
         if (!course) return false;
 
-        // Convert to expression tree (handles legacy format automatically)
-        const expression = convertLegacyPrerequisites(course); // just remove legacy format? TODO
+        const expression = course.prerequisiteExpression ?? null;
         if (!expression) return true; // No prerequisites
 
         const startSemester = plan.startSemester ?? 1;
@@ -621,13 +620,17 @@ export const usePlanStore = create<PlanStore>()(
           .filter(c => getChronologicalPosition(c.year, c.semester, startSemester) < targetPosition)
           .map(c => c.courseCode);
 
+        // Get courses in the same semester (for concurrentAllowed)
+        const concurrentCourseCodes = plan.courses
+          .filter(c => getChronologicalPosition(c.year, c.semester, startSemester) === targetPosition && c.courseCode !== courseCode)
+          .map(c => c.courseCode);
+
         const approvedCreditData = getApprovedCreditsForPrerequisiteEvaluation(plan);
         const completedSet = new Set([
           ...priorCourseCodes,
           ...plan.completedCourses,
           ...approvedCreditData.approvedCourseCodes,
         ]);
-
         const completedCoursesData = [...completedSet]
           .map(code => courses[code])
           .filter(Boolean)
@@ -638,6 +641,7 @@ export const usePlanStore = create<PlanStore>()(
           completedCourses: completedSet,
           completedCoursesData,
           equivalenceRegistry: getEquivalenceRegistry(),
+          concurrentCourses: new Set(concurrentCourseCodes),
         };
 
         const result = evaluateExpression(expression, context);
@@ -685,10 +689,10 @@ export const usePlanStore = create<PlanStore>()(
 
           // Check prerequisites
           if (!get().getPrerequisitesMet(planId, pc.courseCode, pc.year, pc.semester)) {
-            const expression = convertLegacyPrerequisites(course);
+            const expression = course.prerequisiteExpression;
             const prereqDescription = expression
               ? describeExpression(expression)
-              : course.prerequisites.join(', ');
+              : 'unknown prerequisites';
             errors.push({
               courseCode: pc.courseCode,
               type: 'prerequisite',

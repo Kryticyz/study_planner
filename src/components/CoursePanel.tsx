@@ -2,6 +2,7 @@ import { useMemo } from 'react';
 import { usePlanStore } from '../store/planStore';
 import { useUIStore } from '../store/uiStore';
 import { courses, courseList } from '../data/courses';
+import { describeExpression } from '../utils/prerequisiteEvaluator';
 import { X, Search, Plus, AlertTriangle, CheckCircle, Info } from 'lucide-react';
 
 interface CoursePanelProps {
@@ -13,13 +14,11 @@ export function CoursePanel({ planId }: CoursePanelProps) {
   const {
     searchQuery,
     levelFilter,
-    typeFilter,
     semesterFilter,
     showPrerequisitesMet,
     targetSemester,
     setSearchQuery,
     setLevelFilter,
-    setTypeFilter,
     setSemesterFilter,
     setShowPrerequisitesMet,
     closeCoursePanel,
@@ -47,9 +46,6 @@ export function CoursePanel({ planId }: CoursePanelProps) {
       // Level filter
       if (levelFilter && course.level !== levelFilter) return false;
 
-      // Type filter
-      if (typeFilter && course.type !== typeFilter) return false;
-
       // Semester filter
       if (semesterFilter && !course.semesters.includes(semesterFilter)) return false;
 
@@ -66,7 +62,7 @@ export function CoursePanel({ planId }: CoursePanelProps) {
 
       return true;
     });
-  }, [searchQuery, levelFilter, typeFilter, semesterFilter, showPrerequisitesMet, targetSemester, planId, getPrerequisitesMet]);
+  }, [searchQuery, levelFilter, semesterFilter, showPrerequisitesMet, targetSemester, planId, getPrerequisitesMet]);
 
   const handleAddCourse = (courseCode: string) => {
     if (!targetSemester) return;
@@ -175,21 +171,6 @@ export function CoursePanel({ planId }: CoursePanelProps) {
           </select>
 
           <select
-            value={typeFilter || ''}
-            onChange={(e) => setTypeFilter(e.target.value || null)}
-            className="px-2 py-1 text-sm border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-anu-gold"
-          >
-            <option value="">All Types</option>
-            <option value="foundation">Foundation</option>
-            <option value="core">Core</option>
-            <option value="professionalCore">Professional</option>
-            <option value="major">Major</option>
-            <option value="elective">Elective</option>
-            <option value="engnElective">ENGN Elective</option>
-            <option value="capstone">Capstone</option>
-          </select>
-
-          <select
             value={semesterFilter || ''}
             onChange={(e) => setSemesterFilter(e.target.value as 'S1' | 'S2' | null || null)}
             className="px-2 py-1 text-sm border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-anu-gold"
@@ -254,9 +235,9 @@ export function CoursePanel({ planId }: CoursePanelProps) {
                       <span className="text-xs text-gray-400">
                         {course.semesters.join(', ')}
                       </span>
-                      {course.prerequisites.length > 0 && (
+                      {course.prerequisiteExpression && (
                         <span className="text-xs text-gray-400">
-                          • Prereqs: {course.prerequisites.join(', ')}
+                          • Prereqs: {describeExpression(course.prerequisiteExpression)}
                         </span>
                       )}
                     </div>

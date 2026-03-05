@@ -3,7 +3,6 @@
 export {
   courses,
   courseList,
-  getCoursesByType,
   getCoursesByLevel,
   getCourseBySemester,
   getCoursesByPrefix,
