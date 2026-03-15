@@ -64,6 +64,7 @@ export interface StudyPlan {
   program: string;
   courses: PlannedCourse[];
   approvedCredits: ApprovedCredit[];
+  selectedMajors?: Record<string, string>;
   completedCourses: string[];
 }
 
@@ -80,6 +81,9 @@ export interface RequirementProgress {
   completed: number;
   courses: string[];
   completedCourses: string[];
+  remainingUnits?: number;
+  eligibleCourses?: string[];
+  remainingCourseGroups?: string[][];
 }
 
 export interface DegreeProgress {
@@ -98,7 +102,43 @@ export interface DegreeComponentProgress {
   name: string;
   code: string;
   requirements: Record<string, RequirementProgress>;
+  selectedMajor?: MajorProgress | null;
+  attributedUnits?: number;
   total: { required: number; completed: number };
+}
+
+export interface MajorRequirementGroupProgress {
+  label: string;
+  options: string[];
+  satisfiedBy?: string;
+}
+
+export interface MajorProgress {
+  code: string;
+  name: string;
+  degreeCode: string;
+  required: number;
+  completed: number;
+  completedCourses: string[];
+  eligibleCourses: string[];
+  groups: MajorRequirementGroupProgress[];
+}
+
+export interface CourseAttributionRow {
+  id: string;
+  code: string;
+  name: string;
+  units: number;
+  kind: 'planned' | 'approved';
+  year?: number;
+  semester?: 1 | 2;
+  defaultDegreeCodes: string[];
+  assignedDegreeCodes: string[];
+  usedByDegreeCodes: string[];
+  selectedMajorCodes: string[];
+  selectedMajorNames: string[];
+  isShared: boolean;
+  isUnallocated: boolean;
 }
 
 /** Combined progress for single or double degrees */
@@ -110,6 +150,9 @@ export interface CombinedDegreeProgress {
   primary: DegreeComponentProgress;
   /** For double degrees, secondary contains the second degree's progress */
   secondary?: DegreeComponentProgress;
+  sharedUnits: number;
+  unallocatedUnits: number;
+  attributionRows: CourseAttributionRow[];
   /** Overall totals across both degrees */
   overallTotal: { required: number; completed: number };
 }
@@ -123,6 +166,10 @@ export interface RequirementCategory {
   courses?: (string | string[])[];
   /** For elective categories: minimum units from specific course prefixes */
   prefixRequirements?: { prefix: string; minUnits: number }[];
+  /** Whether courses in this category are individually mandatory (default true).
+   *  Set to false for pool categories like "ICT Related Course" where any one of
+   *  many options satisfies the requirement. */
+  coursesMandatory?: boolean;
 }
 
 /** Configuration for a single degree or degree component */
@@ -133,8 +180,6 @@ export interface DegreeConfig {
   /** Duration in semesters */
   duration: number;
   requirements: Record<string, RequirementCategory>;
-  /** Courses that automatically count for this degree AND another in a double degree */
-  sharedMandatoryCourses?: string[];
 }
 
 /** Configuration for available degree programs (single or double) */
@@ -147,4 +192,13 @@ export interface ProgramConfig {
   isDoubleDegree: boolean;
   /** For single degrees: just the one degree code. For double: both codes */
   degreeComponents: string[];
+}
+
+export interface MajorConfig {
+  code: string;
+  name: string;
+  degreeCode: string;
+  totalUnits: number;
+  courseGroups: string[][];
+  aliases?: string[];
 }

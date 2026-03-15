@@ -78,6 +78,18 @@ export const COMP_COURSES: Record<string, Course> = {
     prerequisiteExpression: or(courseReq("COMP1100"), courseReq("COMP1140")),
     description: "Group Project app development",
   },
+  COMP2300: {
+    code: "COMP2300",
+    name: "Computer Organisation and Program Execution",
+    units: 6,
+    level: 2000,
+    college: "CSS",
+    semesters: ["S1"],
+    prerequisiteExpression: or(courseReq("COMP1100"), courseReq("COMP1130")),
+    incompatible: ["ENGN2219"],
+    equivalentTo: ["ENGN2219"],
+    description: "Computer architecture, assembly language, and program execution",
+  },
   COMP2310: {
     code: "COMP2310",
     name: "Systems, Networks, and Concurrency",

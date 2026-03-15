@@ -2,6 +2,7 @@ import { describe, it, expect, beforeEach } from 'bun:test';
 import { usePlanStore } from '../src/store/planStore';
 import {
   isSharedMandatory,
+  isMandatoryForDegree,
   isCoreForDegree,
   canUseAsElective,
   getDefaultDegreeAttribution,
@@ -13,6 +14,57 @@ describe('Double Counting Rules', () => {
     usePlanStore.setState({ plans: [], activePlanId: null });
   });
 
+  describe('Mandatory Course Identification', () => {
+    it('MATH1013 is mandatory for AENGI (in foundations)', () => {
+      expect(isMandatoryForDegree('MATH1013', 'AENGI')).toBe(true);
+    });
+
+    it('MATH1013 is NOT mandatory for BCOMP (only in ICT Related Course pool)', () => {
+      expect(isMandatoryForDegree('MATH1013', 'BCOMP')).toBe(false);
+    });
+
+    it('COMP2300 is mandatory for BCOMP (in core)', () => {
+      expect(isMandatoryForDegree('COMP2300', 'BCOMP')).toBe(true);
+    });
+
+    it('ENGN2219 is mandatory for AENGI (in engineeringFundamentals)', () => {
+      expect(isMandatoryForDegree('ENGN2219', 'AENGI')).toBe(true);
+    });
+
+    it('ENGN2219 is mandatory for BCOMP via equivalence with COMP2300', () => {
+      expect(isMandatoryForDegree('ENGN2219', 'BCOMP')).toBe(true);
+    });
+
+    it('COMP2300 is mandatory for AENGI via equivalence with ENGN2219', () => {
+      expect(isMandatoryForDegree('COMP2300', 'AENGI')).toBe(true);
+    });
+
+    it('COMP1100 is mandatory for AENGI (in foundations)', () => {
+      expect(isMandatoryForDegree('COMP1100', 'AENGI')).toBe(true);
+    });
+
+    it('COMP1100 is mandatory for BCOMP (in core choice group with COMP1130)', () => {
+      expect(isMandatoryForDegree('COMP1100', 'BCOMP')).toBe(true);
+    });
+
+    it('COMP1600 is NOT mandatory for AENGI', () => {
+      expect(isMandatoryForDegree('COMP1600', 'AENGI')).toBe(false);
+    });
+
+    it('COMP1600 is mandatory for BCOMP (in core)', () => {
+      expect(isMandatoryForDegree('COMP1600', 'BCOMP')).toBe(true);
+    });
+
+    it('MATH1014 is mandatory for AENGI but NOT for BCOMP', () => {
+      expect(isMandatoryForDegree('MATH1014', 'AENGI')).toBe(true);
+      expect(isMandatoryForDegree('MATH1014', 'BCOMP')).toBe(false);
+    });
+
+    it('returns false for unknown degree', () => {
+      expect(isMandatoryForDegree('MATH1013', 'UNKNOWN')).toBe(false);
+    });
+  });
+
   describe('Shared Mandatory Courses', () => {
     it('identifies ENGN2219 as shared between AENGI and BCOMP', () => {
       expect(isSharedMandatory('ENGN2219', 'AENGI-BCOMP')).toBe(true);
@@ -22,12 +74,28 @@ describe('Double Counting Rules', () => {
       expect(isSharedMandatory('COMP2300', 'AENGI-BCOMP')).toBe(true);
     });
 
-    it('MATH1013 is shared (core for AENGI, in BCOMP shared list)', () => {
-      expect(isSharedMandatory('MATH1013', 'AENGI-BCOMP')).toBe(true);
+    it('COMP1100 is shared (mandatory for AENGI foundations, BCOMP core)', () => {
+      expect(isSharedMandatory('COMP1100', 'AENGI-BCOMP')).toBe(true);
+    });
+
+    it('MATH1013 is NOT shared (mandatory for AENGI, but only a pool option for BCOMP)', () => {
+      expect(isSharedMandatory('MATH1013', 'AENGI-BCOMP')).toBe(false);
+    });
+
+    it('MATH1014 is NOT shared (mandatory for AENGI but not in any BCOMP requirement)', () => {
+      expect(isSharedMandatory('MATH1014', 'AENGI-BCOMP')).toBe(false);
     });
 
     it('COMP2100 is NOT shared (only core for BCOMP)', () => {
       expect(isSharedMandatory('COMP2100', 'AENGI-BCOMP')).toBe(false);
+    });
+
+    it('PHYS1101 is NOT shared (mandatory for AENGI but not listed in BCOMP)', () => {
+      expect(isSharedMandatory('PHYS1101', 'AENGI-BCOMP')).toBe(false);
+    });
+
+    it('returns false for single degree programs', () => {
+      expect(isSharedMandatory('COMP1100', 'AENGI')).toBe(false);
     });
   });
 
@@ -47,6 +115,11 @@ describe('Double Counting Rules', () => {
     it('handles choice groups - COMP1100 or COMP1130 both count as core for BCOMP', () => {
       expect(isCoreForDegree('COMP1100', 'BCOMP')).toBe(true);
       expect(isCoreForDegree('COMP1130', 'BCOMP')).toBe(true);
+    });
+
+    it('MATH1013 is core for BCOMP (appears in ICT Related Course pool)', () => {
+      // isCoreForDegree is intentionally broad — includes pool categories
+      expect(isCoreForDegree('MATH1013', 'BCOMP')).toBe(true);
     });
   });
 
@@ -73,6 +146,18 @@ describe('Double Counting Rules', () => {
       expect(attribution).toContain('AENGI');
       expect(attribution).toContain('BCOMP');
       expect(attribution.length).toBe(2);
+    });
+
+    it('COMP2300 defaults to both degrees (shared via equivalence)', () => {
+      const attribution = getDefaultDegreeAttribution('COMP2300', 'AENGI-BCOMP');
+      expect(attribution).toContain('AENGI');
+      expect(attribution).toContain('BCOMP');
+      expect(attribution.length).toBe(2);
+    });
+
+    it('MATH1013 defaults to AENGI only (not shared — pool option for BCOMP)', () => {
+      const attribution = getDefaultDegreeAttribution('MATH1013', 'AENGI-BCOMP');
+      expect(attribution).toEqual(['AENGI']);
     });
 
     it('BCOMP-only core courses default to BCOMP', () => {

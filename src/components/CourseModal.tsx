@@ -1,5 +1,6 @@
 import { courses } from '../data/courses';
 import { getEquivalentCourses } from '../data/equivalences';
+import { getMajorName, getMajorsForCourse, resolveMajorCode } from '../data/majorRegistry';
 import { describeExpression } from '../utils/prerequisiteEvaluator';
 import { X, BookOpen, Calendar, AlertTriangle, Link, CheckCircle, ArrowLeftRight } from 'lucide-react';
 
@@ -10,6 +11,13 @@ interface CourseModalProps {
 
 export function CourseModal({ courseCode, onClose }: CourseModalProps) {
   const course = courses[courseCode];
+  const registryMajors = getMajorsForCourse(courseCode);
+  const majorNames = [
+    ...new Set([
+      ...registryMajors.map(major => major.name),
+      ...(course?.majorRelevance ?? []).map(majorCode => getMajorName(resolveMajorCode(majorCode))),
+    ]),
+  ];
 
   if (!course) {
     return null;
@@ -180,15 +188,15 @@ export function CourseModal({ courseCode, onClose }: CourseModalProps) {
           )}
 
           {/* Major Relevance */}
-          {course.majorRelevance && course.majorRelevance.length > 0 && (
+          {majorNames.length > 0 && (
             <div>
               <h3 className="text-sm font-semibold text-gray-500 uppercase mb-2">
                 Major Relevance
               </h3>
               <div className="flex flex-wrap gap-2">
-                {course.majorRelevance.map(major => (
-                  <span key={major} className="px-2 py-1 bg-green-50 text-green-700 rounded text-sm">
-                    {major === 'ECSY-MAJ' ? 'Electronic & Communications Systems' : major}
+                {majorNames.map(majorName => (
+                  <span key={majorName} className="px-2 py-1 bg-green-50 text-green-700 rounded text-sm">
+                    {majorName}
                   </span>
                 ))}
               </div>

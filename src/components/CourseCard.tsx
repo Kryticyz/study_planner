@@ -3,6 +3,7 @@ import { useUIStore } from '../store/uiStore';
 import { courses } from '../data/courses';
 import { useDraggable } from '@dnd-kit/core';
 import { X, AlertTriangle, Info, CheckCircle } from 'lucide-react';
+import { CourseAttributionRow } from '../types';
 
 interface CourseCardProps {
   courseCode: string;
@@ -10,11 +11,26 @@ interface CourseCardProps {
   isDragging?: boolean;
   compact?: boolean;
   isSpanContinuation?: boolean;
+  attribution?: CourseAttributionRow;
 }
 
 const defaultCardStyle = 'bg-white border-gray-200 hover:border-gray-400';
 
-export function CourseCard({ courseCode, planId, isDragging, compact, isSpanContinuation }: CourseCardProps) {
+const getDegreeLabel = (code: string) => {
+  if (code === 'AENGI') return 'ENG';
+  if (code === 'BCOMP') return 'COMP';
+  if (code === 'BSC') return 'SCI';
+  return code;
+};
+
+export function CourseCard({
+  courseCode,
+  planId,
+  isDragging,
+  compact,
+  isSpanContinuation,
+  attribution,
+}: CourseCardProps) {
   const { removeCourse, validatePlan, getPlanById, markCompleted, unmarkCompleted } = usePlanStore();
   const { openCourseModal } = useUIStore();
   const course = courses[courseCode];
@@ -37,6 +53,11 @@ export function CourseCard({ courseCode, planId, isDragging, compact, isSpanCont
   const hasError = errors.length > 0;
   const isCompleted = plan?.completedCourses.includes(courseCode);
   const isMultiSemester = (course.semesterSpan ?? 1) > 1;
+  const allocationLabel = attribution
+    ? attribution.usedByDegreeCodes.length > 0
+      ? attribution.usedByDegreeCodes.map(getDegreeLabel).join('+')
+      : 'Open'
+    : null;
 
   const style = transform
     ? {
@@ -60,8 +81,17 @@ export function CourseCard({ courseCode, planId, isDragging, compact, isSpanCont
           isCompleted ? 'opacity-60' : ''
         }`}
       >
-        <span className="font-medium">{course.code}</span>
-        <span className="text-gray-500 ml-1">({course.units}u)</span>
+        <div className="flex items-center justify-between gap-2">
+          <div>
+            <span className="font-medium">{course.code}</span>
+            <span className="text-gray-500 ml-1">({course.units}u)</span>
+          </div>
+          {allocationLabel && (
+            <span className="rounded-full bg-slate-100 px-1.5 py-0.5 text-[10px] font-semibold text-slate-600">
+              {allocationLabel}
+            </span>
+          )}
+        </div>
       </div>
     );
   }
@@ -79,7 +109,16 @@ export function CourseCard({ courseCode, planId, isDragging, compact, isSpanCont
             </div>
             <p className="text-xs text-gray-500 italic">Continues...</p>
           </div>
-          <span className="text-xs font-medium text-gray-400">{course.units / (course.semesterSpan ?? 1)}u</span>
+          <div className="text-right">
+            <span className="text-xs font-medium text-gray-400">{course.units / (course.semesterSpan ?? 1)}u</span>
+            {allocationLabel && (
+              <div className="mt-1">
+                <span className="rounded-full bg-slate-100 px-1.5 py-0.5 text-[10px] font-semibold text-slate-600">
+                  {allocationLabel}
+                </span>
+              </div>
+            )}
+          </div>
         </div>
       </div>
     );
@@ -150,6 +189,29 @@ export function CourseCard({ courseCode, planId, isDragging, compact, isSpanCont
           {course.semesters.join(', ')}
         </span>
       </div>
+
+      {attribution && (
+        <div className="mt-2 flex flex-wrap items-center gap-1.5">
+          {allocationLabel && (
+            <span className="rounded-full bg-slate-100 px-1.5 py-0.5 text-[10px] font-semibold text-slate-700">
+              {allocationLabel}
+            </span>
+          )}
+          {attribution.isShared && (
+            <span className="rounded-full bg-indigo-100 px-1.5 py-0.5 text-[10px] font-semibold text-indigo-700">
+              Shared
+            </span>
+          )}
+          {attribution.selectedMajorNames.length > 0 && (
+            <span
+              className="rounded-full bg-emerald-100 px-1.5 py-0.5 text-[10px] font-semibold text-emerald-700"
+              title={attribution.selectedMajorNames.join(', ')}
+            >
+              Major fit
+            </span>
+          )}
+        </div>
+      )}
 
       {/* Error tooltip */}
       {hasError && (

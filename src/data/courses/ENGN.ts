@@ -61,6 +61,8 @@ export const ENGN_COURSES: Record<string, Course> = {
     college: "Engineering",
     semesters: ["S1"],
     prerequisiteExpression: courseReq("COMP1100"),
+    incompatible: ["COMP2300"],
+    equivalentTo: ["COMP2300"],
     description: "Computer architecture, assembly, memory systems",
     note: "Prerequisite for HPC courses",
   },

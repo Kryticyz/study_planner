@@ -35,25 +35,62 @@ export function Header() {
               plan.program || 'AENGI'
             );
 
+            Object.entries(plan.selectedMajors ?? {}).forEach(([degreeCode, majorCode]) => {
+              if (typeof majorCode === 'string' && majorCode.length > 0) {
+                store.setSelectedMajor(newPlanId, degreeCode, majorCode);
+              }
+            });
+
             // Add scheduled courses from imported plan
-            plan.courses?.forEach((c: { courseCode: string; year: number; semester: 1 | 2 }) => {
+            plan.courses?.forEach((c: {
+              courseCode: string;
+              year: number;
+              semester: 1 | 2;
+              countTowardDegree?: string[];
+            }) => {
               store.addCourse(newPlanId, c.courseCode, c.year, c.semester);
+              if (c.countTowardDegree?.length) {
+                store.setCourseCountingOverride(newPlanId, c.courseCode, c.countTowardDegree);
+              }
             });
 
             // Add approved credits from imported plan
             plan.approvedCredits?.forEach((credit: {
+              id?: string;
               kind: 'course' | 'unspecified';
               courseCode?: string;
               school?: string;
               level?: 1000 | 2000 | 3000 | 4000;
               units?: number;
+              countTowardDegree?: string[];
             }) => {
+              const existingIds = new Set(
+                store.getPlanById(newPlanId)?.approvedCredits.map(existing => existing.id) ?? []
+              );
+
               if (credit.kind === 'course' && credit.courseCode) {
                 store.addApprovedCourseCredit(newPlanId, credit.courseCode);
               }
               if (credit.kind === 'unspecified' && credit.school && credit.level) {
                 store.addUnspecifiedCredit(newPlanId, credit.school, credit.level, credit.units);
               }
+
+              if (credit.countTowardDegree?.length) {
+                const createdCredit = store
+                  .getPlanById(newPlanId)
+                  ?.approvedCredits.find(existing => !existingIds.has(existing.id));
+                if (createdCredit) {
+                  store.setApprovedCreditCountingOverride(
+                    newPlanId,
+                    createdCredit.id,
+                    credit.countTowardDegree
+                  );
+                }
+              }
+            });
+
+            plan.completedCourses?.forEach((courseCode: string) => {
+              store.markCompleted(newPlanId, courseCode);
             });
           });
         }

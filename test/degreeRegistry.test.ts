@@ -5,6 +5,7 @@ import {
   getMaxYear,
   getTotalSemesters,
   isSharedMandatory,
+  isMandatoryForDegree,
   isCoreForDegree,
   getAvailablePrograms,
   getDefaultDegreeAttribution,
@@ -95,16 +96,46 @@ describe('Degree Registry', () => {
     });
   });
 
-  describe('isSharedMandatory', () => {
-    it('returns true for shared mandatory courses in double degree', () => {
-      // ENGN2219 and COMP2300 are shared mandatory courses
-      expect(isSharedMandatory('ENGN2219', 'AENGI-BCOMP')).toBe(true);
-      expect(isSharedMandatory('COMP2300', 'AENGI-BCOMP')).toBe(true);
+  describe('isMandatoryForDegree', () => {
+    it('returns true for direct requirements', () => {
+      expect(isMandatoryForDegree('MATH1013', 'AENGI')).toBe(true);
+      expect(isMandatoryForDegree('COMP2300', 'BCOMP')).toBe(true);
     });
 
-    it('returns false for non-shared courses in double degree', () => {
-      // COMP2100 is only in BCOMP
+    it('returns true for choice group courses in mandatory categories', () => {
+      expect(isMandatoryForDegree('COMP1100', 'BCOMP')).toBe(true);
+      expect(isMandatoryForDegree('COMP1130', 'BCOMP')).toBe(true);
+    });
+
+    it('returns false for courses in pool categories (coursesMandatory: false)', () => {
+      // MATH1013 is in BCOMP relatedCourse which has coursesMandatory: false
+      expect(isMandatoryForDegree('MATH1013', 'BCOMP')).toBe(false);
+    });
+
+    it('checks equivalences — ENGN2219 is mandatory for BCOMP via COMP2300', () => {
+      expect(isMandatoryForDegree('ENGN2219', 'BCOMP')).toBe(true);
+      expect(isMandatoryForDegree('COMP2300', 'AENGI')).toBe(true);
+    });
+
+    it('returns false for unknown degree', () => {
+      expect(isMandatoryForDegree('MATH1013', 'UNKNOWN')).toBe(false);
+    });
+  });
+
+  describe('isSharedMandatory', () => {
+    it('returns true for courses mandatory for both degrees', () => {
+      expect(isSharedMandatory('ENGN2219', 'AENGI-BCOMP')).toBe(true);
+      expect(isSharedMandatory('COMP2300', 'AENGI-BCOMP')).toBe(true);
+      expect(isSharedMandatory('COMP1100', 'AENGI-BCOMP')).toBe(true);
+    });
+
+    it('returns false for courses only mandatory for one degree', () => {
       expect(isSharedMandatory('COMP2400', 'AENGI-BCOMP')).toBe(false);
+      expect(isSharedMandatory('MATH1014', 'AENGI-BCOMP')).toBe(false);
+    });
+
+    it('returns false for pool-only courses (MATH1013 in BCOMP ICT pool)', () => {
+      expect(isSharedMandatory('MATH1013', 'AENGI-BCOMP')).toBe(false);
     });
 
     it('returns false for single degree programs', () => {

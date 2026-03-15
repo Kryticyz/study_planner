@@ -4,6 +4,7 @@ import { CourseCard } from './CourseCard';
 import { useDroppable } from '@dnd-kit/core';
 import { Plus, AlertTriangle } from 'lucide-react';
 import { courses as courseData } from '../data/courses';
+import { CourseAttributionRow } from '../types';
 
 interface SemesterSlotProps {
   planId: string;
@@ -11,9 +12,17 @@ interface SemesterSlotProps {
   semester: 1 | 2;
   startYear: number;
   startSemester: 1 | 2;
+  attributionByCourseCode: Map<string, CourseAttributionRow>;
 }
 
-export function SemesterSlot({ planId, year, semester, startYear, startSemester }: SemesterSlotProps) {
+export function SemesterSlot({
+  planId,
+  year,
+  semester,
+  startYear,
+  startSemester,
+  attributionByCourseCode,
+}: SemesterSlotProps) {
   const { getCoursesForSemester, getSemesterUnits } = usePlanStore();
   const { openCoursePanel } = useUIStore();
 
@@ -75,6 +84,7 @@ export function SemesterSlot({ planId, year, semester, startYear, startSemester 
               courseCode={course.courseCode}
               planId={planId}
               isSpanContinuation={isSpanContinuation}
+              attribution={attributionByCourseCode.get(course.courseCode)}
             />
           );
         })}
