@@ -2,6 +2,8 @@ import { useMemo } from 'react';
 import { usePlanStore } from '../store/planStore';
 import { useUIStore } from '../store/uiStore';
 import { courses, courseList } from '../data/courses';
+import { getDefaultDegreeAttribution, getProgram } from '../data/degreeRegistry';
+import { getMajorName, isCourseInMajor } from '../data/majorRegistry';
 import { describeExpression } from '../utils/prerequisiteEvaluator';
 import { X, Search, Plus, AlertTriangle, CheckCircle, Info } from 'lucide-react';
 
@@ -26,6 +28,7 @@ export function CoursePanel({ planId }: CoursePanelProps) {
   } = useUIStore();
 
   const plan = getPlanById(planId);
+  const program = plan ? getProgram(plan.program ?? 'AENGI') : undefined;
   const plannedCodes = new Set(plan?.courses.map(c => c.courseCode) || []);
   const approvedCourseCodes = new Set(
     (plan?.approvedCredits ?? [])
@@ -67,6 +70,13 @@ export function CoursePanel({ planId }: CoursePanelProps) {
   const handleAddCourse = (courseCode: string) => {
     if (!targetSemester) return;
     addCourse(planId, courseCode, targetSemester.year, targetSemester.semester);
+  };
+
+  const getDegreeLabel = (degreeCode: string) => {
+    if (degreeCode === 'AENGI') return 'ENG';
+    if (degreeCode === 'BCOMP') return 'COMP';
+    if (degreeCode === 'BSC') return 'SCI';
+    return degreeCode;
   };
 
   const checkCourseAvailability = (courseCode: string) => {
@@ -204,6 +214,12 @@ export function CoursePanel({ planId }: CoursePanelProps) {
             const isPlanned = plannedCodes.has(course.code);
             const isCredited = approvedCourseCodes.has(course.code);
             const isAlreadyAdded = isPlanned || isCredited;
+            const autoAttribution = program
+              ? getDefaultDegreeAttribution(course.code, program.code)
+              : [];
+            const selectedMajorFits = Object.entries(plan?.selectedMajors ?? {})
+              .filter(([, majorCode]) => isCourseInMajor(course.code, majorCode))
+              .map(([degreeCode, majorCode]) => `${getDegreeLabel(degreeCode)} major: ${getMajorName(majorCode)}`);
 
             return (
               <div
@@ -235,6 +251,19 @@ export function CoursePanel({ planId }: CoursePanelProps) {
                       <span className="text-xs text-gray-400">
                         {course.semesters.join(', ')}
                       </span>
+                      {program?.isDoubleDegree && autoAttribution.length > 0 && (
+                        <span className="text-xs px-1.5 py-0.5 rounded bg-sky-50 text-sky-700">
+                          Auto: {autoAttribution.map(getDegreeLabel).join(' + ')}
+                        </span>
+                      )}
+                      {selectedMajorFits.map(label => (
+                        <span
+                          key={`${course.code}-${label}`}
+                          className="text-xs px-1.5 py-0.5 rounded bg-emerald-50 text-emerald-700"
+                        >
+                          {label}
+                        </span>
+                      ))}
                       {course.prerequisiteExpression && (
                         <span className="text-xs text-gray-400">
                           • Prereqs: {describeExpression(course.prerequisiteExpression)}

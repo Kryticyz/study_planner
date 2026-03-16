@@ -1,4 +1,5 @@
 import { DegreeConfig, ProgramConfig } from '../types';
+import { getEquivalentCourses } from './equivalences';
 
 /**
  * Registry of individual degree configurations
@@ -57,7 +58,6 @@ export const degreeConfigs: Record<string, DegreeConfig> = {
         units: 24,
       },
     },
-    sharedMandatoryCourses: ['ENGN2219', 'COMP2300', 'MATH1013', 'MATH1014', 'COMP1100'],
   },
 
   'BCOMP': {
@@ -89,6 +89,7 @@ export const degreeConfigs: Record<string, DegreeConfig> = {
         name: 'ICT Related Course',
         description: 'One course from approved ICT-related list',
         units: 6,
+        coursesMandatory: false,
         courses: [
           ['ARTH2181', 'ASIA3032', 'DESN2010', 'ENGN1211', 'ENVS2015', 'INFS2024',
            'INFS3002', 'INFS3024', 'MATH1013', 'MATH1115', 'MATH2301', 'MATH2307',
@@ -101,7 +102,6 @@ export const degreeConfigs: Record<string, DegreeConfig> = {
         units: 42,
       },
     },
-    sharedMandatoryCourses: ['COMP2300', 'ENGN2219'],
   },
 
   'BSC': {
@@ -126,7 +126,6 @@ export const degreeConfigs: Record<string, DegreeConfig> = {
         units: 72,
       },
     },
-    sharedMandatoryCourses: [],
   },
 };
 
@@ -193,20 +192,46 @@ export function getTotalSemesters(programCode: string): number {
 }
 
 /**
- * Check if a course is a shared mandatory course that automatically counts for both degrees
+ * Check if a course (or an equivalent) is specifically mandatory for a degree.
+ * A course is mandatory if it appears in a RequirementCategory where
+ * coursesMandatory !== false, as either a direct requirement or in a choice group.
+ *
+ * This is stricter than isCoreForDegree: pool categories (coursesMandatory: false)
+ * do NOT qualify. Used for determining double-counting eligibility.
+ */
+export function isMandatoryForDegree(courseCode: string, degreeCode: string): boolean {
+  const degree = degreeConfigs[degreeCode];
+  if (!degree) return false;
+
+  const equivalents = getEquivalentCourses(courseCode);
+
+  for (const category of Object.values(degree.requirements)) {
+    if (category.coursesMandatory === false) continue;
+    if (!category.courses) continue;
+
+    for (const courseSpec of category.courses) {
+      if (Array.isArray(courseSpec)) {
+        if (equivalents.some(eq => courseSpec.includes(eq))) return true;
+      } else {
+        if (equivalents.includes(courseSpec)) return true;
+      }
+    }
+  }
+  return false;
+}
+
+/**
+ * Check if a course should automatically count for both degrees in a double degree.
+ * A course is shared-mandatory if it (or an equivalent) is specifically required
+ * by BOTH degrees — not merely available as a pool option.
  */
 export function isSharedMandatory(courseCode: string, programCode: string): boolean {
   const program = programConfigs[programCode];
   if (!program || !program.isDoubleDegree) return false;
 
-  // Check if the course is in the shared mandatory list of any component degree
-  for (const degreeCode of program.degreeComponents) {
-    const degree = degreeConfigs[degreeCode];
-    if (degree?.sharedMandatoryCourses?.includes(courseCode)) {
-      return true;
-    }
-  }
-  return false;
+  return program.degreeComponents.every(
+    degreeCode => isMandatoryForDegree(courseCode, degreeCode)
+  );
 }
 
 /**
